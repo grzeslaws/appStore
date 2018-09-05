@@ -28,7 +28,7 @@ export function fetchProducts(i18n: I18N) {
 }
 
 export function addProduct(payload: NewProduct, productImage: FileList, i18n: I18N) {
-    const product = new NewProduct((payload.name));
+    const product = new NewProduct(payload.name);
 
     return dispatch => {
         http(endpoints.addProductImage, "file", productImage);
@@ -36,9 +36,14 @@ export function addProduct(payload: NewProduct, productImage: FileList, i18n: I1
     };
 }
 
-export function editProduct(productUuid: string, payload, i18n: I18N) {
-    const product = new NewProduct((payload.name));
+export function editProduct(productUuid: string, payload: NewProduct, i18n: I18N, productImage?: FileList) {
+    const product = new NewProduct(payload.name);
     return dispatch => {
-        http(endpoints.editProduct(productUuid), "put", product).then(json => dispatch(fetchProducts(i18n)));
+        if (productImage) {
+            http(endpoints.editProductImage(productUuid), "file", productImage);
+        }
+        if (payload.name) {
+            http(endpoints.editProduct(productUuid), "put", product).then(json => dispatch(fetchProducts(i18n)));
+        }
     };
 }

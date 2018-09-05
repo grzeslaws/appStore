@@ -3,6 +3,7 @@ import { config } from "./config/config";
 const endpoints = {
     products: `/api/products`,
     addProductImage: `/api/add_product_image`,
+    editProductImage: (productUuid: string) => `/api/edit_product_image/${productUuid}`,
     editProduct: (productUuid: string) => `/api/edit_product/${productUuid}`,
     getPathForProductImage: (pathToImage: string) => `api/get_image/${pathToImage}`,
 

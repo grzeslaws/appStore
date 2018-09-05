@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 
 import { ProductsComponent, ProductsProps } from "../components/products/ProductsComponent";
-import { addProduct, fetchProducts } from "../redux/actions/productsActions";
+import { addProduct, editProduct, fetchProducts } from "../redux/actions/productsActions";
 import { ApplicationStore } from "../redux/store/store";
 
 export function mapStateToProps({ i18n, products }: ApplicationStore): ProductsProps {
@@ -10,6 +10,7 @@ export function mapStateToProps({ i18n, products }: ApplicationStore): ProductsP
         products: products.products,
         fetchProducts,
         addProduct,
+        editProduct,
     };
 }
 

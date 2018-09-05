@@ -58,7 +58,7 @@ def add_product():
 
 
 @app.route("/api/add_product_image", methods=["POST"])
-@app.route("/api/products", methods=["GET", "POST", "PUT"])
+@app.route("/api/products", methods=["GET", "POST"])
 def order():
     if request.method == "POST":
         add_product()
@@ -74,10 +74,30 @@ def order():
         return jsonify({"products": productList})
 
 
-@app.route("/api/edit_product/<product_uuid>", methods=["PUT"])
+@app.route("/api/edit_product/<product_uuid>", methods=["POST", "PUT"])
 def edit_product(product_uuid):
+
     if request.method == "PUT":
         p = Product.query.filter_by(product_uuid=product_uuid).first()
         p.name = request.json["name"]
         db.session.commit()
         return jsonify({"message": "Product has been updated!"})
+
+
+@app.route("/api/edit_product_image/<product_uuid>", methods=["POST"])
+def edit_product_image(product_uuid):
+    if request.method == "POST":
+        print("product_uuid: ", product_uuid)
+        if request.files:
+            file = request.files["file"]
+            file_name = secure_filename(file.filename)
+            imagePath = product_uuid + "_" + file_name
+            file.save(os.path.join(
+                app.config['UPLOAD_FOLDER'], imagePath))
+
+            p = Product.query.filter_by(product_uuid=product_uuid).first()
+            print("p: ", p)
+            p.image_path = imagePath
+            db.session.commit()
+        return jsonify({"message": "Image has been changed!"})
+    return jsonify({"message": "Image has been changed!"})
