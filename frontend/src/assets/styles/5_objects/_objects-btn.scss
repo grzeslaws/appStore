@@ -1,0 +1,52 @@
+.o-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: $font-family-barlow;
+    font-weight: normal;
+    font-size: 18px;
+    letter-spacing: $spacing-default / 4;
+    height: $spacing-default * 6;
+    border-radius: $spacing-default;
+    padding: 0 ($spacing-default * 2);
+    text-transform: uppercase;
+    box-shadow: $shadow-default;
+    transition: $transition-default;
+    cursor: pointer;
+    outline: 0;
+
+    &--default {
+        background-color: $color-primary;
+        border: 1px solid $color-primary;
+        color: $color-white;
+    }
+
+    &--default-inverse {
+        background-color: transparent;
+        border: 1px solid $color-primary;
+        color: $color-primary;
+        box-shadow: none;
+
+        &:hover {
+            background-color: $color-primary;
+            color: $color-white;
+        }
+    }
+
+    &--small {
+        font-size: 16px;
+        height: $spacing-default * 4;
+        text-transform: none;
+    }
+
+    &--smaller {
+        font-size: 14px;
+        height: $spacing-default * 4 - 2;
+        text-transform: none;
+    }
+
+    &:disabled {
+        opacity: .5;
+        cursor: default;
+    }
+}

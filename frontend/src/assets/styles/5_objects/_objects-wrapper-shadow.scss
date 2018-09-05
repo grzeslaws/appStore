@@ -1,0 +1,21 @@
+.o-wrapper-shadow {
+    padding-top: $spacing-default * 2;
+    position: relative;
+    flex: 1;
+    display: flex;
+
+    &:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: -$spacing-default;
+        width: 100%;
+        box-shadow: $shadow-header;
+        height: $spacing-default;
+        z-index: 1000;
+    }
+
+    &--reset-padding {
+        padding-top: unset;
+    }
+}
