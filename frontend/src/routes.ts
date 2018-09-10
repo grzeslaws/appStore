@@ -1,6 +1,7 @@
 export const routes = {
     auth: "/auth",
-    products: "/products",
+    products: `/products/page/:pageNumber?`,
+    productsTemplate: `/products/page/`,
     login: "/login",
     trip: (userId: string, tripId: string) => `/auth/users/${userId}/trips/${tripId}`,
     tripTemplate: "/auth/users/:userId/trips/:tripId",

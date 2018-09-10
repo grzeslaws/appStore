@@ -39,7 +39,6 @@ const http = (endpoint, method = "get", options?) => {
                 body = {
                     body: JSON.stringify(options),
                 };
-                console.log("body: ", body);
                 break;
         }
     }

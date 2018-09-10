@@ -2,10 +2,12 @@ import { config } from "./config/config";
 
 const endpoints = {
     products: `/api/products`,
+    getAllProducts: (pageNumber = 1, perPage = 5) => `/api/get_all_products/${pageNumber}/${perPage}`,
     addProductImage: `/api/add_product_image`,
     editProductImage: (productUuid: string) => `/api/edit_product_image/${productUuid}`,
     editProduct: (productUuid: string) => `/api/edit_product/${productUuid}`,
     getPathForProductImage: (pathToImage: string) => `api/get_image/${pathToImage}`,
+    deleteProduct: (productUuid: string) => `/api/delete_product/${productUuid}`,
 
     logout: `/api/tenants/${config.tenant}/logout`,
     profile: `/api/tenants/${config.tenant}/admin/profile`,

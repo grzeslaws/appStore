@@ -12,7 +12,7 @@ productUuid = None
 
 
 def categories_init():
-    for i in range(0, 12):
+    for i in range(0, 10):
         t = Category(name="Category " + str(i))
         db.session.add(t)
 
@@ -65,16 +65,25 @@ def order():
 
         return jsonify({"message": "Product has been added!"}), 201
 
+
+@app.route("/api/get_all_products/<int:page_number>/<int:per_page>", methods=["GET"])
+def get_all_products(page_number, per_page):
+
     if request.method == "GET":
 
-        products = Product.query.order_by(desc(Product.id)).all()
+        products = Product.query.order_by(desc(Product.id)).paginate(page=page_number, per_page=per_page)
         productList = []
-        for p in products:
+        for p in products.items:
             productList.append(product_item(p))
-        return jsonify({"products": productList})
+        return jsonify({"products": productList,
+                        "has_next": products.has_next,
+                        "has_prev": products.has_prev,
+                        "next_num": products.next_num,
+                        "prev_num": products.prev_num,
+                        "pages": products.pages})
 
 
-@app.route("/api/edit_product/<product_uuid>", methods=["POST", "PUT"])
+@app.route("/api/edit_product/<product_uuid>", methods=["POST", "PUT", "GET"])
 def edit_product(product_uuid):
 
     if request.method == "PUT":
@@ -82,6 +91,21 @@ def edit_product(product_uuid):
         p.name = request.json["name"]
         db.session.commit()
         return jsonify({"message": "Product has been updated!"})
+
+    if request.method == "GET":
+        p = Product.query.filter_by(product_uuid=product_uuid).firdt()
+        db.session.delete(p)
+        db.commit()
+
+
+@app.route("/api/delete_product/<product_uuid>", methods=["GET"])
+def delete_product(product_uuid):
+    if request.method == "GET":
+        p = Product.query.filter_by(product_uuid=product_uuid).first()
+        db.session.delete(p)
+        db.session.commit()
+
+        return jsonify({"message": "Product has been deleted!"})
 
 
 @app.route("/api/edit_product_image/<product_uuid>", methods=["POST"])

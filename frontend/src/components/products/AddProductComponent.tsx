@@ -25,7 +25,6 @@ export class AddProductComponent extends React.Component<ProductsProps, AddProdu
     }
     public render() {
         const { i18n } = this.props;
-        console.log(this.state);
 
         return (
             <>
@@ -43,7 +42,7 @@ export class AddProductComponent extends React.Component<ProductsProps, AddProdu
     }
 
     private addProduct = () => {
-        this.props.addProduct({name: this.state.productName}, this.state.productImage, this.props.i18n);
+        this.props.addProduct({ name: this.state.productName }, this.state.productImage, this.props.i18n);
         this.setState({ productName: "" });
     };
 

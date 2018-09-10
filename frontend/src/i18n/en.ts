@@ -7,6 +7,7 @@ export const en = {
         openEditor: "Open editor",
         closeEditor: "Close editor",
         saveChanges: "Save changes",
+        deleteProduct: "Delete product",
     },
     errors: {
         fetchProductsFailed: "Fetching products failed",

@@ -14,7 +14,7 @@ def categories_init():
 def product_init():
     db.drop_all()
     db.create_all()
-    for i in range(0, 25):
+    for i in range(0, 200):
         p = Product(name="Product " + str(i))
         db.session.add(p)
 

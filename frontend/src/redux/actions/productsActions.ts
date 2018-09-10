@@ -14,9 +14,9 @@ function updateProducts(products: Products): Action<"UPDATE_PRODUCTS", Products>
     };
 }
 
-export function fetchProducts(i18n: I18N) {
+export function fetchProducts(i18n: I18N, pageNumber?: number, perPage?: number) {
     return dispatch => {
-        return http(endpoints.products)
+        return http(endpoints.getAllProducts(pageNumber, perPage))
             .then(json => {
                 dispatch(updateProducts(parse(Products, json)));
             })
@@ -45,5 +45,11 @@ export function editProduct(productUuid: string, payload: NewProduct, i18n: I18N
         if (payload.name) {
             http(endpoints.editProduct(productUuid), "put", product).then(json => dispatch(fetchProducts(i18n)));
         }
+    };
+}
+
+export function deleteProduct(productUuid: string, i18n: I18N) {
+    return dispatch => {
+        return http(endpoints.deleteProduct(productUuid)).then(json => dispatch(fetchProducts(i18n)));
     };
 }
