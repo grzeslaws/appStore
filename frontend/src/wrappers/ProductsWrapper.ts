@@ -1,8 +1,8 @@
 import { connect } from "react-redux";
 import { match } from "react-router";
 
-import { ProductsComponent, ProductsProps } from "../components/products/ProductsComponent";
-import { addProduct, deleteProduct, editProduct, fetchProducts } from "../redux/actions/productsActions";
+import { ProductsAdminComponent, ProductsProps } from "../components/admin/products/ProductsAdminComponent";
+import { addProduct, deleteProduct, editProduct, fetchProductsFormAdmin } from "../redux/actions/productsActions";
 import { ApplicationStore } from "../redux/store/store";
 
 export function mapStateToProps({ i18n, products }: ApplicationStore, ownProps: { match: match<{ pageNumber: string; perPage: string }> }): ProductsProps {
@@ -11,7 +11,7 @@ export function mapStateToProps({ i18n, products }: ApplicationStore, ownProps: 
     return {
         i18n: i18n.messages,
         products: products.products,
-        fetchProducts,
+        fetchProductsFormAdmin,
         addProduct,
         editProduct,
         pageNumber: ownProps.match.params.pageNumber,
@@ -20,4 +20,4 @@ export function mapStateToProps({ i18n, products }: ApplicationStore, ownProps: 
     };
 }
 
-export default connect(mapStateToProps)(ProductsComponent);
+export default connect(mapStateToProps)(ProductsAdminComponent);

@@ -52,3 +52,9 @@ class Order(db.Model):
     date = db.Column(db.DateTime, nullable=False,
                      default=datetime.utcnow)
     orderitems = db.relationship("Orderitem", backref="order", lazy=True)
+
+
+class Admin(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    admin_name = db.Column(db.String(100))
+    password = db.Column(db.String(200))

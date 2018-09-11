@@ -1,9 +1,8 @@
 import { Immutable } from "immutable-typescript";
 import * as React from "react";
-import { I18N } from "../../i18n/i18n";
-import { NewProduct } from "../../model/NewProduct";
-import store from "../../redux/store/store";
-import "./products.scss";
+import { I18N } from "../../../i18n/i18n";
+import { NewProduct } from "../../../model/NewProduct";
+import "./products-admin.scss";
 
 export interface ProductsProps {
     i18n: Immutable<I18N>;
@@ -14,7 +13,7 @@ interface AddProductState {
     productName: string;
     productImage: FileList;
 }
-export class AddProductComponent extends React.Component<ProductsProps, AddProductState> {
+export class AddProductAdminComponent extends React.Component<ProductsProps, AddProductState> {
     constructor(props: ProductsProps) {
         super(props);
 

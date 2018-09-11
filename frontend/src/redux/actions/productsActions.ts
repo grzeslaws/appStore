@@ -14,7 +14,7 @@ function updateProducts(products: Products): Action<"UPDATE_PRODUCTS", Products>
     };
 }
 
-export function fetchProducts(i18n: I18N, pageNumber?: number, perPage?: number) {
+export function fetchProductsFormAdmin(i18n: I18N, pageNumber?: number, perPage?: number) {
     return dispatch => {
         return http(endpoints.getAllProducts(pageNumber, perPage))
             .then(json => {
@@ -32,7 +32,7 @@ export function addProduct(payload: NewProduct, productImage: FileList, i18n: I1
 
     return dispatch => {
         http(endpoints.addProductImage, "file", productImage);
-        return http(endpoints.products, "post", product).then(json => dispatch(fetchProducts(i18n)));
+        return http(endpoints.products, "post", product).then(json => dispatch(fetchProductsFormAdmin(i18n)));
     };
 }
 
@@ -43,13 +43,13 @@ export function editProduct(productUuid: string, payload: NewProduct, i18n: I18N
             http(endpoints.editProductImage(productUuid), "file", productImage);
         }
         if (payload.name) {
-            http(endpoints.editProduct(productUuid), "put", product).then(json => dispatch(fetchProducts(i18n)));
+            http(endpoints.editProduct(productUuid), "put", product).then(json => dispatch(fetchProductsFormAdmin(i18n)));
         }
     };
 }
 
 export function deleteProduct(productUuid: string, i18n: I18N) {
     return dispatch => {
-        return http(endpoints.deleteProduct(productUuid)).then(json => dispatch(fetchProducts(i18n)));
+        return http(endpoints.deleteProduct(productUuid)).then(json => dispatch(fetchProductsFormAdmin(i18n)));
     };
 }

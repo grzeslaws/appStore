@@ -4,6 +4,7 @@ from flask import request, jsonify, send_from_directory
 from store_api.models import Product, Category
 from store_api.serializers import product_item
 from sqlalchemy import desc
+from store_api.routes import token_required
 import time
 import os
 
@@ -58,7 +59,7 @@ def add_product():
 
 
 @app.route("/api/add_product_image", methods=["POST"])
-@app.route("/api/products", methods=["GET", "POST"])
+@app.route("/api/products", methods=["POST"])
 def order():
     if request.method == "POST":
         add_product()
@@ -67,7 +68,8 @@ def order():
 
 
 @app.route("/api/get_all_products/<int:page_number>/<int:per_page>", methods=["GET"])
-def get_all_products(page_number, per_page):
+@token_required
+def get_all_products(current_user, page_number, per_page):
 
     if request.method == "GET":
 

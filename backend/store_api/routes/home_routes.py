@@ -1,6 +1,7 @@
 from store_api import app, db
 from flask import jsonify
-from store_api.models import Product, Category
+from store_api.models import Product, Category, Admin
+from werkzeug.security import generate_password_hash
 
 
 def categories_init():
@@ -21,9 +22,17 @@ def product_init():
     db.session.commit()
 
 
+def admin_init():
+    hashed_password = generate_password_hash("admin", method="sha256")
+    a = Admin(admin_name="admin", password=hashed_password)
+    db.session.add(a)
+    db.session.commit()
+
+
 @app.route("/")
 def index():
     print("home")
     product_init()
     categories_init()
+    admin_init()
     return jsonify({"message": "Home"})
