@@ -10,9 +10,12 @@ import { HashRouter, Link, Redirect, Switch } from "react-router-dom";
 import { i18n } from "./i18n/i18n";
 import store from "./redux/store/store";
 
+import { LoginComponent } from "./components/admin/login/LoginComponent";
 import { setI18N } from "./redux/actions/i18nActions";
 import { adminRoutes } from "./routes/adminRutes";
 import ProductsWrapper from "./wrappers/ProductsWrapper";
+
+import { getAdminProfile } from "./redux/actions/adminProfileActions";
 
 import "./style.scss";
 
@@ -54,6 +57,7 @@ const AdminComponet = () => {
 };
 
 const PrivateRoute = ({ component: Componet, ...rest }) => {
+    getAdminProfile()(store.dispatch);
     return (
         <Route
             {...rest}
@@ -73,36 +77,37 @@ const PrivateRoute = ({ component: Componet, ...rest }) => {
     );
 };
 
-interface LoginState {
-    redirectToPath: boolean;
-}
+// interface LoginState {
+//     redirectToPath: boolean;
+// }
 
-class Login extends React.Component<any, LoginState> {
-    constructor(props) {
-        super(props);
+// class Login extends React.Component<any, LoginState> {
+//     constructor(props) {
+//         super(props);
 
-        this.state = {
-            redirectToPath: false,
-        };
-    }
+//         this.state = {
+//             redirectToPath: false,
+//         };
+//     }
 
-    public render() {
-        const { from } = this.props.location.state || { from: "./" };
-        const loginForm = (
-            <>
-                {from.pathname} is protected, you should be login
-                <button onClick={this.login}>Log in</button>
-            </>
-        );
-        return this.state.redirectToPath ? <Redirect to={from} /> : <>{loginForm}</>;
-    }
+//     public render() {
+//         const { from } = this.props.location.state || { from: "./" };
+//         const loginForm = (
+//             <>
+//                 {from.pathname} is protected, you should be login
+//                 <button onClick={this.login}>Log in</button>
+//             </>
+//         );
+//         return this.state.redirectToPath ? <Redirect to={from} /> : <>{loginForm}</>;
+//     }
 
-    private login = () => {
-        fakeAuth.authenticated(() => {
-            this.setState({ redirectToPath: true });
-        });
-    };
-}
+//     private login = () => {
+//         fakeAuth.authenticated(() => {
+//             this.setState({ redirectToPath: true });
+//         });
+//     };
+// }
+
 ReactDOM.render(
     <Provider store={store}>
         <HashRouter>
@@ -110,7 +115,7 @@ ReactDOM.render(
                 <Nav />
                 <Route path="/public" component={Public} />
                 <Switch>
-                    <Route path="/login" component={Login} />
+                    <Route path="/login" component={LoginComponent} />
                 </Switch>
                 <PrivateRoute path="/admin" component={AdminComponet} />
                 {/* <Route path={adminRoutes.products} component={ProductsWrapper} /> */}

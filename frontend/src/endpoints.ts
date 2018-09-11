@@ -1,7 +1,9 @@
 import { config } from "./config/config";
 
 const endpoints = {
-    products: `/api/products`,
+    products: `/api/products`, // check
+    adminProfile: `/api/admin_profile`,
+    login: `/api/login`,
     getAllProducts: (pageNumber = 1, perPage = 5) => `/api/get_all_products/${pageNumber}/${perPage}`,
     addProductImage: `/api/add_product_image`,
     editProductImage: (productUuid: string) => `/api/edit_product_image/${productUuid}`,

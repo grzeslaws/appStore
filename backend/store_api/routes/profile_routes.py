@@ -1,9 +1,15 @@
 from store_api import app
 from flask import jsonify, request
-from store_api.models import Profile
+from store_api.models import Admin
+from store_api.routes import token_required
 
-@app.route("/api/admi_profile/<id>", methods=["POST"])
-def admi_profile(id):
-    if request.method == "POST":
-        p = Profile.query.filter_by(id=id).first()
 
+@app.route("/api/admin_profile")
+@token_required
+def admin_profile(current_user):
+    if request.method == "GET":
+        p = Admin.query.filter_by(id=current_user.id).first()
+        admin_profile = {}
+        admin_profile["admin_name"] = p.admin_name
+        admin_profile["id"] = p.id
+        return jsonify({"admin_profile": admin_profile})
