@@ -6,17 +6,16 @@ import { Products } from "../../../model/Products";
 import store from "../../../redux/store/store";
 import { AddProductAdminComponent } from "./AddProductAdminComponent";
 
-import { Link } from "react-router-dom";
-
-import { adminRoutes } from "../../../routes/adminRutes";
+import { adminRoutes } from "../../../routes/adminRoutes";
 
 import endpoints from "../../../endpoints";
+import { PaginationComponent } from "../../pagination/PaginationComponent";
 import "./products-admin.scss";
 
 export interface ProductsProps {
     i18n: Immutable<I18N>;
     products: Immutable<Products>;
-    fetchProductsFormAdmin: (i18n: I18N, pageNumber?: number, perPage?: number) => any;
+    fetchAdminProducts: (i18n: I18N, pageNumber?: number, perPage?: number) => any;
     addProduct: (payload: NewProduct, productImage: FileList, i18n: I18N) => any;
     editProduct: (productUuid: string, payload: NewProduct, i18n: I18N, productImage?: FileList) => any;
     deleteProduct: (productUuid: string, i18n: I18N) => any;
@@ -42,11 +41,20 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
 
     public componentDidMount() {
         const currentPageNumber = this.props.pageNumber ? Number(this.props.pageNumber) : 1;
-        store.dispatch(this.props.fetchProductsFormAdmin(this.props.i18n, currentPageNumber));
+        store.dispatch(this.props.fetchAdminProducts(this.props.i18n, currentPageNumber));
     }
 
     public render() {
         const { products, i18n } = this.props;
+        const paginationData = products
+            ? {
+                  hasNext: products.hasNext,
+                  hasPrev: products.hasNext,
+                  nextNum: products.nextNum,
+                  prevNum: products.prevNum,
+                  pages: products.pages,
+              }
+            : null;
         const productList: ReadonlyArray<JSX.Element> = products
             ? products.products.map(p => {
                   const isCurrentProduct = this.state.currentProduct === p.productUuid ? true : false;
@@ -76,36 +84,25 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
                 <AddProductAdminComponent i18n={i18n} addProduct={this.handleAddProduct} />
                 {this.props.i18n.products.title}
                 {productList}
-                <div>{this.renderPaginate(products)}</div>
+                <div>
+                    {products && (
+                        <PaginationComponent
+                            i18n={i18n}
+                            paginationData={paginationData}
+                            fetchDataForCurrentPage={this.fetchDataForCurrentPage}
+                            baseRoute={adminRoutes.productsTemplate}
+                        />
+                    )}
+                </div>
             </>
         );
     }
 
-    private renderPaginate(products) {
-        let paginate;
-
-        if (products) {
-            const paginateItems = [];
-            for (let i = 1; i <= this.props.products.pages; i++) {
-                const paginateItem = (
-                    <li key={i}>
-                        <Link onClick={() => this.fetchDataForCurrentPage(i)} to={adminRoutes.productsTemplate + i.toString()}>
-                            {i}
-                        </Link>
-                    </li>
-                );
-                paginateItems.push(paginateItem);
-            }
-            paginate = <ul>{paginateItems}</ul>;
-        }
-        return paginate;
-    }
-
-    private fetchDataForCurrentPage(pageNumber) {
+    private fetchDataForCurrentPage = (pageNumber: number) => {
         if (pageNumber !== Number(this.props.pageNumber)) {
-            store.dispatch(this.props.fetchProductsFormAdmin(this.props.i18n, pageNumber));
+            store.dispatch(this.props.fetchAdminProducts(this.props.i18n, pageNumber));
         }
-    }
+    };
 
     private handleAddProduct = (payload: NewProduct, productImage: FileList, i18n: I18N) => {
         store.dispatch(this.props.addProduct(payload, productImage, i18n));

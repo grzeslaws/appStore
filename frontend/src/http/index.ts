@@ -1,28 +1,30 @@
 import { requestCompleted, requestIssued } from "../redux/actions/fetchActions";
 import store from "../redux/store/store";
 
-const DEFAULT_OPTIONS = {
-    headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-    },
-};
-
 const CONTENT_TYPE_HEADER = "Content-Type";
 const APPLICATION_JSON = "application/json";
+let defaultOptions;
 
 const http = (endpoint, method = "get", options?) => {
     let body = {};
     let params = "";
-    let defaultOptions = { ...DEFAULT_OPTIONS };
 
     if (options) {
+        const DEFAULT_OPTIONS = {
+            headers: {
+                "Content-Type": "application/json",
+                "x-access-token": localStorage.getItem("x-access-token"),
+            },
+        };
+
+        defaultOptions = { ...DEFAULT_OPTIONS };
         switch (method) {
             case "get":
                 const esc = encodeURIComponent;
                 params += Object.keys(options)
                     .map(k => esc(k) + "=" + esc(typeof options[k] !== "undefined" ? options[k] : ""))
                     .join("&");
+
                 break;
             case "file":
                 const formData = new FormData();

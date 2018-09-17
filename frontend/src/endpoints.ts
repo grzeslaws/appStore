@@ -4,7 +4,9 @@ const endpoints = {
     products: `/api/products`, // check
     adminProfile: `/api/admin_profile`,
     login: `/api/login`,
-    getAllProducts: (pageNumber = 1, perPage = 5) => `/api/get_all_products/${pageNumber}/${perPage}`,
+    getAllAdminProducts: (pageNumber = 1, perPage = 5) => `/api/get_all_admin_products/${pageNumber}/${perPage}`,
+    getAllPublicProducts: (pageNumber = 1, perPage = 5) => `/api/get_all_public_products/${pageNumber}/${perPage}`,
+    getPublicProduct: (productUuid: string) => `/api/get_public_product/${productUuid}`,
     addProductImage: `/api/add_product_image`,
     editProductImage: (productUuid: string) => `/api/edit_product_image/${productUuid}`,
     editProduct: (productUuid: string) => `/api/edit_product/${productUuid}`,
