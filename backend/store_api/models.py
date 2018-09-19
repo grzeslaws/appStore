@@ -2,12 +2,12 @@ from store_api import db, generate_uuid
 from datetime import datetime
 
 
-categories = db.Table("categories",
-                      db.Column("category_id", db.Integer, db.ForeignKey(
-                          "category.id"), primary_key=True),
-                      db.Column("product_id", db.Integer, db.ForeignKey(
-                          "product.id"), primary_key=True)
-                      )
+cat = db.Table("categories",
+               db.Column("category_id", db.Integer, db.ForeignKey(
+                   "category.id"), primary_key=True),
+               db.Column("product_id", db.Integer, db.ForeignKey(
+                   "product.id"), primary_key=True)
+               )
 
 
 class Category(db.Model):
@@ -24,9 +24,7 @@ class Product(db.Model):
     quantity = db.Column(db.Integer, nullable=False, default=0)
     image_path = db.Column(db.String(200), nullable=True, default="default.jpg")
     orderitem = db.relationship("Orderitem", backref="product", lazy=True)
-    categories = db.relationship("Category", secondary=categories,
-                                 lazy="subquery",
-                                 backref=db.backref("products", lazy=True))
+    categories = db.relationship("Category", secondary=cat, backref=db.backref("products", lazy="dynamic",))
 
 
 class Orderitem(db.Model):

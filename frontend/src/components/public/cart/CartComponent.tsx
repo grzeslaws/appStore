@@ -27,20 +27,26 @@ export class CartComponent extends React.Component<CartProps, {}> {
                   return (
                       <div key={i}>
                           <div>
-                              Product quantity: {p.quantity}, Name: {p.product ? p.product.name : ""}
+                              Product quantity: {p.quantity}
+                              <br />
+                              Name: {p.product ? p.product.name : ""}
+                              <br />
+                              Price: {p.product ? p.product.price : ""}
+                              <br />
                           </div>
-                          <button onClick={() => addProductToCart(p.product)(store.dispatch)}>Add one</button>
-                          <button onClick={() => removeProductFromCart(p.product)(store.dispatch)}>Remove one</button>
+                          <button onClick={() => store.dispatch(addProductToCart(p.product))}>Add one</button>
+                          <button onClick={() => store.dispatch(removeProductFromCart(p.product))}>Remove one</button>
                       </div>
                   );
               })
             : null;
+        const totalPrice = orderItems.length ? orderItems.map(o => o.product.price * o.quantity).reduce((item, sum) => item + sum) : null;
         return (
             <>
                 <PublicNavigationWrapper />
                 {orderList}
                 <br />
-                Total payment:
+                Total payment: {totalPrice}
             </>
         );
     }

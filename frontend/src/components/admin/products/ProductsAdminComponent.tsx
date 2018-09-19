@@ -9,6 +9,7 @@ import { AddProductAdminComponent } from "./AddProductAdminComponent";
 import { adminRoutes } from "../../../routes/adminRoutes";
 
 import endpoints from "../../../endpoints";
+import { Categories } from "../../../model/Categories";
 import { PaginationComponent } from "../../pagination/PaginationComponent";
 import "./products-admin.scss";
 

@@ -18,7 +18,6 @@ import ProductsWrapper from "./wrappers/ProductsAdminWrapper";
 import PrivateRouteWrapper from "./wrappers/PrivateRouteWrapper";
 
 import { AdminDashboardComponent } from "./components/admin/adminDashboard/AdminDashboardComponent";
-import { EmptyComponent } from "./components/empty/EmptyComponent";
 import { getAdminProfile } from "./redux/actions/adminProfileActions";
 import "./style.scss";
 import CartWrapper from "./wrappers/CartWrapper";
@@ -38,9 +37,9 @@ ReactDOM.render(
                 <Switch>
                     <Route path={publicRoutes.home} component={HomeCustomerWrapper} />
                     <Route path={publicRoutes.products} component={ProductsPublicWrapper} />
+                    <Route path={publicRoutes.category} component={ProductsPublicWrapper} />
                     <Route path={publicRoutes.product} component={ProductPublicWrapper} />
                     <Route path={publicRoutes.cart} component={CartWrapper} />
-                    <Route path="*" component={EmptyComponent} />
                 </Switch>
 
                 <PrivateRouteWrapper path={adminRoutes.admin} component={AdminDashboardComponent} />
