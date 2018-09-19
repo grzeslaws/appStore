@@ -20,7 +20,8 @@ class Product(db.Model):
     product_uuid = db.Column(
         db.String(100), default=generate_uuid)
     name = db.Column(db.String(80), nullable=False)
-    price = db.Column(db.Integer, nullable=False)
+    price = db.Column(db.Integer, nullable=False, default=0)
+    quantity = db.Column(db.Integer, nullable=False, default=0)
     image_path = db.Column(db.String(200), nullable=True, default="default.jpg")
     orderitem = db.relationship("Orderitem", backref="product", lazy=True)
     categories = db.relationship("Category", secondary=categories,

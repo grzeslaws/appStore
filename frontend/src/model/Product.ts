@@ -6,6 +6,7 @@ export class Product {
         @Field("product_uuid") public productUuid: string,
         @Field("name") public name: string,
         @Field("price", true) public price: number,
+        @Field("quantity", true) public quantity: number,
         @Field("image_path", true) public imagePath?: string,
     ) {}
 }

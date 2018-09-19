@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 import { match } from "react-router";
 
 import { ProductPublicComponent, ProductPublicProps } from "../components/public/product/ProductPublicComponent";
-import { addProductToCart } from "../redux/actions/cartActions";
+import { addProductToCart, removeProductFromCart } from "../redux/actions/cartActions";
 import { fetchPublicProduct } from "../redux/actions/productsActions";
 import { ApplicationStore } from "../redux/store/store";
 

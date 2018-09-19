@@ -57,6 +57,8 @@ export class ProductsPublicComponent extends React.Component<ProductsPublicProps
                   return (
                       <div style={{ border: "1px solid", marginBottom: "20px" }} key={p.id}>
                           <Link to={publicRoutes.productTemplate + p.productUuid}>{p.name}</Link>
+                          <div>Quantity: {p.quantity}</div>
+                          <div>Price: {p.price}</div>
                           {p.imagePath && <img style={{ maxWidth: "40px" }} src={`${endpoints.getPathForProductImage(p.imagePath)}`} />}
                       </div>
                   );

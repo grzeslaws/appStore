@@ -24,7 +24,7 @@ export class PublicNavigationComponent extends React.Component<PublicNavigationP
                 <div>Cart: {totalQuantityofProducts}</div>
                 <ul>
                     <li>
-                        <Link to={publicRoutes.main}>
+                        <Link to={publicRoutes.home}>
                             <button>Home page</button>
                         </Link>
                     </li>

@@ -4,7 +4,7 @@ import * as ReactDOM from "react-dom";
 import "reflect-metadata";
 
 import { Provider } from "react-redux";
-import { HashRouter, Route } from "react-router-dom";
+import { HashRouter, Redirect, Route, Switch } from "react-router-dom";
 
 import { i18n } from "./i18n/i18n";
 import store from "./redux/store/store";
@@ -18,6 +18,7 @@ import ProductsWrapper from "./wrappers/ProductsAdminWrapper";
 import PrivateRouteWrapper from "./wrappers/PrivateRouteWrapper";
 
 import { AdminDashboardComponent } from "./components/admin/adminDashboard/AdminDashboardComponent";
+import { EmptyComponent } from "./components/empty/EmptyComponent";
 import { getAdminProfile } from "./redux/actions/adminProfileActions";
 import "./style.scss";
 import CartWrapper from "./wrappers/CartWrapper";
@@ -33,10 +34,14 @@ ReactDOM.render(
     <Provider store={store}>
         <HashRouter>
             <>
-                <Route exact={true} path={publicRoutes.main} component={HomeCustomerWrapper} />
-                <Route exact={true} path={publicRoutes.products} component={ProductsPublicWrapper} />
-                <Route exact={true} path={publicRoutes.product} component={ProductPublicWrapper} />
-                <Route exact={true} path={publicRoutes.cart} component={CartWrapper} />
+                <Route exact={true} path={publicRoutes.main} render={() => <Redirect to={publicRoutes.home} />} />
+                <Switch>
+                    <Route path={publicRoutes.home} component={HomeCustomerWrapper} />
+                    <Route path={publicRoutes.products} component={ProductsPublicWrapper} />
+                    <Route path={publicRoutes.product} component={ProductPublicWrapper} />
+                    <Route path={publicRoutes.cart} component={CartWrapper} />
+                    <Route path="*" component={EmptyComponent} />
+                </Switch>
 
                 <PrivateRouteWrapper path={adminRoutes.admin} component={AdminDashboardComponent} />
                 <Route path={adminRoutes.products} component={ProductsWrapper} />
