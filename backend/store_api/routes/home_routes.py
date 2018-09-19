@@ -16,7 +16,7 @@ def product_init():
     db.drop_all()
     db.create_all()
     for i in range(0, 200):
-        p = Product(name="Product " + str(i), price=i*10)
+        p = Product(name="Product " + str(i), price=i*10, quantity=i*2)
         db.session.add(p)
 
     db.session.commit()

@@ -19,7 +19,8 @@ app.config["SECRET_KEY"] = "thissecretkey"
 
 db = SQLAlchemy(app)
 
-from store_api.routes import product_routes  # noqa: E402, F401
+from store_api.routes import product_public_routes  # noqa: E402, F401
+from store_api.routes import product_admin_routes  # noqa: E402, F401
 from store_api.routes import home_routes  # noqa: E402, F401
 from store_api.routes import order_routes  # noqa: E402, F401
 from store_api.routes import login_routes  # noqa: E402, F401 

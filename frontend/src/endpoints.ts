@@ -1,26 +1,22 @@
 import { config } from "./config/config";
 
 const endpoints = {
-    products: `/api/products`, // check
-    adminProfile: `/api/admin_profile`,
+    // public
+    getAllPublicProducts: (pageNumber = 1, perPage = 5) => `/api/public/get_all_products/${pageNumber}/${perPage}`,
+    getPublicProduct: (productUuid: string) => `/api/public/get_product/${productUuid}`,
+    getPathForProductImage: (pathToImage: string) => `api/public/get_image/${pathToImage}`,
+    addOneProduct: (productUuuid: string) => `/api/public/add_one_product/${productUuuid}`,
+    removeOneProduct: (productUuid: string) => `/api/public/remove_one_product/${productUuid}`,
     login: `/api/login`,
-    getAllAdminProducts: (pageNumber = 1, perPage = 5) => `/api/get_all_admin_products/${pageNumber}/${perPage}`,
-    getAllPublicProducts: (pageNumber = 1, perPage = 5) => `/api/get_all_public_products/${pageNumber}/${perPage}`,
-    getPublicProduct: (productUuid: string) => `/api/get_public_product/${productUuid}`,
-    addProductImage: `/api/add_product_image`,
-    editProductImage: (productUuid: string) => `/api/edit_product_image/${productUuid}`,
-    editProduct: (productUuid: string) => `/api/edit_product/${productUuid}`,
-    getPathForProductImage: (pathToImage: string) => `api/get_image/${pathToImage}`,
-    deleteProduct: (productUuid: string) => `/api/delete_product/${productUuid}`,
 
-    logout: `/api/tenants/${config.tenant}/logout`,
-    profile: `/api/tenants/${config.tenant}/admin/profile`,
-    trip: (userId: string, tripId: string) => `/api/tenants/${config.tenant}/admin/users/${userId}/trips/${tripId}`,
-    trips: (userId: string) => `/api/tenants/${config.tenant}/admin/users/${userId}/trips`,
-    userData: (userId: string) => `/api/tenants/${config.tenant}/admin/users/${userId}`,
-    users: (query?: string) => (query ? `/api/tenants/${config.tenant}/admin/users?q=${query}` : `/api/tenants/${config.tenant}/admin/users`),
-    tenantStats: `/api/tenants/${config.tenant}/admin/stats`,
-    uploadUsers: "/api/users",
+    // admin
+    products: `/api/admin/products`,
+    adminProfile: `/api/admin_profile`,
+    getAllAdminProducts: (pageNumber = 1, perPage = 5) => `/api/admin/get_all_products/${pageNumber}/${perPage}`,
+    addProductImage: `/api/admin/add_product_image`,
+    editProductImage: (productUuid: string) => `/api/admin/edit_product_image/${productUuid}`,
+    editProduct: (productUuid: string) => `/api/admin/edit_product/${productUuid}`,
+    deleteProduct: (productUuid: string) => `/api/admin/delete_product/${productUuid}`,
 };
 
 export default endpoints;

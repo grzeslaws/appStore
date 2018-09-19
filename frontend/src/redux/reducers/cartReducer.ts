@@ -10,10 +10,9 @@ const initialState: CartStore = {
 };
 
 export default function reducer(state = initialState, action: Action<ActionType, Product>): CartStore {
+    const currentProduct = action.payload ? state.orderItems.find(o => o.product.productUuid === action.payload.productUuid) : null;
     switch (action.type) {
         case "ADD_PRODUCT_TO_CART":
-            const currentProduct = state.orderItems.find(o => o.product.productUuid === action.payload.productUuid);
-
             if (currentProduct) {
                 const quantity = currentProduct.quantity + 1;
                 const newOrderItem = new OrderItem(action.payload, quantity);
@@ -26,6 +25,22 @@ export default function reducer(state = initialState, action: Action<ActionType,
                 return {
                     ...state,
                     orderItems: state.orderItems.concat(new OrderItem(action.payload)),
+                };
+            }
+        case "REMOVE_PRODUCT_FROM_CART":
+            if (currentProduct && currentProduct.quantity > 1) {
+                const quantity = currentProduct.quantity - 1;
+                const newOrderItem = new OrderItem(action.payload, quantity);
+                const newOrderItems = state.orderItems.map(o => (o.product.productUuid === currentProduct.product.productUuid ? newOrderItem : o));
+                return {
+                    ...state,
+                    orderItems: newOrderItems,
+                };
+            }
+            if (currentProduct && currentProduct.quantity === 1) {
+                return {
+                    ...state,
+                    orderItems: state.orderItems.filter(o => o.product.productUuid !== currentProduct.product.productUuid),
                 };
             }
     }

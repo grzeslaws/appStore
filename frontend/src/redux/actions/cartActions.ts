@@ -1,16 +1,37 @@
-import { parse } from "sparkson";
 import endpoints from "../../endpoints";
 import http from "../../http";
-import { I18N } from "../../i18n/i18n";
-import { NewProduct } from "../../model/NewProduct";
 import { Product } from "../../model/Product";
-import { Products } from "../../model/Products";
 import { Action } from "./action";
-import { requestFailed } from "./fetchActions";
+import { fetchPublicProduct } from "./productsActions";
 
-export function addProductToCart(product: Product): Action<"ADD_PRODUCT_TO_CART", Product> {
+function addProductToCartAction(product: Product): Action<"ADD_PRODUCT_TO_CART", Product> {
     return {
         type: "ADD_PRODUCT_TO_CART",
         payload: product,
+    };
+}
+
+export function addProductToCart(product: Product) {
+    return dispatch => {
+        return http(endpoints.removeOneProduct(product.productUuid)).then(() => {
+            dispatch(addProductToCartAction(product));
+            dispatch(fetchPublicProduct(product.productUuid));
+        });
+    };
+}
+
+function removeProductFromCartAction(product: Product): Action<"REMOVE_PRODUCT_FROM_CART", Product> {
+    return {
+        type: "REMOVE_PRODUCT_FROM_CART",
+        payload: product,
+    };
+}
+
+export function removeProductFromCart(product: Product) {
+    return dispatch => {
+        return http(endpoints.addOneProduct(product.productUuid)).then(() => {
+            dispatch(removeProductFromCartAction(product));
+            dispatch(fetchPublicProduct(product.productUuid));
+        });
     };
 }
