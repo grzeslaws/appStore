@@ -5,8 +5,10 @@ import { ProductsAdminComponent, ProductsProps } from "../components/admin/produ
 import { addProduct, deleteProduct, editProduct, fetchAdminProducts } from "../redux/actions/productsActions";
 import { ApplicationStore } from "../redux/store/store";
 
-export function mapStateToProps({ i18n, products }: ApplicationStore, ownProps: { match: match<{ pageNumber: string; perPage: string }> }): ProductsProps {
-
+export function mapStateToProps(
+    { i18n, products, categories }: ApplicationStore,
+    ownProps: { match: match<{ pageNumber: string; perPage: string }> },
+): ProductsProps {
     return {
         i18n: i18n.messages,
         products: products.products,

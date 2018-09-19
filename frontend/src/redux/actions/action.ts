@@ -8,7 +8,8 @@ export type ActionType =
     | "GETTING_PROFILE_IN_PROGRESS"
     | "UPDATE_PRODUCT"
     | "ADD_PRODUCT_TO_CART"
-    | "REMOVE_PRODUCT_FROM_CART";
+    | "REMOVE_PRODUCT_FROM_CART"
+    | "GET_CATEGORIES";
 
 export interface Action<Type extends ActionType, Payload> {
     type: Type;

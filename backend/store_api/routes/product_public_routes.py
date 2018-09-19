@@ -1,6 +1,6 @@
 from store_api import app, db
 from flask import request, jsonify, send_from_directory
-from store_api.models import Product
+from store_api.models import Product, Category
 from store_api.serializers import product_item
 from sqlalchemy import desc
 import os
@@ -12,12 +12,27 @@ def download_file(filename):
                                filename, as_attachment=False)
 
 
-@app.route("/api/public/get_all_products/<int:page_number>/<int:per_page>", methods=["GET"])
-def get_all_public_products(page_number, per_page):
+@app.route("/api/public/get_all_products/<int:category_id>/<int:page_number>/<int:per_page>")
+def get_all_public_products(category_id, page_number, per_page):
 
-    if request.method == "GET":
-
+    if category_id is 0:
+        print("category_id: ", category_id)
         products = Product.query.order_by(desc(Product.id)).paginate(page=page_number, per_page=per_page)
+        productList = []
+        for p in products.items:
+            productList.append(product_item(p))
+        return jsonify({"products": productList,
+                        "has_next": products.has_next,
+                        "has_prev": products.has_prev,
+                        "next_num": products.next_num,
+                        "prev_num": products.prev_num,
+                        "pages": products.pages})
+
+    else:
+        print("category_id in else: ", category_id)
+        category = Category.query.filter_by(id=category_id).first()
+        products = category.products.paginate(page=page_number, per_page=per_page)
+        print("by category: ", products)
         productList = []
         for p in products.items:
             productList.append(product_item(p))

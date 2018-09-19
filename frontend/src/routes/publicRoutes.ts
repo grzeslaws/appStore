@@ -5,5 +5,7 @@ export const publicRoutes = {
     productsTemplate: `/products/page/`,
     product: `/product/:productUuid`,
     productTemplate: `/product/`,
+    category: `/category/:categoryId`,
+    categoryTemplate: `/category/`,
     cart: `/cart`,
 };

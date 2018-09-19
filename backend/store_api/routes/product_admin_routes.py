@@ -89,7 +89,7 @@ def edit_product(product_uuid):
         return jsonify({"message": "Product has been updated!"})
 
     if request.method == "GET":
-        p = Product.query.filter_by(product_uuid=product_uuid).firdt()
+        p = Product.query.filter_by(product_uuid=product_uuid).first()
         db.session.delete(p)
         db.commit()
 

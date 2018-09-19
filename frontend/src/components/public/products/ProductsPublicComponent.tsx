@@ -9,14 +9,19 @@ import { Link } from "react-router-dom";
 import { publicRoutes } from "../../../routes/publicRoutes";
 
 import endpoints from "../../../endpoints";
+import { Categories } from "../../../model/Categories";
 import PublicNavigationWrapper from "../../../wrappers/PublicNavigationWrapper";
 import { PaginationComponent } from "../../pagination/PaginationComponent";
+import { CategoriesPublicComponent } from "../categories/CategoriesPublicComponent";
 
 export interface ProductsPublicProps {
     i18n: Immutable<I18N>;
     products: Immutable<Products>;
-    fetchPublicProducts: (i18n: I18N, pageNumber?: number, perPage?: number) => any;
+    fetchPublicProducts: (i18n: I18N, categorId?: number, pageNumber?: number, perPage?: number) => any;
     pageNumber: string;
+    categorId: number;
+    categories: Immutable<Categories>;
+    getCategories: () => any;
     perPage?: string;
 }
 
@@ -36,9 +41,11 @@ export class ProductsPublicComponent extends React.Component<ProductsPublicProps
         };
     }
 
-    public componentDidMount() {
+    public componentWillMount() {
+        console.log("this.props.categorId: ", this.props.categorId);
+
         const currentPageNumber = this.props.pageNumber ? Number(this.props.pageNumber) : 1;
-        store.dispatch(this.props.fetchPublicProducts(this.props.i18n, currentPageNumber));
+        store.dispatch(this.props.fetchPublicProducts(this.props.i18n, this.props.categorId, currentPageNumber));
     }
 
     public render() {
@@ -68,6 +75,7 @@ export class ProductsPublicComponent extends React.Component<ProductsPublicProps
         return (
             <>
                 <PublicNavigationWrapper />
+                <CategoriesPublicComponent categories={this.props.categories} getCategories={this.props.getCategories} />
                 {this.props.i18n.products.title}
                 {productList}
                 <div>
@@ -75,7 +83,7 @@ export class ProductsPublicComponent extends React.Component<ProductsPublicProps
                         <PaginationComponent
                             i18n={i18n}
                             paginationData={paginationData}
-                            fetchDataForCurrentPage={this.fetchDataForCurrentPage}
+                            fetchDataForCurrentPage={this.fetchDataForOptions}
                             baseRoute={publicRoutes.productsTemplate}
                         />
                     )}
@@ -84,9 +92,9 @@ export class ProductsPublicComponent extends React.Component<ProductsPublicProps
         );
     }
 
-    private fetchDataForCurrentPage = (pageNumber: number) => {
-        if (pageNumber !== Number(this.props.pageNumber)) {
-            store.dispatch(this.props.fetchPublicProducts(this.props.i18n, pageNumber));
+    private fetchDataForOptions = (options: number) => {
+        if (options !== Number(this.props.pageNumber)) {
+            store.dispatch(this.props.fetchPublicProducts(this.props.i18n, options));
         }
     };
 }
