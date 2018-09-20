@@ -21,6 +21,7 @@ import { AdminDashboardComponent } from "./components/admin/adminDashboard/Admin
 import { getAdminProfile } from "./redux/actions/adminProfileActions";
 import "./style.scss";
 import CartWrapper from "./wrappers/CartWrapper";
+import CategoryPublicWrapper from "./wrappers/CategoryPublicWrapper";
 import LoginWrapper from "./wrappers/LoginWrapper";
 import ProductPublicWrapper from "./wrappers/ProductPublicWrapper";
 import ProductsPublicWrapper from "./wrappers/ProductsPublicWrapper";
@@ -33,11 +34,10 @@ ReactDOM.render(
     <Provider store={store}>
         <HashRouter>
             <>
-                <Route exact={true} path={publicRoutes.main} render={() => <Redirect to={publicRoutes.home} />} />
+                <Route exact={true} path={publicRoutes.main} render={() => <Redirect to={publicRoutes.productsTemplate({pageNumber: 1})} />} />
                 <Switch>
-                    <Route path={publicRoutes.home} component={HomeCustomerWrapper} />
                     <Route path={publicRoutes.products} component={ProductsPublicWrapper} />
-                    <Route path={publicRoutes.category} component={ProductsPublicWrapper} />
+                    <Route path={publicRoutes.category} component={CategoryPublicWrapper} />
                     <Route path={publicRoutes.product} component={ProductPublicWrapper} />
                     <Route path={publicRoutes.cart} component={CartWrapper} />
                 </Switch>

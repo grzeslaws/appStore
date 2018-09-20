@@ -24,13 +24,13 @@ export class PublicNavigationComponent extends React.Component<PublicNavigationP
                 <div>Cart: {totalQuantityofProducts}</div>
                 <ul>
                     <li>
-                        <Link to={publicRoutes.home}>
-                            <button>Home page</button>
+                        <Link to={publicRoutes.productsTemplate({pageNumber: 1})}>
+                            <button>Home</button>
                         </Link>
                     </li>
                     <li>
-                        <Link to={publicRoutes.productsTemplate}>
-                            <button>Products</button>
+                        <Link to={publicRoutes.categoryTemplate({categoryId: 1})}>
+                            <button>Category</button>
                         </Link>
                     </li>
                     <li>
