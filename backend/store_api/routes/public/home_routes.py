@@ -32,7 +32,6 @@ def product_init():
 
     db.session.commit()
     c = Category.query.filter_by(id=1).first()
-    print(c.products.paginate())
 
 
 def admin_init():
@@ -46,7 +45,6 @@ def admin_init():
 def index():
     db.drop_all()
     db.create_all()
-    print("home")
     categories_init()
     admin_init()
     product_init()

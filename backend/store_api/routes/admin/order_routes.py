@@ -27,7 +27,6 @@ def order_details(order_id):
 
         o = Order.query.filter_by(id=order_id).first()
         oi = Orderitem.query.filter_by(order_id=o.id).all()
-        print(oi)
         oi_items = []
 
         for oii in oi:

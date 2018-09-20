@@ -29,8 +29,6 @@ export function fetchAdminProducts(i18n: I18N, pageNumber?: number, perPage?: nu
 }
 
 export function fetchPublicProducts({ i18n, categoryId, pageNumber }: { i18n: I18N; categoryId?: number; pageNumber?: number }) {
-    console.log("i18n, categoryId, pageNumber: ", i18n, categoryId, pageNumber )
-    
     return dispatch => {
         return http(endpoints.getAllPublicProducts({ categoryId, pageNumber }))
             .then(json => {
@@ -66,13 +64,12 @@ export function addProduct(payload: NewProduct, productImage: FileList, i18n: I1
 }
 
 export function editProduct(productUuid: string, payload: NewProduct, i18n: I18N, productImage?: FileList) {
-    const product = new NewProduct(payload.name);
     return dispatch => {
         if (productImage) {
             http(endpoints.editProductImage(productUuid), "file", productImage);
         }
         if (payload.name) {
-            http(endpoints.editProduct(productUuid), "put", product).then(json => dispatch(fetchAdminProducts(i18n)));
+            http(endpoints.editProduct(productUuid), "put", payload).then(json => dispatch(fetchAdminProducts(i18n)));
         }
     };
 }

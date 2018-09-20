@@ -2,6 +2,7 @@ import { connect } from "react-redux";
 import { match } from "react-router";
 
 import { ProductsAdminComponent, ProductsProps } from "../components/admin/products/ProductsAdminComponent";
+import { addCategory, deleteCategory, getCategories } from "../redux/actions/categoriesActions";
 import { addProduct, deleteProduct, editProduct, fetchAdminProducts } from "../redux/actions/productsActions";
 import { ApplicationStore } from "../redux/store/store";
 
@@ -18,6 +19,10 @@ export function mapStateToProps(
         pageNumber: ownProps.match.params.pageNumber,
         perPage: ownProps.match.params.perPage,
         deleteProduct,
+        categories: categories.categories,
+        getCategories,
+        addCategory,
+        deleteCategory,
     };
 }
 

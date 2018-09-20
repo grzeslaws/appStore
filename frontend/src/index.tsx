@@ -29,12 +29,13 @@ import ProductsPublicWrapper from "./wrappers/ProductsPublicWrapper";
 const messages = new I18nResolver(i18n, "en").translation;
 store.dispatch(setI18N(messages));
 getAdminProfile()(store.dispatch);
+console.log("getAdminProfile()(store.dispatch);");
 
 ReactDOM.render(
     <Provider store={store}>
         <HashRouter>
             <>
-                <Route exact={true} path={publicRoutes.main} render={() => <Redirect to={publicRoutes.productsTemplate({pageNumber: 1})} />} />
+                <Route exact={true} path={publicRoutes.main} render={() => <Redirect to={publicRoutes.productsTemplate({ pageNumber: 1 })} />} />
                 <Switch>
                     <Route path={publicRoutes.products} component={ProductsPublicWrapper} />
                     <Route path={publicRoutes.category} component={CategoryPublicWrapper} />

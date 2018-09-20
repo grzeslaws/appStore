@@ -11,6 +11,7 @@ import { adminRoutes } from "../../../routes/adminRoutes";
 import endpoints from "../../../endpoints";
 import { Categories } from "../../../model/Categories";
 import { PaginationComponent } from "../../pagination/PaginationComponent";
+import { CategoriesAdminComponent } from "../categories/CategoriesAdminComponent";
 import "./products-admin.scss";
 
 export interface ProductsProps {
@@ -21,6 +22,10 @@ export interface ProductsProps {
     editProduct: (productUuid: string, payload: NewProduct, i18n: I18N, productImage?: FileList) => any;
     deleteProduct: (productUuid: string, i18n: I18N) => any;
     pageNumber: string;
+    categories: Immutable<Categories>;
+    getCategories: () => any;
+    addCategory: (categoryName: string) => any;
+    deleteCategory: (categoryUd: number) => any;
     perPage?: string;
 }
 
@@ -28,6 +33,7 @@ interface ProductsState {
     productName: string;
     currentProduct: string;
     productImage: FileList;
+    productCategory: number;
 }
 export class ProductsAdminComponent extends React.Component<ProductsProps, ProductsState> {
     constructor(props: ProductsProps) {
@@ -37,16 +43,18 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
             productName: "",
             currentProduct: null,
             productImage: null,
+            productCategory: 1,
         };
     }
 
     public componentDidMount() {
         const currentPageNumber = this.props.pageNumber ? Number(this.props.pageNumber) : 1;
-        store.dispatch(this.props.fetchAdminProducts(this.props.i18n, currentPageNumber));
+        this.props.fetchAdminProducts(this.props.i18n, currentPageNumber)(store.dispatch);
+        this.props.getCategories()(store.dispatch);
     }
 
     public render() {
-        const { products, i18n } = this.props;
+        const { products, i18n, categories, addCategory, deleteCategory } = this.props;
         const paginationData = products
             ? {
                   hasNext: products.hasNext,
@@ -56,6 +64,17 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
                   pages: products.pages,
               }
             : null;
+
+        const categoriesSelect = categories
+            ? categories.categories.map(c => (
+                  <option key={c.id} value={c.id}>
+                      {c.name}
+                  </option>
+              ))
+            : null;
+
+        const categoriesList = categories ? categories.categories.map(c => <li key={c.id}>{c.name}</li>) : null;
+
         const productList: ReadonlyArray<JSX.Element> = products
             ? products.products.map(p => {
                   const isCurrentProduct = this.state.currentProduct === p.productUuid ? true : false;
@@ -67,13 +86,23 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
                               {isCurrentProduct ? i18n.products.closeEditor : i18n.products.openEditor}
                           </button>
                           {isCurrentProduct && (
-                              <div>
-                                  <label>{i18n.products.imageName}</label>
-                                  <input value={this.state.productName} name="productName" onChange={this.onChange} placeholder={p.name} />
-                                  <input type="file" name="productImage" onChange={this.onChange} />
-                                  <button onClick={() => this.saveChanges(p.productUuid)}>{i18n.products.saveChanges}</button>
-                                  <button onClick={() => this.handleDeleteProduct(p.productUuid)}> X {i18n.products.deleteProduct}</button>
-                              </div>
+                              <>
+                                  <div>
+                                      <label>{i18n.products.imageName}</label>
+                                      <input value={this.state.productName} name="productName" onChange={this.onChange} placeholder={p.name} />
+                                      <input type="file" name="productImage" onChange={this.onChange} />
+                                      <div>
+                                          Select category:{" "}
+                                          <select name="productCategory" value={this.state.productCategory} onChange={this.onChange}>
+                                              <option value={0}>Select category</option>
+                                              {categoriesSelect}
+                                          </select>
+                                      </div>
+                                      <ul>{categoriesList}</ul>
+                                      <button onClick={() => this.saveChanges(p.productUuid)}>{i18n.products.saveChanges}</button>
+                                      <button onClick={() => this.handleDeleteProduct(p.productUuid)}> X {i18n.products.deleteProduct}</button>
+                                  </div>
+                              </>
                           )}
                       </div>
                   );
@@ -84,7 +113,10 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
             <>
                 <AddProductAdminComponent i18n={i18n} addProduct={this.handleAddProduct} />
                 {this.props.i18n.products.title}
-                {productList}
+                <div style={{ display: "flex" }}>
+                    <div>{productList}</div>
+                    <CategoriesAdminComponent categories={categories} addCategory={addCategory} deleteCategory={deleteCategory} />
+                </div>
                 <div>
                     {products && (
                         <PaginationComponent
@@ -99,7 +131,7 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
         );
     }
 
-    private fetchDataForCurrentPage = ({categoryId, pageNumber}: {categoryId?: number, pageNumber: number}) => {
+    private fetchDataForCurrentPage = ({ categoryId, pageNumber }: { categoryId?: number; pageNumber: number }) => {
         if (pageNumber !== Number(this.props.pageNumber)) {
             store.dispatch(this.props.fetchAdminProducts(this.props.i18n, pageNumber));
         }
@@ -109,7 +141,7 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
         store.dispatch(this.props.addProduct(payload, productImage, i18n));
     };
 
-    private onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    private onChange = (e: React.ChangeEvent<any>) => {
         const newProduct: ProductsState = {
             ...this.state,
         };
@@ -134,7 +166,9 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
         if (!this.state.productName && !this.state.productImage) {
             return;
         }
-        const payload = new NewProduct(this.state.productName);
+
+        const payload = new NewProduct(this.state.productName, this.state.productCategory);
+        console.log(payload);
         store.dispatch(this.props.editProduct(productUuid, payload, this.props.i18n, this.state.productImage));
         this.setState({ currentProduct: null });
     };

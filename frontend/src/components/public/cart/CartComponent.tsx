@@ -9,8 +9,8 @@ import PublicNavigationWrapper from "../../../wrappers/PublicNavigationWrapper";
 export interface CartProps {
     i18n: Immutable<I18N>;
     orderItems: ReadonlyArray<Immutable<OrderItem>>;
-    removeProductFromCart: (product: Product) => any;
-    addProductToCart: (product: Product) => any;
+    removeProductFromCart: (product: Immutable<Product>) => any;
+    addProductToCart: (product: Immutable<Product>) => any;
 }
 
 export class CartComponent extends React.Component<CartProps, {}> {

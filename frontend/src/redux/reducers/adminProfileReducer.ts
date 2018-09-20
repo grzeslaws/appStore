@@ -1,11 +1,11 @@
 import { ImmutableUtils } from "immutable-typescript";
 import { Action, ActionType } from "../actions/action";
+import { AdminProfile } from "./../../model/AdminProfile";
 
 import AdminProfileStore from "../store/adminProfileStore";
 
 const initialState: AdminProfileStore = {
     adminProfile: null,
-    succesInGettingProfile: false,
     gettingProfileInProgress: false,
 };
 
