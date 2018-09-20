@@ -85,6 +85,10 @@ def edit_product(product_uuid):
     if request.method == "PUT":
         p = Product.query.filter_by(product_uuid=product_uuid).first()
         p.name = request.json["name"]
+        if request.json["categoryId"] != "0":
+            print("request.json: ", request.json["categoryId"])
+            c = Category.query.filter_by(id=request.json["categoryId"]).first()
+            c.products.append(p)
         db.session.commit()
         return jsonify({"message": "Product has been updated!"})
 
@@ -107,7 +111,6 @@ def delete_product(product_uuid):
 @app.route("/api/admin/edit_product_image/<product_uuid>", methods=["POST"])
 def edit_product_image(product_uuid):
     if request.method == "POST":
-        print("product_uuid: ", product_uuid)
         if request.files:
             file = request.files["file"]
             file_name = secure_filename(file.filename)

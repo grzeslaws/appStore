@@ -12,7 +12,7 @@ export interface ProductPublicProps {
     productUuid: string;
     product: Immutable<Product>;
     fetchPublicProduct: (productUuid: string) => any;
-    addProductToCart: (product: Product) => any;
+    addProductToCart: (product: Immutable<Product>) => any;
 }
 
 export class ProductPublicComponent extends React.Component<ProductPublicProps, {}> {

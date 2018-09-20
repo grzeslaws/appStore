@@ -38,7 +38,7 @@ export class AdminDashboardComponent extends React.Component<{}, {}> {
     }
 
     private logout = history => {
-        logout();
+        logout()(store.dispatch);
         history.push(publicRoutes.main);
     };
 }

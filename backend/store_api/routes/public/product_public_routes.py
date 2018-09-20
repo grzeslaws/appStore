@@ -16,7 +16,6 @@ def download_file(filename):
 def get_all_public_products(category_id, page_number, per_page):
 
     if category_id is 0:
-        print("category_id: ", category_id)
         products = Product.query.order_by(desc(Product.id)).paginate(page=page_number, per_page=per_page)
         productList = []
         for p in products.items:
@@ -29,10 +28,8 @@ def get_all_public_products(category_id, page_number, per_page):
                         "pages": products.pages})
 
     else:
-        print("category_id in else: ", category_id)
         category = Category.query.filter_by(id=category_id).first()
         products = category.products.paginate(page=page_number, per_page=per_page)
-        print("by category: ", products)
         productList = []
         for p in products.items:
             productList.append(product_item(p))

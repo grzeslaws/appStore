@@ -4,7 +4,7 @@ from store_api.models import Admin
 from store_api.routes import token_required
 
 
-@app.route("/api/admin_profile", methods=["GET"])
+@app.route("/api/admin/profile", methods=["GET"])
 @token_required 
 def admin_profile(current_user):
     if request.method == "GET":

@@ -54,5 +54,8 @@ export function login(name: string, password: string): any {
 }
 
 export function logout() {
-    localStorage.removeItem("x-access-token");
+    return dispatch => {
+        localStorage.removeItem("x-access-token");
+        dispatch(getAdminProfile());
+    };
 }
