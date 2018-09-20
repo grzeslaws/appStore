@@ -14,24 +14,24 @@ import PublicNavigationWrapper from "../../../wrappers/PublicNavigationWrapper";
 import { PaginationComponent } from "../../pagination/PaginationComponent";
 import { CategoriesListPublicComponent } from "../categories/CategoriesListPublicComponent";
 
-export interface ProductsPublicProps {
+export interface CategoryPublicProps {
     i18n: Immutable<I18N>;
     products: Immutable<Products>;
     fetchPublicProducts: ({}) => any;
     pageNumber: number;
-    categorId: number;
+    categoryId: number;
     categories: Immutable<Categories>;
     getCategories: () => any;
     perPage?: number;
 }
 
-interface ProductsState {
+interface CategoryState {
     productName: string;
     currentProduct: string;
     productImage: FileList;
 }
-export class ProductsPublicComponent extends React.Component<ProductsPublicProps, ProductsState> {
-    constructor(props: ProductsPublicProps) {
+export class CategoryPublicComponent extends React.Component<CategoryPublicProps, CategoryState> {
+    constructor(props: CategoryPublicProps) {
         super(props);
 
         this.state = {
@@ -42,11 +42,11 @@ export class ProductsPublicComponent extends React.Component<ProductsPublicProps
     }
 
     public componentWillMount() {
-        this.fetchDataForOptions({pageNumber: this.props.pageNumber});
+        this.fetchDataForOptions({ pageNumber: this.props.pageNumber, categoryId: this.props.categoryId });
     }
 
     public render() {
-        const { products, i18n } = this.props;
+        const { products, i18n, categoryId, getCategories, categories } = this.props;
         const paginationData = products
             ? {
                   hasNext: products.hasNext,
@@ -72,23 +72,30 @@ export class ProductsPublicComponent extends React.Component<ProductsPublicProps
         return (
             <>
                 <PublicNavigationWrapper />
+                <CategoriesListPublicComponent
+                    categories={categories}
+                    getCategories={getCategories}
+                    fetchDataForCategory={this.fetchDataForOptions}
+                />
                 {this.props.i18n.products.title}
                 {productList}
                 <div>
-                    {products && (
-                        <PaginationComponent
-                            i18n={i18n}
-                            paginationData={paginationData}
-                            fetchDataForCurrentPage={this.fetchDataForOptions}
-                            baseRoute={publicRoutes.productsTemplate}
-                        />
-                    )}
+                    {products &&
+                        categoryId && (
+                            <PaginationComponent
+                                i18n={i18n}
+                                paginationData={paginationData}
+                                fetchDataForCurrentPage={this.fetchDataForOptions}
+                                baseRoute={publicRoutes.categoryTemplate}
+                                categoryId={categoryId}
+                            />
+                        )}
                 </div>
             </>
         );
     }
 
-    private fetchDataForOptions = ({categoryId, pageNumber}: {categoryId?: number, pageNumber: number}) => {
-        this.props.fetchPublicProducts({ i18n: this.props.i18n, pageNumber })(store.dispatch);
+    private fetchDataForOptions = ({ categoryId, pageNumber }: { categoryId?: number; pageNumber: number }) => {
+        this.props.fetchPublicProducts({ i18n: this.props.i18n, pageNumber, categoryId })(store.dispatch);
     };
 }

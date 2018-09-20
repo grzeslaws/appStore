@@ -24,7 +24,7 @@ export class AdminDashboardComponent extends React.Component<{}, {}> {
                         </Link>
                     </li>
                     <li>
-                        <Link to={adminRoutes.productsTemplate}>
+                        <Link to={adminRoutes.productsTemplate({})}>
                             <button>Products</button>
                         </Link>
                     </li>

@@ -28,9 +28,11 @@ export function fetchAdminProducts(i18n: I18N, pageNumber?: number, perPage?: nu
     };
 }
 
-export function fetchPublicProducts(i18n: I18N, categoryId: number, pageNumber?: number, perPage?: number) {
+export function fetchPublicProducts({ i18n, categoryId, pageNumber }: { i18n: I18N; categoryId?: number; pageNumber?: number }) {
+    console.log("i18n, categoryId, pageNumber: ", i18n, categoryId, pageNumber )
+    
     return dispatch => {
-        return http(endpoints.getAllPublicProducts({ categoryId, pageNumber, perPage }))
+        return http(endpoints.getAllPublicProducts({ categoryId, pageNumber }))
             .then(json => {
                 dispatch(updateProducts(parse(Products, json)));
             })

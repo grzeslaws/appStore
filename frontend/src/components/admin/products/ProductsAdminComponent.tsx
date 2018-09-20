@@ -99,7 +99,7 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
         );
     }
 
-    private fetchDataForCurrentPage = (pageNumber: number) => {
+    private fetchDataForCurrentPage = ({categoryId, pageNumber}: {categoryId?: number, pageNumber: number}) => {
         if (pageNumber !== Number(this.props.pageNumber)) {
             store.dispatch(this.props.fetchAdminProducts(this.props.i18n, pageNumber));
         }

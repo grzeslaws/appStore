@@ -8,9 +8,10 @@ import { publicRoutes } from "../../../routes/publicRoutes";
 interface CategoriesProps {
     categories: Immutable<Categories>;
     getCategories: () => any;
+    fetchDataForCategory: ({ categoryId, pageNumber }: { categoryId?: number; pageNumber: number }) => void;
 }
 
-export class CategoriesPublicComponent extends React.Component<CategoriesProps, {}> {
+export class CategoriesListPublicComponent extends React.Component<CategoriesProps, {}> {
     constructor(props: any) {
         super(props);
 
@@ -22,11 +23,15 @@ export class CategoriesPublicComponent extends React.Component<CategoriesProps, 
     }
 
     public render() {
-        const { categories } = this.props;
+        const { categories, fetchDataForCategory } = this.props;
         const categoriesList = categories
             ? categories.categories.map(c => (
                   <li key={c.id}>
-                      <NavLink to={publicRoutes.categoryTemplate + c.id}>{c.name}</NavLink>
+                      <NavLink
+                          onClick={() => fetchDataForCategory({ categoryId: c.id, pageNumber: 1 })}
+                          to={publicRoutes.categoryTemplate({ categoryId: c.id })}>
+                          {c.name}
+                      </NavLink>
                   </li>
               ))
             : null;
