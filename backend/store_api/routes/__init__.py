@@ -12,7 +12,7 @@ def token_required(f):
 
         if "x-access-token" in request.headers:
             token = request.headers["x-access-token"]
-        if not token:
+        if token == "null" or token is None:
             return jsonify({"message": "Token is missing!"}), 403
         try:
             data = jwt.decode(

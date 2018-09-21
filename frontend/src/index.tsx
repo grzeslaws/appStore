@@ -35,7 +35,8 @@ ReactDOM.render(
     <Provider store={store}>
         <HashRouter>
             <>
-                <Route exact={true} path={publicRoutes.main} render={() => <Redirect to={publicRoutes.productsTemplate({ pageNumber: 1 })} />} />
+                {/* <Route exact={true} path={publicRoutes.main} render={() => <Redirect to={publicRoutes.productsTemplate({ pageNumber: 1 })} />} /> */}
+                <Route exact={true} path={publicRoutes.main} component={ProductsPublicWrapper} />
                 <Switch>
                     <Route path={publicRoutes.products} component={ProductsPublicWrapper} />
                     <Route path={publicRoutes.category} component={CategoryPublicWrapper} />
