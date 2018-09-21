@@ -48,7 +48,8 @@ function updateProduct(product): Action<"UPDATE_PRODUCT", Product> {
     };
 }
 
-export function fetchPublicProduct(productUuid: string) {
+export function fetchPublicProduct(
+    productUuid: string) {
     return dispatch => {
         return http(endpoints.getPublicProduct(productUuid)).then(json => dispatch(updateProduct(parse(Product, json))));
     };

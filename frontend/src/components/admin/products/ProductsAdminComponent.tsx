@@ -8,6 +8,7 @@ import { AddProductAdminComponent } from "./AddProductAdminComponent";
 
 import { adminRoutes } from "../../../routes/adminRoutes";
 
+import * as _ from "lodash";
 import endpoints from "../../../endpoints";
 import { Categories } from "../../../model/Categories";
 import { Category } from "../../../model/Category";
@@ -67,24 +68,38 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
               }
             : null;
 
-        const categoriesSelect = categories
-            ? categories.categories.map(c => (
-                  <option key={c.id} value={c.id}>
-                      {c.name}
-                  </option>
-              ))
-            : null;
-
-        // const categoriesList = categories ? categories.categories.map(c => <li key={c.id}>{c.name}</li>) : null;
-
-        const categoriesForProduct = (cat: ReadonlyArray<Immutable<Category>>, productUuid: string) => {
-            return cat.map(c => {
-                return <li key={c.id}>{c.name}<button onClick={() => this.removeCategoryFromProduct(c.id, productUuid)}>Remove category</button></li>;
+        const categoriesSelect = (category: ReadonlyArray<Immutable<Category>>) => {
+            return categories.categories.map(c => {
+                const isCategoryExist = !!category.find(cat => cat.id === c.id);
+                if (!isCategoryExist) {
+                    return (
+                        <option key={c.id} value={c.id}>
+                            {" "}
+                            {c.name}{" "}
+                        </option>
+                    );
+                }
             });
         };
 
-        // to remove
-        const simpleStyle = { border: "1px solid", padding: "10px", marginBottom: "10px" };
+        const categoriesForProduct = (cat: ReadonlyArray<Immutable<Category>>, productUuid: string) => {
+            return cat.map(c => {
+                return (
+                    <li key={c.id}>
+                        {c.name}
+                        <button onClick={() => this.removeCategoryFromProduct(c.id, productUuid)}>Remove category</button>
+                    </li>
+                );
+            });
+        };
+
+        const showCategoriesSelect = (productCategories: ReadonlyArray<Immutable<Category>>, allCategories: ReadonlyArray<Immutable<Category>>) => {
+            console.log(_.intersectionBy(productCategories, allCategories, "id").length);
+
+            return productCategories && allCategories ? _.intersectionBy(productCategories, allCategories, "id").length !== allCategories.length : null;
+        };
+
+        const simpleStyle = { border: "1px solid", padding: "10px", marginBottom: "10px" }; // to remove
 
         const productList: ReadonlyArray<JSX.Element> = products
             ? products.products.map(p => {
@@ -104,13 +119,18 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
                                           <input value={this.state.productName} name="productName" onChange={this.onChange} placeholder={p.name} />
                                           <input type="file" name="productImage" onChange={this.onChange} />
                                       </div>
-                                      <div style={simpleStyle}>
-                                          Select category:{" "}
-                                          <select name="productCategory" value={this.state.productCategory} onChange={this.onChange}>
-                                              <option value={0}>Select category</option>
-                                              {categoriesSelect}
-                                          </select>
-                                      </div>
+                                      {showCategoriesSelect(p.categories, categories.categories) && (
+                                          <div style={simpleStyle}>
+                                              Select category:{" "}
+                                              <select name="productCategory" value={this.state.productCategory} onChange={this.onChange}>
+                                                  <option key={0} value={0} defaultChecked={true}>
+                                                      Select category
+                                                  </option>
+                                                  {categoriesSelect(p.categories)}
+                                              </select>
+                                          </div>
+                                      )}
+
                                       <ul style={simpleStyle}>Categories list: {categoriesForProduct(p.categories, p.productUuid)}</ul>
                                       <button onClick={() => this.saveChanges(p.productUuid)}>{i18n.products.saveChanges}</button>
                                       <button onClick={() => this.handleDeleteProduct(p.productUuid)}> X {i18n.products.deleteProduct}</button>
