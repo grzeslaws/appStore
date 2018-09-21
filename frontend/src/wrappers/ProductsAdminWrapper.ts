@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 import { match } from "react-router";
 
 import { ProductsAdminComponent, ProductsProps } from "../components/admin/products/ProductsAdminComponent";
-import { addCategory, deleteCategory, getCategories } from "../redux/actions/categoriesActions";
+import { addCategory, deleteCategory, deleteCategoryFromProduct,  getCategories } from "../redux/actions/categoriesActions";
 import { addProduct, deleteProduct, editProduct, fetchAdminProducts } from "../redux/actions/productsActions";
 import { ApplicationStore } from "../redux/store/store";
 
@@ -23,6 +23,7 @@ export function mapStateToProps(
         getCategories,
         addCategory,
         deleteCategory,
+        deleteCategoryFromProduct,
     };
 }
 

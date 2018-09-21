@@ -10,6 +10,7 @@ import { adminRoutes } from "../../../routes/adminRoutes";
 
 import endpoints from "../../../endpoints";
 import { Categories } from "../../../model/Categories";
+import { Category } from "../../../model/Category";
 import { PaginationComponent } from "../../pagination/PaginationComponent";
 import { CategoriesAdminComponent } from "../categories/CategoriesAdminComponent";
 import "./products-admin.scss";
@@ -24,8 +25,9 @@ export interface ProductsProps {
     pageNumber: string;
     categories: Immutable<Categories>;
     getCategories: () => any;
-    addCategory: (categoryName: string) => any;
-    deleteCategory: (categoryUd: number) => any;
+    addCategory: (i18n: I18N, categoryName: string) => any;
+    deleteCategory: (i18n: I18N, categoryId: number) => any;
+    deleteCategoryFromProduct: (i18n: I18N, categoryId: number, productUuid: string) => any;
     perPage?: string;
 }
 
@@ -73,13 +75,22 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
               ))
             : null;
 
-        const categoriesList = categories ? categories.categories.map(c => <li key={c.id}>{c.name}</li>) : null;
+        // const categoriesList = categories ? categories.categories.map(c => <li key={c.id}>{c.name}</li>) : null;
+
+        const categoriesForProduct = (cat: ReadonlyArray<Immutable<Category>>, productUuid: string) => {
+            return cat.map(c => {
+                return <li key={c.id}>{c.name}<button onClick={() => this.removeCategoryFromProduct(c.id, productUuid)}>Remove category</button></li>;
+            });
+        };
+
+        // to remove
+        const simpleStyle = { border: "1px solid", padding: "10px", marginBottom: "10px" };
 
         const productList: ReadonlyArray<JSX.Element> = products
             ? products.products.map(p => {
                   const isCurrentProduct = this.state.currentProduct === p.productUuid ? true : false;
                   return (
-                      <div style={{ border: "1px solid", marginBottom: "20px" }} key={p.id}>
+                      <div style={simpleStyle} key={p.id}>
                           {p.name}
                           {p.imagePath && <img style={{ maxWidth: "40px" }} src={`${endpoints.getPathForProductImage(p.imagePath)}`} />}
                           <button onClick={() => this.openEditProduct(p.productUuid, p.name)}>
@@ -88,17 +99,19 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
                           {isCurrentProduct && (
                               <>
                                   <div>
-                                      <label>{i18n.products.imageName}</label>
-                                      <input value={this.state.productName} name="productName" onChange={this.onChange} placeholder={p.name} />
-                                      <input type="file" name="productImage" onChange={this.onChange} />
-                                      <div>
+                                      <div style={simpleStyle}>
+                                          <label>{i18n.products.imageName}</label>
+                                          <input value={this.state.productName} name="productName" onChange={this.onChange} placeholder={p.name} />
+                                          <input type="file" name="productImage" onChange={this.onChange} />
+                                      </div>
+                                      <div style={simpleStyle}>
                                           Select category:{" "}
                                           <select name="productCategory" value={this.state.productCategory} onChange={this.onChange}>
                                               <option value={0}>Select category</option>
                                               {categoriesSelect}
                                           </select>
                                       </div>
-                                      <ul>{categoriesList}</ul>
+                                      <ul style={simpleStyle}>Categories list: {categoriesForProduct(p.categories, p.productUuid)}</ul>
                                       <button onClick={() => this.saveChanges(p.productUuid)}>{i18n.products.saveChanges}</button>
                                       <button onClick={() => this.handleDeleteProduct(p.productUuid)}> X {i18n.products.deleteProduct}</button>
                                   </div>
@@ -115,7 +128,7 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
                 {this.props.i18n.products.title}
                 <div style={{ display: "flex" }}>
                     <div>{productList}</div>
-                    <CategoriesAdminComponent categories={categories} addCategory={addCategory} deleteCategory={deleteCategory} />
+                    <CategoriesAdminComponent i18n={i18n} categories={categories} addCategory={addCategory} deleteCategory={deleteCategory} />
                 </div>
                 <div>
                     {products && (
@@ -172,6 +185,10 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
         store.dispatch(this.props.editProduct(productUuid, payload, this.props.i18n, this.state.productImage));
         this.setState({ currentProduct: null });
     };
+
+    private removeCategoryFromProduct(categoryId: number, productUuid: string) {
+        this.props.deleteCategoryFromProduct(this.props.i18n, categoryId, productUuid)(store.dispatch);
+    }
 
     private handleDeleteProduct(productUuid: string) {
         store.dispatch(this.props.deleteProduct(productUuid, this.props.i18n));
