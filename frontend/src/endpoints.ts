@@ -8,6 +8,7 @@ const endpoints = {
     addOneProduct: (productUuuid: string) => `/api/public/add_one_product/${productUuuid}`,
     removeOneProduct: (productUuid: string) => `/api/public/remove_one_product/${productUuid}`,
     getCategories: `/api/public/get_categories`,
+    getCollections: `/api/public/get_collections`,
     login: `/api/login`,
 
     // admin
@@ -20,6 +21,9 @@ const endpoints = {
     deleteProduct: (productUuid: string) => `/api/admin/delete_product/${productUuid}`,
     addCategory: `/api/admin/add_category`,
     deleteCategory: (categoryId: number) => `/api/admin/delete_category/${categoryId}`,
+    deleteCategoryFromProduct: (categoryId: number, productUuid: string) => `/api/admin/delete_category_for_product/${categoryId}/${productUuid}`,
+    addCollection: `/api/admin/add_collection`,
+    deleteCollection: (categoryId: number) => `/api/admin/delete_category/${categoryId}`,
     deleteCategoryFromProduct: (categoryId: number, productUuid: string) => `/api/admin/delete_category_for_product/${categoryId}/${productUuid}`,
 };
 
