@@ -7,6 +7,7 @@ import { logout } from "../../../redux/actions/adminProfileActions";
 import store from "../../../redux/store/store";
 import { adminRoutes } from "../../../routes/adminRoutes";
 import { publicRoutes } from "../../../routes/publicRoutes";
+import PublicNavigationWrapper from "../../../wrappers/PublicNavigationWrapper";
 
 export class AdminDashboardComponent extends React.Component<{}, {}> {
     constructor(props: any) {
@@ -17,6 +18,7 @@ export class AdminDashboardComponent extends React.Component<{}, {}> {
     public render() {
         return (
             <>
+                <PublicNavigationWrapper />
                 <ul>
                     <li>
                         <Link to={adminRoutes.admin}>

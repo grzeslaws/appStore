@@ -1,12 +1,14 @@
 import { Immutable } from "immutable-typescript";
 import * as React from "react";
+import { I18N } from "../../../i18n/i18n";
 import { Categories } from "../../../model/Categories";
 import store from "../../../redux/store/store";
 
 interface CategoriesAdminProps {
+    i18n: Immutable<I18N>;
     categories: Immutable<Categories>;
-    addCategory: (categoryName: string) => any;
-    deleteCategory: (categoryId: number) => any;
+    addCategory: (i18n: I18N, categoryName: string) => any;
+    deleteCategory: (i18n: I18N, categoryId: number) => any;
 }
 
 interface CategoriesAdminState {
@@ -23,12 +25,12 @@ export class CategoriesAdminComponent extends React.Component<CategoriesAdminPro
     }
 
     public render() {
-        const { categories, deleteCategory } = this.props;
+        const { categories, deleteCategory, i18n } = this.props;
         const categoriesList = categories
             ? categories.categories.map(c => (
                   <li key={c.id}>
                       {c.name}
-                      <button onClick={() => deleteCategory(c.id)(store.dispatch)}>Remove category</button>
+                      <button onClick={() => deleteCategory(i18n, c.id)(store.dispatch)}>Remove category</button>
                   </li>
               ))
             : null;
@@ -55,7 +57,7 @@ export class CategoriesAdminComponent extends React.Component<CategoriesAdminPro
     };
 
     private addCategory = () => {
-        this.props.addCategory(this.state.categoryItem)(store.dispatch);
+        this.props.addCategory(this.props.i18n, this.state.categoryItem)(store.dispatch);
         this.setState({ categoryItem: "" });
     };
 }

@@ -20,6 +20,7 @@ const endpoints = {
     deleteProduct: (productUuid: string) => `/api/admin/delete_product/${productUuid}`,
     addCategory: `/api/admin/add_category`,
     deleteCategory: (categoryId: number) => `/api/admin/delete_category/${categoryId}`,
+    deleteCategoryFromProduct: (categoryId: number, productUuid: string) => `/api/admin/delete_category_for_product/${categoryId}/${productUuid}`,
 };
 
 export default endpoints;
