@@ -12,8 +12,11 @@ import * as _ from "lodash";
 import endpoints from "../../../endpoints";
 import { Categories } from "../../../model/Categories";
 import { Category } from "../../../model/Category";
+import { Collection } from "../../../model/Collection";
+import { Collections } from "../../../model/Collections";
 import { PaginationComponent } from "../../pagination/PaginationComponent";
 import { CategoriesAdminComponent } from "../categories/CategoriesAdminComponent";
+import { ItemsForProductsComponent } from "../itemsForProducts/ItemsForProductsComponent";
 import "./products-admin.scss";
 
 export interface ProductsProps {
@@ -25,10 +28,13 @@ export interface ProductsProps {
     deleteProduct: (productUuid: string, i18n: I18N) => any;
     pageNumber: string;
     categories: Immutable<Categories>;
+    collections: Immutable<Collections>;
     getCategories: () => any;
+    getCollections: () => any;
     addCategory: (i18n: I18N, categoryName: string) => any;
     deleteCategory: (i18n: I18N, categoryId: number) => any;
     deleteCategoryFromProduct: (i18n: I18N, categoryId: number, productUuid: string) => any;
+    deleteCollectionFromProduct: (i18n: I18N, collectionId: number, productUuid: string) => any;
     perPage?: string;
 }
 
@@ -37,7 +43,9 @@ interface ProductsState {
     currentProduct: string;
     productImage: FileList;
     productCategory: number;
+    productCollection: number;
 }
+
 export class ProductsAdminComponent extends React.Component<ProductsProps, ProductsState> {
     constructor(props: ProductsProps) {
         super(props);
@@ -46,7 +54,8 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
             productName: "",
             currentProduct: null,
             productImage: null,
-            productCategory: 1,
+            productCategory: 0,
+            productCollection: 0,
         };
     }
 
@@ -54,10 +63,11 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
         const currentPageNumber = this.props.pageNumber ? Number(this.props.pageNumber) : 1;
         this.props.fetchAdminProducts(this.props.i18n, currentPageNumber)(store.dispatch);
         this.props.getCategories()(store.dispatch);
+        this.props.getCollections()(store.dispatch);
     }
 
     public render() {
-        const { products, i18n, categories, addCategory, deleteCategory } = this.props;
+        const { products, i18n, categories, addCategory, deleteCategory, collections, deleteCategoryFromProduct, deleteCollectionFromProduct } = this.props;
         const paginationData = products
             ? {
                   hasNext: products.hasNext,
@@ -68,9 +78,9 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
               }
             : null;
 
-        const categoriesSelect = (category: ReadonlyArray<Immutable<Category>>) => {
-            return categories.categories.map(c => {
-                const isCategoryExist = !!category.find(cat => cat.id === c.id);
+        const itemsSelect = (itemsInProduct: ReadonlyArray<Immutable<Category | Collection>>, allItems: ReadonlyArray<Immutable<Category | Collection>>) => {
+            return allItems.map(c => {
+                const isCategoryExist = !!itemsInProduct.find(cat => cat.id === c.id);
                 if (!isCategoryExist) {
                     return (
                         <option key={c.id} value={c.id}>
@@ -82,20 +92,10 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
             });
         };
 
-        const categoriesForProduct = (cat: ReadonlyArray<Immutable<Category>>, productUuid: string) => {
-            return cat.map(c => {
-                return (
-                    <li key={c.id}>
-                        {c.name}
-                        <button onClick={() => this.removeCategoryFromProduct(c.id, productUuid)}>Remove category</button>
-                    </li>
-                );
-            });
-        };
-
-        const showCategoriesSelect = (productCategories: ReadonlyArray<Immutable<Category>>, allCategories: ReadonlyArray<Immutable<Category>>) => {
-            console.log(_.intersectionBy(productCategories, allCategories, "id").length);
-
+        const showCategoriesSelect = (
+            productCategories: ReadonlyArray<Immutable<Category | Collections>>,
+            allCategories: ReadonlyArray<Immutable<Category | Collections>>,
+        ) => {
             return productCategories && allCategories ? _.intersectionBy(productCategories, allCategories, "id").length !== allCategories.length : null;
         };
 
@@ -123,15 +123,41 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
                                           <div style={simpleStyle}>
                                               Select category:{" "}
                                               <select name="productCategory" value={this.state.productCategory} onChange={this.onChange}>
-                                                  <option key={0} value={0} defaultChecked={true}>
+                                                  <option key={0} value={0}>
                                                       Select category
                                                   </option>
-                                                  {categoriesSelect(p.categories)}
+                                                  {itemsSelect(p.categories, categories.categories)}
                                               </select>
                                           </div>
                                       )}
-
-                                      <ul style={simpleStyle}>Categories list: {categoriesForProduct(p.categories, p.productUuid)}</ul>
+                                      {showCategoriesSelect(p.collections, collections.collections) && (
+                                          <div style={simpleStyle}>
+                                              Select collection:{" "}
+                                              <select name="productCollection" value={this.state.productCollection} onChange={this.onChange}>
+                                                  <option key={0} value={0}>
+                                                      Select category
+                                                  </option>
+                                                  {itemsSelect(p.collections, collections.collections)}
+                                              </select>
+                                          </div>
+                                      )}
+                                      Categories list:
+                                      <ItemsForProductsComponent
+                                          items={p.categories}
+                                          itemUuid={p.productUuid}
+                                          removeItemFromProduct={({ categoryId, productUuid }) =>
+                                              deleteCategoryFromProduct(i18n, categoryId, productUuid)(store.dispatch)
+                                          }
+                                      />
+                                      <br />
+                                      Collections list:
+                                      <ItemsForProductsComponent
+                                          items={p.collections}
+                                          itemUuid={p.productUuid}
+                                          removeItemFromProduct={({ categoryId, productUuid }) =>
+                                              deleteCollectionFromProduct(i18n, categoryId, productUuid)(store.dispatch)
+                                          }
+                                      />
                                       <button onClick={() => this.saveChanges(p.productUuid)}>{i18n.products.saveChanges}</button>
                                       <button onClick={() => this.handleDeleteProduct(p.productUuid)}> X {i18n.products.deleteProduct}</button>
                                   </div>
@@ -200,15 +226,11 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
             return;
         }
 
-        const payload = new NewProduct(this.state.productName, this.state.productCategory);
-        console.log(payload);
+        const payload = new NewProduct(this.state.productName, this.state.productCategory, this.state.productCollection);
         store.dispatch(this.props.editProduct(productUuid, payload, this.props.i18n, this.state.productImage));
         this.setState({ currentProduct: null });
+        this.setState({ productCategory: 0 });
     };
-
-    private removeCategoryFromProduct(categoryId: number, productUuid: string) {
-        this.props.deleteCategoryFromProduct(this.props.i18n, categoryId, productUuid)(store.dispatch);
-    }
 
     private handleDeleteProduct(productUuid: string) {
         store.dispatch(this.props.deleteProduct(productUuid, this.props.i18n));

@@ -9,8 +9,20 @@ cat = db.Table("categories",
                    "product.id"), primary_key=True)
                )
 
+col = db.Table("collections",
+               db.Column("collection_id", db.Integer, db.ForeignKey(
+                   "collection.id"), primary_key=True),
+               db.Column("product_id", db.Integer, db.ForeignKey(
+                   "product.id"), primary_key=True)
+               )
+
 
 class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20), nullable=False)
+
+
+class Collection(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
 
@@ -24,7 +36,8 @@ class Product(db.Model):
     quantity = db.Column(db.Integer, nullable=False, default=0)
     image_path = db.Column(db.String(200), nullable=True, default="default.jpg")
     orderitem = db.relationship("Orderitem", backref="product", lazy=True)
-    categories = db.relationship("Category", secondary=cat, backref=db.backref("products", lazy="dynamic",))
+    categories = db.relationship("Category", secondary=cat, backref=db.backref("products", lazy="dynamic"))
+    collections = db.relationship("Collection", secondary=col, backref=db.backref("products", lazy="dynamic"))
 
 
 class Orderitem(db.Model):
