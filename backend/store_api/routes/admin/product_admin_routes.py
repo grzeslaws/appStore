@@ -1,7 +1,7 @@
 from werkzeug.utils import secure_filename
 from store_api import app, db, generate_uuid
 from flask import request, jsonify
-from store_api.models import Product, Category
+from store_api.models import Product, Category, Collection
 from store_api.serializers import product_item
 from sqlalchemy import desc
 from store_api.routes import token_required
@@ -85,10 +85,12 @@ def edit_product(product_uuid):
     if request.method == "PUT":
         p = Product.query.filter_by(product_uuid=product_uuid).first()
         p.name = request.json["name"]
-        if request.json["categoryId"] != "0":
-            print("request.json['categoryId']: ", request.json["categoryId"])
-            c = Category.query.filter_by(id=request.json["categoryId"]).first()
-            c.products.append(p)
+        if request.json["categoryId"] != 0:
+            cat = Category.query.filter_by(id=request.json["categoryId"]).first()
+            cat.products.append(p)
+        if request.json["collectionId"] != 0:
+            coll = Collection.query.filter_by(id=request.json["collectionId"]).first()
+            coll.products.append(p)
         db.session.commit()
         return jsonify({"message": "Product has been updated!"})
 

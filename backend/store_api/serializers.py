@@ -1,11 +1,18 @@
 def product_item(p):
 
     categoryList = []
-    for c in p.categories:
+    for cat in p.categories:
         category = {}
-        category["id"] = c.id
-        category["name"] = c.name
+        category["id"] = cat.id
+        category["name"] = cat.name
         categoryList.append(category)
+    
+    collectionsList = []
+    for col in p.collections:
+        collection = {}
+        collection["id"] = col.id
+        collection["name"] = col.name
+        collectionsList.append(collection)
 
     product_item = {}
     product_item["id"] = p.id
@@ -15,5 +22,6 @@ def product_item(p):
     product_item["price"] = p.price
     product_item["quantity"] = p.quantity
     product_item["categories"] = categoryList
+    product_item["collections"] = collectionsList
 
     return product_item

@@ -14,4 +14,4 @@ def get_collections():
         collectionsObject["name"] = c.name
         collectionsList.append(collectionsObject)
 
-    return jsonify({"categories": collectionsList})
+    return jsonify({"collections": collectionsList})
