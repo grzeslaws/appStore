@@ -11,7 +11,9 @@ export type ActionType =
     | "REMOVE_PRODUCT_FROM_CART"
     | "GET_CATEGORIES"
     | "GET_COLLECTIONS"
-    | "UPDATE_CAROUSEL";
+    | "UPDATE_CAROUSEL"
+    | "UPDATE_MESSGAES"
+    | "REMOVE_MESSGAE";
 
 export interface Action<Type extends ActionType, Payload> {
     type: Type;

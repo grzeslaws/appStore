@@ -71,7 +71,6 @@ export class CategoryPublicComponent extends React.Component<CategoryPublicProps
 
         return (
             <>
-                <PublicNavigationWrapper />
                 <CategoriesListPublicComponent
                     categories={categories}
                     getCategories={getCategories}

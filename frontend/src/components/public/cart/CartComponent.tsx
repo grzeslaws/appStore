@@ -43,7 +43,6 @@ export class CartComponent extends React.Component<CartProps, {}> {
         const totalPrice = orderItems.length ? orderItems.map(o => o.product.price * o.quantity).reduce((item, sum) => item + sum) : null;
         return (
             <>
-                <PublicNavigationWrapper />
                 {orderList}
                 <br />
                 Total payment: {totalPrice}

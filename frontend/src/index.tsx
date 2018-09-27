@@ -25,6 +25,8 @@ import LoginWrapper from "./wrappers/LoginWrapper";
 import ProductPublicWrapper from "./wrappers/ProductPublicWrapper";
 
 import "./style.scss";
+import MessagesWrapper from "./wrappers/MessagesWrapper";
+import PublicNavigationWrapper from "./wrappers/PublicNavigationWrapper";
 
 const messages = new I18nResolver(i18n, "en").translation;
 store.dispatch(setI18N(messages));
@@ -35,7 +37,9 @@ ReactDOM.render(
     <Provider store={store}>
         <HashRouter>
             <>
-                <Route exact={true} path={publicRoutes.main} render={() => <Redirect to={publicRoutes.homeTemplate({})}/>} />
+                <MessagesWrapper />
+                <PublicNavigationWrapper />
+                <Route exact={true} path={publicRoutes.main} render={() => <Redirect to={publicRoutes.homeTemplate({})} />} />
                 <Switch>
                     <Route path={publicRoutes.home} component={HomePublicWrapper} />
                     <Route path={publicRoutes.category} component={CategoryPublicWrapper} />

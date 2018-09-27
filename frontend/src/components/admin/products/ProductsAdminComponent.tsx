@@ -52,7 +52,7 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
 
         this.state = {
             productName: "",
-            currentProduct: null,
+            currentProduct: "",
             productImage: null,
             productCategory: null,
             productCollection: null,
@@ -67,7 +67,17 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
     }
 
     public render() {
-        const { products, i18n, categories, addCategory, deleteCategory, collections, deleteCategoryFromProduct, deleteCollectionFromProduct } = this.props;
+        const {
+            products,
+            i18n,
+            categories,
+            addCategory,
+            deleteCategory,
+            collections,
+            deleteCategoryFromProduct,
+            deleteCollectionFromProduct,
+            // messages,
+        } = this.props;
         const paginationData = products
             ? {
                   hasNext: products.hasNext,

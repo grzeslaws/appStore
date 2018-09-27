@@ -8,7 +8,7 @@ import { addProduct, deleteProduct, editProduct, fetchAdminProducts } from "../r
 import { ApplicationStore } from "../redux/store/store";
 
 export function mapStateToProps(
-    { i18n, products, categories, collections }: ApplicationStore,
+    { i18n, products, categories, collections, messages }: ApplicationStore,
     ownProps: { match: match<{ pageNumber: string; perPage: string }> },
 ): ProductsProps {
     return {
@@ -28,6 +28,7 @@ export function mapStateToProps(
         deleteCollectionFromProduct,
         getCollections,
         collections: collections.collection,
+        // messages,
     };
 }
 

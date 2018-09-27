@@ -5,7 +5,6 @@ import store from "../../../redux/store/store";
 
 import endpoints from "../../../endpoints";
 import { Product } from "../../../model/Product";
-import PublicNavigationWrapper from "../../../wrappers/PublicNavigationWrapper";
 
 export interface ProductPublicProps {
     i18n: Immutable<I18N>;
@@ -30,7 +29,6 @@ export class ProductPublicComponent extends React.Component<ProductPublicProps, 
         const { product, addProductToCart } = this.props;
         return (
             <>
-                <PublicNavigationWrapper />
                 {product && (
                     <div>
                         Product name: {product.name}<br/>
