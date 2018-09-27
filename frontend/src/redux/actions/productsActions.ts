@@ -8,6 +8,7 @@ import { Product } from "../../model/Product";
 import { Products } from "../../model/Products";
 import { Action } from "./action";
 import { requestFailed } from "./fetchActions";
+import { updateSuccessMessage } from "./messagesActions";
 
 function updateProducts(products: Products): Action<"UPDATE_PRODUCTS", Products> {
     return {
@@ -76,7 +77,10 @@ export function editProduct(productUuid: string, payload: NewProduct, i18n: I18N
             http(endpoints.editProductImage(productUuid), "file", productImage);
         }
         if (payload.name) {
-            http(endpoints.editProduct(productUuid), "put", payload).then(json => dispatch(fetchAdminProducts(i18n)));
+            http(endpoints.editProduct(productUuid), "put", payload).then(json => {
+                dispatch(fetchAdminProducts(i18n));
+                dispatch(updateSuccessMessage((json as any).message));
+            });
         }
     };
 }

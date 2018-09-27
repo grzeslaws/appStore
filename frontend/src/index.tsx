@@ -22,8 +22,10 @@ import CartWrapper from "./wrappers/CartWrapper";
 import CategoryPublicWrapper from "./wrappers/CategoryPublicWrapper";
 import HomePublicWrapper from "./wrappers/HomePublicWrapper";
 import LoginWrapper from "./wrappers/LoginWrapper";
+import MessagesWrapper from "./wrappers/MessagesWrapper";
 import ProductPublicWrapper from "./wrappers/ProductPublicWrapper";
 
+import { MessagesComponent } from "./components/public/messages/MessagesComponent";
 import "./style.scss";
 
 const messages = new I18nResolver(i18n, "en").translation;
@@ -35,6 +37,7 @@ ReactDOM.render(
     <Provider store={store}>
         <HashRouter>
             <>
+            <MessagesWrapper />
                 <Route exact={true} path={publicRoutes.main} render={() => <Redirect to={publicRoutes.homeTemplate({})}/>} />
                 <Switch>
                     <Route path={publicRoutes.home} component={HomePublicWrapper} />

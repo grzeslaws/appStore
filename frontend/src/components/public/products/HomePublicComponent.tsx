@@ -38,7 +38,7 @@ interface HomeState {
     productImage: FileList;
 }
 export class HomePublicComponent extends React.Component<HomePublicProps, HomeState> {
-    private static PRODUCT_NUMBER_FOR_CAROUSEL = 5;
+    private static PRODUCT_NUMBER_FOR_CAROUSEL = 3;
     private static ID_COLLECTION_FOR_CAROUSEL = 2;
 
     constructor(props: HomePublicProps) {
@@ -73,10 +73,7 @@ export class HomePublicComponent extends React.Component<HomePublicProps, HomeSt
               }
             : null;
         const productList: ReadonlyArray<JSX.Element> = products
-            ? products.products.map(p => {
-                  return this.renderOneProduct(p);
-              })
-            : null;
+            ? products.products.map(this.renderOneProduct) : null;
 
         return (
             <>
@@ -113,10 +110,7 @@ export class HomePublicComponent extends React.Component<HomePublicProps, HomeSt
     }
 
     private renderCarouselProducts(products: ReadonlyArray<Immutable<Product>>): JSX.Element {
-        // debugger;
-        const productsList = products.map(p => {
-            return this.renderOneProduct(p);
-        });
+        const productsList = products.map(this.renderOneProduct);
         return <>{productsList}</>;
     }
 
