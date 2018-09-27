@@ -10,7 +10,9 @@ import collectionsReducer from "../reducers/collectionsReducer";
 import i18nReducer from "../reducers/i18nReducer";
 import productsReducer from "../reducers/productsReducer";
 
+import carouselReducer from "../reducers/carouselReducer";
 import AdminProfileStore from "./adminProfileStore";
+import CarouselStore from "./carouselStore";
 import CartStore from "./cartStore";
 import CategoriesStore from "./categoriesStore";
 import CollectionsStore from "./collectionsStore";
@@ -25,6 +27,7 @@ const reducers = combineReducers({
     cart: cartReducer,
     categories: categoriesReducer,
     collections: collectionsReducer,
+    carousel: carouselReducer,
 });
 
 export interface ApplicationStore {
@@ -34,6 +37,7 @@ export interface ApplicationStore {
     cart: CartStore;
     categories: CategoriesStore;
     collections: CollectionsStore;
+    carousel: CarouselStore;
 }
 
 export default createStore(reducers, middleware) as Store<Immutable<ApplicationStore>>;

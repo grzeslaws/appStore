@@ -10,7 +10,8 @@ export type ActionType =
     | "ADD_PRODUCT_TO_CART"
     | "REMOVE_PRODUCT_FROM_CART"
     | "GET_CATEGORIES"
-    | "GET_COLLECTIONS";
+    | "GET_COLLECTIONS"
+    | "UPDATE_CAROUSEL";
 
 export interface Action<Type extends ActionType, Payload> {
     type: Type;

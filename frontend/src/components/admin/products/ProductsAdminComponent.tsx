@@ -54,8 +54,8 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
             productName: "",
             currentProduct: null,
             productImage: null,
-            productCategory: 0,
-            productCollection: 0,
+            productCategory: null,
+            productCollection: null,
         };
     }
 
@@ -92,11 +92,11 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
             });
         };
 
-        const showCategoriesSelect = (
-            productCategories: ReadonlyArray<Immutable<Category | Collections>>,
-            allCategories: ReadonlyArray<Immutable<Category | Collections>>,
+        const showItemsSelect = (
+            productItems: ReadonlyArray<Immutable<Category | Collections>>,
+            allItems: ReadonlyArray<Immutable<Category | Collections>>,
         ) => {
-            return productCategories && allCategories ? _.intersectionBy(productCategories, allCategories, "id").length !== allCategories.length : null;
+            return productItems && allItems ? _.intersectionBy(productItems, allItems, "id").length !== allItems.length : null;
         };
 
         const simpleStyle = { border: "1px solid", padding: "10px", marginBottom: "10px" }; // to remove
@@ -119,22 +119,22 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
                                           <input value={this.state.productName} name="productName" onChange={this.onChange} placeholder={p.name} />
                                           <input type="file" name="productImage" onChange={this.onChange} />
                                       </div>
-                                      {showCategoriesSelect(p.categories, categories.categories) && (
+                                      {showItemsSelect(p.categories, categories.categories) && (
                                           <div style={simpleStyle}>
                                               Select category:{" "}
                                               <select name="productCategory" value={this.state.productCategory} onChange={this.onChange}>
-                                                  <option key={0} value={0}>
+                                                  <option key={0} value={null}>
                                                       Select category
                                                   </option>
                                                   {itemsSelect(p.categories, categories.categories)}
                                               </select>
                                           </div>
                                       )}
-                                      {showCategoriesSelect(p.collections, collections.collections) && (
+                                      {showItemsSelect(p.collections, collections.collections) && (
                                           <div style={simpleStyle}>
                                               Select collection:{" "}
                                               <select name="productCollection" value={this.state.productCollection} onChange={this.onChange}>
-                                                  <option key={0} value={0}>
+                                                  <option key={0} value={null}>
                                                       Select category
                                                   </option>
                                                   {itemsSelect(p.collections, collections.collections)}
@@ -146,8 +146,7 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
                                           items={p.categories}
                                           itemUuid={p.productUuid}
                                           removeItemFromProduct={({ categoryId, productUuid }) =>
-                                              deleteCategoryFromProduct(i18n, categoryId, productUuid)(store.dispatch)
-                                          }
+                                              deleteCategoryFromProduct(i18n, categoryId, productUuid)(store.dispatch)}
                                       />
                                       <br />
                                       Collections list:
@@ -155,8 +154,7 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
                                           items={p.collections}
                                           itemUuid={p.productUuid}
                                           removeItemFromProduct={({ categoryId, productUuid }) =>
-                                              deleteCollectionFromProduct(i18n, categoryId, productUuid)(store.dispatch)
-                                          }
+                                              deleteCollectionFromProduct(i18n, categoryId, productUuid)(store.dispatch)}
                                       />
                                       <button onClick={() => this.saveChanges(p.productUuid)}>{i18n.products.saveChanges}</button>
                                       <button onClick={() => this.handleDeleteProduct(p.productUuid)}> X {i18n.products.deleteProduct}</button>
@@ -229,7 +227,8 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
         const payload = new NewProduct(this.state.productName, this.state.productCategory, this.state.productCollection);
         store.dispatch(this.props.editProduct(productUuid, payload, this.props.i18n, this.state.productImage));
         this.setState({ currentProduct: null });
-        this.setState({ productCategory: 0 });
+        this.setState({ productCategory: null });
+        this.setState({ productCollection: null });
     };
 
     private handleDeleteProduct(productUuid: string) {

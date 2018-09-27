@@ -16,8 +16,8 @@ def categories_init():
 
 
 def collections_init():
-    c1 = Collection(name="carousel")
-    c2 = Collection(name="home_collection")
+    c1 = Collection(name="Home collection")
+    c2 = Collection(name="Carousel")
     db.session.add(c1)
     db.session.add(c2)
     db.session.commit()

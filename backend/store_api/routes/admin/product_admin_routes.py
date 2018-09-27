@@ -85,10 +85,10 @@ def edit_product(product_uuid):
     if request.method == "PUT":
         p = Product.query.filter_by(product_uuid=product_uuid).first()
         p.name = request.json["name"]
-        if request.json["categoryId"] != 0:
+        if request.json["categoryId"] is not None:
             cat = Category.query.filter_by(id=request.json["categoryId"]).first()
             cat.products.append(p)
-        if request.json["collectionId"] != 0:
+        if request.json["collectionId"] is not None:
             coll = Collection.query.filter_by(id=request.json["collectionId"]).first()
             coll.products.append(p)
         db.session.commit()

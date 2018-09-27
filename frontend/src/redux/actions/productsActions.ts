@@ -1,4 +1,5 @@
 import { parse } from "sparkson";
+import { FetchPublicProductsByCollectionMethod } from "../../components/public/products/HomePublicComponent";
 import endpoints from "../../endpoints";
 import http from "../../http";
 import { I18N } from "../../i18n/i18n";
@@ -48,12 +49,17 @@ function updateProduct(product): Action<"UPDATE_PRODUCT", Product> {
     };
 }
 
-export function fetchPublicProduct(
-    productUuid: string) {
+export function fetchPublicProduct(productUuid: string) {
     return dispatch => {
         return http(endpoints.getPublicProduct(productUuid)).then(json => dispatch(updateProduct(parse(Product, json))));
     };
 }
+
+export const fetchPublicProductsByCollection: FetchPublicProductsByCollectionMethod = ({ i18n, collectionId, pageNumber }) => {
+    return dispatch => {
+        return http(endpoints.getProductsByCollection({ collectionId, pageNumber })).then(json => dispatch(updateProducts(parse(Products, json))));
+    };
+};
 
 export function addProduct(payload: NewProduct, productImage: FileList, i18n: I18N) {
     const product = new NewProduct(payload.name);
@@ -80,3 +86,16 @@ export function deleteProduct(productUuid: string, i18n: I18N) {
         return http(endpoints.deleteProduct(productUuid)).then(json => dispatch(fetchAdminProducts(i18n)));
     };
 }
+
+function updateCarousel(products: Products): Action<"UPDATE_CAROUSEL", Products> {
+    return {
+        type: "UPDATE_CAROUSEL",
+        payload: products,
+    };
+}
+
+export const getProductsForCarousel: FetchPublicProductsByCollectionMethod = ({ i18n, collectionId, pageNumber, perPage }) => {
+    return dispatch => {
+        return http(endpoints.getProductsByCollection({ collectionId, pageNumber, perPage })).then(json => dispatch(updateCarousel(parse(Products, json))));
+    };
+};

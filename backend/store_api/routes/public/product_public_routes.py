@@ -1,6 +1,6 @@
 from store_api import app, db
 from flask import request, jsonify, send_from_directory
-from store_api.models import Product, Category
+from store_api.models import Product, Category, Collection
 from store_api.serializers import product_item
 from sqlalchemy import desc
 import os
@@ -72,3 +72,17 @@ def add_one_product(product_uuid):
         p.quantity = p.quantity + 1
         db.session.commit()
         return jsonify({"message": "One product has been added!"})
+
+
+@app.route("/api/public/get_products_by_collection/<int:collection_id>/<int:page_number>/<int:per_page>")
+def get_products_by_collection(collection_id, page_number, per_page):
+    collection = Collection.query.filter_by(id=collection_id).first()
+    products = collection.products.paginate(page=page_number, per_page=per_page)
+    productList = [product_item(p) for p in products.items]
+
+    return jsonify({"products": productList,
+                    "has_next": products.has_next,
+                    "has_prev": products.has_prev,
+                    "next_num": products.next_num,
+                    "prev_num": products.prev_num,
+                    "pages": products.pages})

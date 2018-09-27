@@ -15,13 +15,13 @@ interface PaginationData {
 interface PaginationProps {
     i18n: Immutable<I18N>;
     paginationData: Immutable<PaginationData>;
-    baseRoute: ({categoryId, pageNumber}: {categoryId: number, pageNumber: number}) => any;
-    fetchDataForCurrentPage: ({categoryId, pageNumber}: {categoryId?: number, pageNumber: number}) => void;
-    categoryId?: number;
+    baseRoute: ({itemId, pageNumber}: {itemId: number, pageNumber: number}) => any;
+    fetchDataForCurrentPage: ({itemId, pageNumber}: {itemId?: number, pageNumber: number}) => void;
+    itemId?: number;
 }
 
 export const PaginationComponent: React.SFC<PaginationProps> = props => {
-    const { paginationData, i18n, fetchDataForCurrentPage, baseRoute, categoryId } = props;
+    const { paginationData, i18n, fetchDataForCurrentPage, baseRoute, itemId } = props;
     const { hasNext, hasPrev, nextNum, prevNum, pages } = paginationData;
     let paginate;
 
@@ -30,7 +30,7 @@ export const PaginationComponent: React.SFC<PaginationProps> = props => {
         for (let pageNumber = 1; pageNumber <= pages; pageNumber++) {
             const paginateItem = (
                 <li key={pageNumber}>
-                    <Link onClick={() => fetchDataForCurrentPage({ categoryId, pageNumber })} to={baseRoute({ categoryId, pageNumber })}>
+                    <Link onClick={() => fetchDataForCurrentPage({ itemId, pageNumber })} to={baseRoute({ itemId, pageNumber })}>
                         {pageNumber} |
                     </Link>
                 </li>

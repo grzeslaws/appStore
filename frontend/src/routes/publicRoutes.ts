@@ -1,7 +1,7 @@
 export const publicRoutes = {
     main: "/",
-    home: "/home",
-    products: `/products/page/:pageNumber?`,
+    home: "/collection/:collectionId/page/:pageNumber",
+    homeTemplate: ({ collectionId = 1, pageNumber = 1 }: { collectionId?: number; pageNumber?: number }) => `/collection/${collectionId}/page/${pageNumber}`,
     productsTemplate: ({ pageNumber = 1 }) => `/products/page/${pageNumber}`,
     product: `/product/:productUuid`,
     productTemplate: `/product/`,

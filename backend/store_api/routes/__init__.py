@@ -9,7 +9,6 @@ def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = None
-
         if "x-access-token" in request.headers:
             token = request.headers["x-access-token"]
         if token == "null" or token is None:
@@ -19,9 +18,11 @@ def token_required(f):
                 token, app.config["SECRET_KEY"], algorithms=["HS256"])
             current_user = Admin.query.filter_by(
                 id=data["id"]).first()
-        except:  # noqa: E722
+        except Exception:  # noqa: E722
             jsonify({"message": "Token is invalid!"}), 403
-
-        return f(current_user, *args, **kwargs)
+        try:
+            return f(current_user, *args, **kwargs)
+        except UnboundLocalError as err:
+            return jsonify({"err": str(err) + " - This probably means your credentials are wrong!"}), 403
 
     return decorated

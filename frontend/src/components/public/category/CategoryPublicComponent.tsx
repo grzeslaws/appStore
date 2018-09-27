@@ -86,8 +86,8 @@ export class CategoryPublicComponent extends React.Component<CategoryPublicProps
                                 i18n={i18n}
                                 paginationData={paginationData}
                                 fetchDataForCurrentPage={this.fetchDataForOptions}
-                                baseRoute={publicRoutes.categoryTemplate}
-                                categoryId={categoryId}
+                                baseRoute={({itemId, pageNumber}) => publicRoutes.categoryTemplate({categoryId: itemId, pageNumber})}
+                                itemId={categoryId}
                             />
                         )}
                 </div>
