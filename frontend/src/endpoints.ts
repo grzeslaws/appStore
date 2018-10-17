@@ -12,6 +12,8 @@ const endpoints = {
     getCategories: `/api/public/get_categories`,
     getCollections: `/api/public/get_collections`,
     getProductsForCarousel: () => ``,
+    createOrder: `/api/public/create_order`,
+    getOrder: (orderUuid: string) => `/api/public/get_order/${orderUuid}`,
     login: `/api/login`,
 
     // admin

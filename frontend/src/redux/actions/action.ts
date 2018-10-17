@@ -13,7 +13,8 @@ export type ActionType =
     | "GET_COLLECTIONS"
     | "UPDATE_CAROUSEL"
     | "UPDATE_MESSGAES"
-    | "REMOVE_MESSGAE";
+    | "REMOVE_MESSGAE"
+    | "UPDATE_ORDER";
 
 export interface Action<Type extends ActionType, Payload> {
     type: Type;

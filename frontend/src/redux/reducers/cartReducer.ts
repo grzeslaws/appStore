@@ -1,6 +1,6 @@
 import { Action, ActionType } from "../actions/action";
 
-import { OrderItem } from "../../model/orderItem";
+import { OrderItem } from "../../model/OrderItem";
 import { Product } from "../../model/Product";
 import CartStore from "../store/cartStore";
 

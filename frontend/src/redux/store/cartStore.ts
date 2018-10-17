@@ -1,5 +1,5 @@
 import {Immutable} from "immutable-typescript";
-import { OrderItem } from "../../model/orderItem";
+import { OrderItem } from "../../model/OrderItem";
 
 interface Store {
     orderItems: OrderItem[];

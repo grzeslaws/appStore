@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { I18N } from "../../../i18n/i18n";
 
 import * as React from "react";
-import { OrderItem } from "../../../model/orderItem";
+import { OrderItem } from "../../../model/OrderItem";
 import { Product } from "../../../model/Product";
 import { adminRoutes } from "../../../routes/adminRoutes";
 import { publicRoutes } from "../../../routes/publicRoutes";
