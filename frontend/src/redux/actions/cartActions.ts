@@ -1,8 +1,16 @@
+import { Immutable } from "immutable-typescript";
+import { parse } from "sparkson";
+import { OrderItem } from "src/model/OrderItem";
 import endpoints from "../../endpoints";
 import http from "../../http";
+import { OrderItemSpark } from "../../model/OrderItemSpark";
 import { Product } from "../../model/Product";
+import { Order } from "./../../model/Order";
 import { Action } from "./action";
-import { fetchPublicProduct } from "./productsActions";
+
+interface OrderUuid {
+    orderUuid: string;
+}
 
 export function addProductToCart(product: Product): Action<"ADD_PRODUCT_TO_CART", Product> {
     return {
@@ -15,5 +23,31 @@ export function removeProductFromCart(product: Product): Action<"REMOVE_PRODUCT_
     return {
         type: "REMOVE_PRODUCT_FROM_CART",
         payload: product,
+    };
+}
+
+function updateOrder(order: Order): Action<"UPDATE_ORDER", Order> {
+    return {
+        type: "UPDATE_ORDER",
+        payload: order,
+    };
+}
+
+export function createOrderAction(orderItems: ReadonlyArray<Immutable<OrderItem>>) {
+    return dispatch => {
+        return http(endpoints.createOrder, "post", { orderItems }).then((json: OrderUuid) => {
+            console.log(json.orderUuid);
+
+            dispatch(getOrderAction(json.orderUuid));
+        });
+    };
+}
+
+function getOrderAction(orderUuid: string) {
+    return dispatch => {
+        return http(endpoints.getOrder(orderUuid), "get", {}).then(json => {
+            console.log(json);
+            dispatch(updateOrder(parse(Order, json)));
+        });
     };
 }

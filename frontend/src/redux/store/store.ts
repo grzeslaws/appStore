@@ -9,6 +9,7 @@ import categoriesReducer from "../reducers/categoriesReducer";
 import collectionsReducer from "../reducers/collectionsReducer";
 import i18nReducer from "../reducers/i18nReducer";
 import messageReducer from "../reducers/messageReducer";
+import orderReducer from "../reducers/orderReducer";
 import productsReducer from "../reducers/productsReducer";
 
 import carouselReducer from "../reducers/carouselReducer";
@@ -19,6 +20,7 @@ import CategoriesStore from "./categoriesStore";
 import CollectionsStore from "./collectionsStore";
 import I18NStore from "./i18nStore";
 import MessageStore from "./messageStore";
+import OrderStore from "./orderStore";
 import ProductsStore from "./productsStore";
 
 const middleware =  applyMiddleware(thunk, createLogger());
@@ -31,6 +33,7 @@ const reducers = combineReducers({
     collections: collectionsReducer,
     carousel: carouselReducer,
     messages: messageReducer,
+    order: orderReducer,
 });
 
 export interface ApplicationStore {
@@ -42,6 +45,7 @@ export interface ApplicationStore {
     collections: CollectionsStore;
     carousel: CarouselStore;
     messages: MessageStore;
+    order: OrderStore;
 }
 
 export default createStore(reducers, middleware) as Store<Immutable<ApplicationStore>>;

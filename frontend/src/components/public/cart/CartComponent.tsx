@@ -1,16 +1,16 @@
 import { Immutable } from "immutable-typescript";
 import * as React from "react";
 import { I18N } from "../../../i18n/i18n";
-import { OrderItem } from "../../../model/orderItem";
+import { OrderItem } from "../../../model/OrderItem";
 import { Product } from "../../../model/Product";
 import store from "../../../redux/store/store";
-import PublicNavigationWrapper from "../../../wrappers/PublicNavigationWrapper";
 
 export interface CartProps {
     i18n: Immutable<I18N>;
     orderItems: ReadonlyArray<Immutable<OrderItem>>;
     removeProductFromCart: (product: Immutable<Product>) => any;
     addProductToCart: (product: Immutable<Product>) => any;
+    createOrderAction: (orderItems: ReadonlyArray<Immutable<OrderItem>>) => any;
 }
 
 export class CartComponent extends React.Component<CartProps, {}> {
@@ -46,7 +46,13 @@ export class CartComponent extends React.Component<CartProps, {}> {
                 {orderList}
                 <br />
                 Total payment: {totalPrice}
+                <br/>
+                <button onClick={this.createOrder}>Create order</button>
             </>
         );
+    }
+
+    private createOrder = () => {
+        this.props.createOrderAction(this.props.orderItems)(store.dispatch);
     }
 }
