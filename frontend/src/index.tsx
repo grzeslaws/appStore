@@ -22,10 +22,11 @@ import CartWrapper from "./wrappers/CartWrapper";
 import CategoryPublicWrapper from "./wrappers/CategoryPublicWrapper";
 import HomePublicWrapper from "./wrappers/HomePublicWrapper";
 import LoginWrapper from "./wrappers/LoginWrapper";
+import MessagesWrapper from "./wrappers/MessagesWrapper";
 import ProductPublicWrapper from "./wrappers/ProductPublicWrapper";
 
+import { MessagesComponent } from "./components/public/messages/MessagesComponent";
 import "./style.scss";
-import MessagesWrapper from "./wrappers/MessagesWrapper";
 import PublicNavigationWrapper from "./wrappers/PublicNavigationWrapper";
 
 const messages = new I18nResolver(i18n, "en").translation;

@@ -1,4 +1,4 @@
-import { Message, MessageType } from "../../model/Message";
+import { Message } from "../../model/Message";
 import { Action, ActionType } from "./action";
 
 export const updateMessages = (message: Message): Action<ActionType, Message> => {
@@ -9,8 +9,6 @@ export const updateMessages = (message: Message): Action<ActionType, Message> =>
 };
 
 export const removeMessage = (message: Message): Action<ActionType, Message> => {
-    console.log("removeMessage");
-
     return {
         type: "REMOVE_MESSGAE",
         payload: message,
