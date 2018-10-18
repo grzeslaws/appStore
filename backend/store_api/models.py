@@ -1,5 +1,5 @@
 from store_api import db, generate_uuid
-from datetime import datetime
+import time
 
 
 cat = db.Table("categories",
@@ -40,15 +40,6 @@ class Product(db.Model):
     collections = db.relationship("Collection", secondary=col, backref=db.backref("products", lazy="dynamic"))
 
 
-class Orderitem(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    quantity = db.Column(db.Integer, nullable=True, default=3)
-    order_id = db.Column(db.Integer, db.ForeignKey(
-        "order.id"), nullable=False)
-    product_id = db.Column(db.Integer, db.ForeignKey(
-        "product.id"), nullable=False)
-
-
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     customer_uuid = db.Column(
@@ -61,10 +52,19 @@ class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     order_uuid = db.Column(db.String(100), unique=True, default=generate_uuid)
     customer_id = db.Column(db.Integer, db.ForeignKey(
-        "customer.id"), nullable=False)
-    date = db.Column(db.DateTime, nullable=False,
-                     default=datetime.utcnow)
+        "customer.id"), nullable=True)
+    timastamp = db.Column(db.Integer, nullable=False,
+                          default=int(time.time()))
     orderitems = db.relationship("Orderitem", backref="order", lazy=True)
+
+
+class Orderitem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    quantity = db.Column(db.Integer, nullable=True, default=3)
+    order_id = db.Column(db.Integer, db.ForeignKey(
+        "order.id"), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey(
+        "product.id"), nullable=False)
 
 
 class Admin(db.Model):

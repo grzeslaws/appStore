@@ -54,7 +54,7 @@ def add_product():
 
 @app.route("/api/admin/add_product_image", methods=["POST"])
 @app.route("/api/admin/products", methods=["POST"])
-def order():
+def add_product_route():
     if request.method == "POST":
         add_product()
 
