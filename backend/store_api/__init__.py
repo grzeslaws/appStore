@@ -10,6 +10,7 @@ def generate_uuid():
 STATIC_FOLDER = "/static"
 UPLOAD_FOLDER = "store_api" + STATIC_FOLDER + "/images"
 ALLOWED_EXTENSIONS = set(["txt", "pdf", "png", "jpg", "jpeg", "gif"])
+PYTHONHTTPSVERIFY = 0
 
 app = Flask(__name__, static_folder=STATIC_FOLDER)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
@@ -22,6 +23,7 @@ db = SQLAlchemy(app)
 from store_api.routes.public import product_public_routes  # noqa: E402, F401
 from store_api.routes.public import categories_public_routes  # noqa: E402, F401
 from store_api.routes.public import collections_public_routes  # noqa: E402, F401
+from store_api.routes.public import order_public_routes  # noqa: E402, F401
 from store_api.routes.public import home_routes  # noqa: E402, F401
 from store_api.routes.public import login_routes  # noqa: E402, F401
 

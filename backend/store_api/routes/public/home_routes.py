@@ -1,6 +1,6 @@
 from store_api import app, db
 from flask import jsonify
-from store_api.models import Product, Category, Admin, Collection
+from store_api.models import Product, Category, Admin, Collection, Customer
 from werkzeug.security import generate_password_hash
 
 
@@ -49,6 +49,12 @@ def admin_init():
     db.session.commit()
 
 
+def init_customer():
+    new_customer = Customer(name="Tom")
+    db.session.add(new_customer)
+    db.session.commit()
+
+
 @app.route("/")
 def index():
     db.drop_all()
@@ -57,4 +63,5 @@ def index():
     collections_init()
     admin_init()
     product_init()
+    init_customer()
     return jsonify({"message": "Home"})
