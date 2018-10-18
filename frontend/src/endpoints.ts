@@ -14,6 +14,7 @@ const endpoints = {
     getProductsForCarousel: () => ``,
     createOrder: `/api/public/create_order`,
     getOrder: (orderUuid: string) => `/api/public/get_order/${orderUuid}`,
+    getAccessToken: `/api/public/get_access_token`,
     login: `/api/login`,
 
     // admin
