@@ -43,11 +43,13 @@ export function createOrderAction(orderItems: ReadonlyArray<Immutable<OrderItem>
     };
 }
 
-function getOrderAction(orderUuid: string) {
+export function getOrderAction(orderUuid: string) {
     return dispatch => {
-        return http(endpoints.getOrder(orderUuid), "get", {}).then(json => {
+        return http(endpoints.getOrder(orderUuid), "get", {}).then((json: Order) => {
             console.log(json);
+            console.log(new Date(json.timestamp * 1000));
             dispatch(updateOrder(parse(Order, json)));
+            http(endpoints.getAccessToken, "get", {}).then(console.log);
         });
     };
 }

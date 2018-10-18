@@ -8,6 +8,7 @@ let defaultOptions;
 const http = (endpoint, method = "get", options?) => {
     let body = {};
     let params = "";
+    // application/x-www-form-urlencoded
 
     if (options) {
         const DEFAULT_OPTIONS = {
