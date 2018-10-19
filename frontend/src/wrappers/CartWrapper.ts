@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { addProductToCart, createOrderAction, getOrderAction, removeProductFromCart, sendOrder } from "../redux/actions/cartActions";
+import { addProductToCart, createOrderAction, getOrderAction, removeProductFromCart } from "../redux/actions/cartActions";
 import { ApplicationStore } from "../redux/store/store";
 import { CartComponent, CartProps } from "./../components/public/cart/CartComponent";
 
@@ -11,7 +11,6 @@ export function mapStateToProps({ i18n, cart }: ApplicationStore): CartProps {
         removeProductFromCart,
         addProductToCart,
         createOrderAction,
-        sendOrder,
     };
 }
 
