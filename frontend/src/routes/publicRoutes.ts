@@ -8,4 +8,5 @@ export const publicRoutes = {
     category: `/category/:categoryId/page/:pageNumber?`,
     categoryTemplate: ({ categoryId = 1, pageNumber = 1 }: { categoryId: number; pageNumber?: number }) => `/category/${categoryId}/page/${pageNumber}`,
     cart: `/cart`,
+    payu: `/payu`,
 };
