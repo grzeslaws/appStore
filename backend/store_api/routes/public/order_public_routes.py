@@ -5,6 +5,9 @@ from flask import jsonify, request
 import urllib.parse
 import urllib.request
 import certifi
+import json
+
+import requests
 
 
 @app.route("/api/public/create_order", methods=["POST"])
@@ -51,5 +54,49 @@ def get_access_token():
     req = urllib.request.Request('https://secure.payu.com/pl/standard/user/oauth/authorize', data, headers)
 
     with urllib.request.urlopen(req, cafile=certifi.where()) as response:
-        access_token = response.read()
-        return access_token, 200
+
+        return send_order(response.read())
+
+
+def send_order(access_token):
+    at = json.loads(access_token)["access_token"]
+
+    payload = {
+        "notifyUrl": "https://your.eshop.com/notify",
+        "customerIp": "127.0.0.1",
+        "merchantPosId": "145227",
+        "description": "RTV market",
+        "currencyCode": "PLN",
+        "totalAmount": "21000",
+        "buyer": {
+            "email": "john.doe@example.com",
+            "phone": "654111654",
+            "firstName": "John",
+            "lastName": "Doe",
+            "language": "pl"
+        },
+        "products": [
+            {
+                "name": "Wireless Mouse for Laptop",
+                "unitPrice": "15000",
+                "quantity": "1"
+            },
+            {
+                "name": "HDMI cable",
+                "unitPrice": "6000",
+                "quantity": "1"
+            }
+        ]
+    }
+
+    url = "https://secure.payu.com/api/v2_1/orders/"
+    headers = {
+        'Content-Type': "application/json",
+        'Authorization': "Bearer " + at,
+        'Cache-Control': "no-cache"
+    }
+
+    response = requests.request("POST", url, data=json.dumps(payload), headers=headers, allow_redirects=False)
+
+    print(response.json()["redirectUri"])
+    return jsonify({"redirectUri": response.json()["redirectUri"]})
