@@ -4,6 +4,8 @@ import { OrderItem } from "../../model/OrderItem";
 export interface OrderItems {
     orderItems: OrderItem[];
     orderUuid: string;
+    linkToPayment: string;
+    timastamp: number;
 }
 
 interface Store {
