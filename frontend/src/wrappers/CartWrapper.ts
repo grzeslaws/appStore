@@ -3,14 +3,14 @@ import { addProductToCart, createOrderAction, getOrderAction, removeProductFromC
 import { ApplicationStore } from "../redux/store/store";
 import { CartComponent, CartProps } from "./../components/public/cart/CartComponent";
 
-export function mapStateToProps({ i18n, cart }: ApplicationStore): CartProps {
-
+export function mapStateToProps({ i18n, cart, order }: ApplicationStore): CartProps {
     return {
         i18n: i18n.messages,
         orderItems: cart.orderItems,
         removeProductFromCart,
         addProductToCart,
         createOrderAction,
+        linkToPayment: order.order ? order.order.linkToPayment : null,
     };
 }
 

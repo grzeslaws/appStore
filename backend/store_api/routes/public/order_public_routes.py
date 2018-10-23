@@ -62,17 +62,17 @@ def send_order(access_token):
     at = json.loads(access_token)["access_token"]
 
     payload = {
-        "notifyUrl": "https://your.eshop.com/notify",
+        "notifyUrl": "http://127.0.0.1:5000/notify",
         "customerIp": "127.0.0.1",
         "merchantPosId": "145227",
         "description": "RTV market",
         "currencyCode": "PLN",
-        "totalAmount": "21000",
+        "totalAmount": "22000",
         "buyer": {
-            "email": "john.doe@example.com",
+            "email": "grzesiek.supel@example.com",
             "phone": "654111654",
-            "firstName": "John",
-            "lastName": "Doe",
+            "firstName": "Grzesiek",
+            "lastName": "Supel",
             "language": "pl"
         },
         "products": [
@@ -99,4 +99,12 @@ def send_order(access_token):
     response = requests.request("POST", url, data=json.dumps(payload), headers=headers, allow_redirects=False)
 
     print(response.json()["redirectUri"])
-    return jsonify({"redirectUri": response.json()["redirectUri"]})
+    return jsonify({"linkToPayment": response.json()["redirectUri"]})
+
+
+@app.route("/notify", methods=["POST"])
+def notify():
+    if request.method == "POST":
+        order = request.json
+        print("order: ", order)
+        return jsonify({"status": order})

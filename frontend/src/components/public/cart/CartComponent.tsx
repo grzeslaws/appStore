@@ -14,10 +14,11 @@ export interface CartProps {
     removeProductFromCart: (product: Immutable<Product>) => any;
     addProductToCart: (product: Immutable<Product>) => any;
     createOrderAction: (orderItems: ReadonlyArray<Immutable<OrderItem>>) => any;
+    linkToPayment: string;
 }
 
 interface State {
-    redirectToPayu: string;
+    linkToPayment: string;
 }
 
 export class CartComponent extends React.Component<CartProps, State> {
@@ -25,8 +26,14 @@ export class CartComponent extends React.Component<CartProps, State> {
         super(props);
 
         this.state = {
-            redirectToPayu: null,
+            linkToPayment: null,
         };
+    }
+
+    public componentWillReceiveProps(nextProps) {
+        if (nextProps.linkToPayment !== null) {
+            window.open(nextProps.linkToPayment);
+        }
     }
 
     public render() {
@@ -61,15 +68,5 @@ export class CartComponent extends React.Component<CartProps, State> {
         );
     }
 
-    private createOrder = () => {
-        this.setState({
-            redirectToPayu:
-                // tslint:disable-next-line:max-line-length
-                "https://secure.payu.com/pay/?orderId=SCMPGH3GJW181019GUEST000P01&token=eyJhbGciOiJIUzI1NiJ9.eyJvcmRlcklkIjoiU0NNUEdIM0dKVzE4MTAxOUdVRVNUMDAwUDAxIiwicG9zSWQiOiJ6RGVubjhoTiIsImF1dGhvcml0aWVzIjpbIlJPTEVfQ0xJRU5UIl0sInBheWVyRW1haWwiOiJqb2huLmRvZUBleGFtcGxlLmNvbSIsImV4cCI6MTU0MDAzOTQ2OCwiaXNzIjoiUEFZVSIsImF1ZCI6ImFwaS1nYXRld2F5Iiwic3ViIjoiUGF5VSBzdWJqZWN0IiwianRpIjoiN2M4MDkxZmMtZGZhYy00NzY1LWIyZjMtYjJhZGNhZmNhOWZjIn0.o3yrfU33jSNM4aMnD56CUCEAgZqddd08KtpAc9nrrJ8",
-        });
-        this.props.createOrderAction(this.props.orderItems)(store.dispatch);
-        setTimeout(() => {
-            window.location.href = this.state.redirectToPayu;
-        });
-    };
+    private createOrder = () => this.props.createOrderAction(this.props.orderItems)(store.dispatch);
 }
