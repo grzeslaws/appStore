@@ -4,6 +4,7 @@ import * as React from "react";
 import { Redirect, Route, RouteComponentProps } from "react-router";
 import { Link, RouteProps } from "react-router-dom";
 import { I18N } from "../../../i18n/i18n";
+import { Customer } from "../../../model/Customer";
 import { OrderItem } from "../../../model/OrderItem";
 import { Product } from "../../../model/Product";
 import { StatusOrder } from "../../../redux/actions/orderActions";
@@ -17,17 +18,23 @@ export interface CartProps extends RouteComponentProps<History> {
     orderItems: ReadonlyArray<Immutable<OrderItem>>;
     removeProductFromCart: (product: Immutable<Product>) => any;
     addProductToCart: (product: Immutable<Product>) => any;
-    createOrderAction: (orderItems: ReadonlyArray<Immutable<OrderItem>>, totalPrice: number) => any;
+    createOrderAction: (orderItems: ReadonlyArray<Immutable<OrderItem>>, totalPrice: number, customerPayload: Customer) => any;
     linkToPayment: string;
     status: string;
 }
 
 interface State {
     linkToPayment: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    street: string;
+    city: string;
+    zipCode: string;
+    telephone: string;
 }
 
 export class CartComponent extends React.Component<CartProps, State> {
-
     private redirectToPayment = true;
 
     constructor(props: CartProps) {
@@ -35,6 +42,13 @@ export class CartComponent extends React.Component<CartProps, State> {
 
         this.state = {
             linkToPayment: null,
+            firstName: "",
+            lastName: "",
+            email: "",
+            street: "",
+            city: "",
+            zipCode: "",
+            telephone: "",
         };
     }
 
@@ -42,16 +56,14 @@ export class CartComponent extends React.Component<CartProps, State> {
         if (nextProps.linkToPayment !== null && this.redirectToPayment) {
             window.open(nextProps.linkToPayment);
             this.redirectToPayment = false;
-        }
-
-        if (_.includes([StatusOrder.completed, StatusOrder.rejected, StatusOrder.canceled], nextProps.status)) {
-            console.log("nextProps.status: ", nextProps.status);
-
+        } else if (_.includes([StatusOrder.completed, StatusOrder.rejected, StatusOrder.canceled], nextProps.status)) {
             this.props.history.push(publicRoutes.thankYouPage);
         }
     }
 
     public render() {
+        console.log(this.state);
+
         const { orderItems, removeProductFromCart, addProductToCart } = this.props;
         const orderList = orderItems
             ? orderItems.map((p, i) => {
@@ -78,12 +90,42 @@ export class CartComponent extends React.Component<CartProps, State> {
                 <br />
                 Total payment: {totalPrice}
                 <br />
+                {this.renderCustomerForm()}
+                <br />
                 <button onClick={() => this.createOrder(totalPrice)}>Create order</button>
             </>
         );
     }
 
+    private renderCustomerForm = () => {
+        return (
+            <>
+                <input value={this.state.firstName} name="firstName" onChange={this.onChange} placeholder="First name" />
+                <input value={this.state.lastName} name="lastName" onChange={this.onChange} placeholder="Last name" />
+                <input value={this.state.email} name="email" onChange={this.onChange} placeholder="Email" />
+                <input value={this.state.street} name="street" onChange={this.onChange} placeholder="Street" />
+                <input value={this.state.city} name="city" onChange={this.onChange} placeholder="City" />
+                <input value={this.state.zipCode} name="zipCode" onChange={this.onChange} placeholder="Zip code" />
+                <input value={this.state.telephone} name="telephone" onChange={this.onChange} placeholder="Telephone" />
+            </>
+        );
+    };
+
+    private onChange = (e: React.ChangeEvent<any>) => {
+        const newState: State = {
+            ...this.state,
+        };
+
+        newState[e.target.name] = e.target.value;
+
+        this.setState({
+            ...this.state,
+            ...newState,
+        });
+    };
+
     private createOrder = (totalPrice: number) => {
-        this.props.createOrderAction(this.props.orderItems, totalPrice)(store.dispatch);
+        const customerPayload = { ...this.state };
+        this.props.createOrderAction(this.props.orderItems, totalPrice, customerPayload)(store.dispatch);
     };
 }

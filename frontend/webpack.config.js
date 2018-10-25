@@ -77,8 +77,8 @@ module.exports = {
         host: '0.0.0.0',
         proxy: {
             "/api": {
-                // target: "http://localhost:5000",
-                target: "https://app-store-backend.herokuapp.com",
+                target: "http://localhost:5000",
+                // target: "https://app-store-backend.herokuapp.com",
                 changeOrigin: true,
             },
         }

@@ -8,6 +8,7 @@ export function mapStateToProps({ i18n, order }: ApplicationStore): Props {
         status: order.order ? order.order.status : null,
         orderItems: order.order ? order.order.orderItems : null,
         orderUuid: order.order ? order.order.orderUuid : null,
+        customer: order.order ? order.order.customer : null,
     };
 }
 

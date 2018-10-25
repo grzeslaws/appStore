@@ -3,6 +3,7 @@ import { parse } from "sparkson";
 import { OrderItem } from "src/model/OrderItem";
 import endpoints from "../../endpoints";
 import http from "../../http";
+import { Customer } from "../../model/Customer";
 import { Order } from "../../model/Order";
 import { Action } from "./action";
 
@@ -19,8 +20,9 @@ export enum StatusOrder {
     rejected = "REJECTED",
 }
 
-interface OrderUuid {
+interface OrderDetails {
     orderUuid: string;
+    customer: Customer;
 }
 
 function updateOrder(order: Order): Action<"UPDATE_ORDER", Order> {
@@ -30,10 +32,18 @@ function updateOrder(order: Order): Action<"UPDATE_ORDER", Order> {
     };
 }
 
-export function createOrderAction(orderItems: ReadonlyArray<Immutable<OrderItem>>, totalPrice: number) {
+function updateCustomer(customer: Customer): Action<"UPDATE_CUSTOMER", Customer> {
+    return {
+        type: "UPDATE_CUSTOMER",
+        payload: customer,
+    };
+}
+
+export function createOrderAction(orderItems: ReadonlyArray<Immutable<OrderItem>>, totalPrice: number, customerPayloads: Customer) {
     return dispatch => {
-        return http(endpoints.createOrder, "post", { orderItems, totalPrice }).then((json: OrderUuid) => {
-            dispatch(getOrderAction(json.orderUuid));
+        return http(endpoints.createOrder, "post", { orderItems, totalPrice, customerPayloads }).then((json: OrderDetails) => {
+            dispatch(getOrderAction(json.orderUuid, json.customer));
+            // dispatch(updateCustomer(json.customer));
         });
     };
 }
@@ -41,8 +51,6 @@ export function createOrderAction(orderItems: ReadonlyArray<Immutable<OrderItem>
 function updateStatusOrderAction(oUuid: string) {
     return dispatch => {
         return http(endpoints.getOrder(oUuid), "get", {}).then((json: Order) => {
-            console.log("json.status: ", json.status);
-
             dispatch(updateStatusOrder(json.status));
 
             if (_.includes([StatusOrder.completed, StatusOrder.rejected, StatusOrder.canceled], json.status)) {
@@ -59,7 +67,7 @@ function updateStatusOrder(status: string): Action<"UPDATE_STATUS_ORDER", string
     };
 }
 
-export function getOrderAction(oUuid: string) {
+export function getOrderAction(oUuid: string, customer: Customer) {
     return dispatch => {
         const getOrderPromise = http(endpoints.getOrder(oUuid), "get", {});
         const getAccessTokenPromise = http(endpoints.getAccessToken(oUuid), "get", {});
@@ -68,8 +76,7 @@ export function getOrderAction(oUuid: string) {
             const { orderItems, orderUuid, timestamp, status, totalPrice } = json[0] as Order;
             const { linkToPayment } = json[1] as Order;
 
-            dispatch(updateOrder(parse(Order, { orderItems, orderUuid, timestamp, linkToPayment, status, totalPrice })));
-            updateStatusOrderAction(oUuid);
+            dispatch(updateOrder(parse(Order, { orderItems, orderUuid, timestamp, linkToPayment, status, totalPrice, customer })));
             stausInterval = setInterval(() => {
                 dispatch(updateStatusOrderAction(oUuid));
             }, intervalStep);
