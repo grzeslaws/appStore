@@ -25,9 +25,9 @@ import LoginWrapper from "./wrappers/LoginWrapper";
 import MessagesWrapper from "./wrappers/MessagesWrapper";
 import ProductPublicWrapper from "./wrappers/ProductPublicWrapper";
 
-import { MessagesComponent } from "./components/public/messages/MessagesComponent";
 import "./style.scss";
 import PublicNavigationWrapper from "./wrappers/PublicNavigationWrapper";
+import ThankYouPageWrapper from "./wrappers/ThankYouPageWrapper";
 
 const messages = new I18nResolver(i18n, "en").translation;
 store.dispatch(setI18N(messages));
@@ -46,6 +46,7 @@ ReactDOM.render(
                     <Route path={publicRoutes.category} component={CategoryPublicWrapper} />
                     <Route path={publicRoutes.product} component={ProductPublicWrapper} />
                     <Route path={publicRoutes.cart} component={CartWrapper} />
+                    <Route path={publicRoutes.thankYouPage} component={ThankYouPageWrapper} />
                 </Switch>
 
                 <PrivateRouteWrapper path={adminRoutes.admin} component={AdminDashboardComponent} />

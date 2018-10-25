@@ -1,15 +1,8 @@
 import { Immutable } from "immutable-typescript";
-import { OrderItem } from "../../model/OrderItem";
-
-export interface OrderItems {
-    orderItems: OrderItem[];
-    orderUuid: string;
-    linkToPayment: string;
-    timastamp: number;
-}
+import { Order } from "../../model/Order";
 
 interface Store {
-    order: OrderItems;
+    order: Order;
 }
 
 type OrderStore = Immutable<Store>;

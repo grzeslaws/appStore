@@ -7,5 +7,7 @@ export class Order {
         @Field("orderUuid") public orderUuid: string,
         @Field("linkToPayment") public linkToPayment: string,
         @Field("timestamp") public timestamp: number,
+        @Field("status", true) public status?: string,
+        @Field("totalPrice", true) public totalPrice?: number,
     ) {}
 }
