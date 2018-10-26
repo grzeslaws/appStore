@@ -43,7 +43,6 @@ export function createOrderAction(orderItems: ReadonlyArray<Immutable<OrderItem>
     return dispatch => {
         return http(endpoints.createOrder, "post", { orderItems, totalPrice, customerPayloads }).then((json: OrderDetails) => {
             dispatch(getOrderAction(json.orderUuid, json.customer));
-            // dispatch(updateCustomer(json.customer));
         });
     };
 }

@@ -16,7 +16,12 @@ export type ActionType =
     | "REMOVE_MESSGAE"
     | "UPDATE_ORDER"
     | "UPDATE_STATUS_ORDER"
-    | "UPDATE_CUSTOMER";
+    | "UPDATE_CUSTOMER"
+    | "ADD_POST_TYPES"
+    | "ADD_PAYMENT_TYPES"
+    | "DELETE_POST_TYPES"
+    | "DELETE_PAYMENT_TYPES"
+    | "UPDATE_POST_PAYMENT_TYPES";
 
 export interface Action<Type extends ActionType, Payload> {
     type: Type;

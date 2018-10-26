@@ -16,6 +16,7 @@ const endpoints = {
     getOrder: (orderUuid: string) => `/api/public/get_order/${orderUuid}`,
     getAccessToken: (orderUuid: string) => `/api/public/get_access_token/${orderUuid}`,
     login: `/api/login`,
+    getPostPaymentTypes: "/api/public/get_post_payment_types",
 
     // admin
     products: `/api/admin/products`,
@@ -30,6 +31,10 @@ const endpoints = {
     deleteCategoryFromProduct: (categoryId: number, productUuid: string) => `/api/admin/delete_category_for_product/${categoryId}/${productUuid}`,
     addCollection: `/api/admin/add_collection`,
     deleteCollectionFromProduct: (collectionId: number, productUuid: string) => `/api/admin/delete_collection_for_product/${collectionId}/${productUuid}`,
+    addPostType: "/api/admin/add_post_type",
+    deletePostType: (id: number) => `/api/admin/delete_post_type/${id}`,
+    addPaymentType: "/api/admin/add_payment_type",
+    deletePaymentType: (id: number) => `/api/admin/delete_payment_type/${id}`,
 };
 
 export default endpoints;

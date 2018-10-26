@@ -6,6 +6,7 @@ import { Link, RouteProps } from "react-router-dom";
 import { I18N } from "../../../i18n/i18n";
 import { Customer } from "../../../model/Customer";
 import { OrderItem } from "../../../model/OrderItem";
+import { PostPayment } from "../../../model/PostPayment";
 import { Product } from "../../../model/Product";
 import { StatusOrder } from "../../../redux/actions/orderActions";
 import store from "../../../redux/store/store";
@@ -19,6 +20,9 @@ export interface CartProps extends RouteComponentProps<History> {
     removeProductFromCart: (product: Immutable<Product>) => any;
     addProductToCart: (product: Immutable<Product>) => any;
     createOrderAction: (orderItems: ReadonlyArray<Immutable<OrderItem>>, totalPrice: number, customerPayload: Customer) => any;
+    updatePostPaymentAction: () => any;
+    postTypes: ReadonlyArray<Immutable<PostPayment>>;
+    paymentTypes: ReadonlyArray<Immutable<PostPayment>>;
     linkToPayment: string;
     status: string;
 }
@@ -32,6 +36,8 @@ interface State {
     city: string;
     zipCode: string;
     telephone: string;
+    // paymentType: PaymentType;
+    // postType: PostType;
 }
 
 export class CartComponent extends React.Component<CartProps, State> {
@@ -49,7 +55,13 @@ export class CartComponent extends React.Component<CartProps, State> {
             city: "",
             zipCode: "",
             telephone: "",
+            // paymentType: PaymentType.CASH_ON_DELIVERY,
+            // postType: PostType.NORMAL,
         };
+    }
+
+    public componentWillMount() {
+        this.props.updatePostPaymentAction()(store.dispatch);
     }
 
     public componentWillReceiveProps(nextProps) {
@@ -62,8 +74,6 @@ export class CartComponent extends React.Component<CartProps, State> {
     }
 
     public render() {
-        console.log(this.state);
-
         const { orderItems, removeProductFromCart, addProductToCart } = this.props;
         const orderList = orderItems
             ? orderItems.map((p, i) => {
@@ -92,6 +102,8 @@ export class CartComponent extends React.Component<CartProps, State> {
                 <br />
                 {this.renderCustomerForm()}
                 <br />
+                {/* {this.renderPostMethods()} */}
+                <br />
                 <button onClick={() => this.createOrder(totalPrice)}>Create order</button>
             </>
         );
@@ -110,6 +122,55 @@ export class CartComponent extends React.Component<CartProps, State> {
             </>
         );
     };
+
+    // private renderPostMethods = () => {
+    //     return (
+    //         <>
+    //             <button
+    //                 onClick={() => this.onChangePostPayment("paymentType", PaymentType.CASH_ON_DELIVERY)}
+    //                 style={{ color: `${this.state.paymentType === PaymentType.CASH_ON_DELIVERY ? "green" : ""}` }}>
+    //                 Cash on Delivery (+ 5 pln)
+    //             </button>
+    //             <button
+    //                 onClick={() => this.onChangePostPayment("paymentType", PaymentType.TRANSFER)}
+    //                 style={{ color: `${this.state.paymentType === PaymentType.TRANSFER ? "green" : ""}` }}>
+    //                 Transfer (0 pln)
+    //             </button>
+    //             <button
+    //                 onClick={() => this.onChangePostPayment("postType", PostType.NORMAL)}
+    //                 style={{ color: `${this.state.postType === PostType.NORMAL ? "green" : ""}` }}>
+    //                 Courier parcel normal (+ {Constant.POST_NORMAL_COST} pln)
+    //             </button>
+    //             <button
+    //                 onClick={() => this.onChangePostPayment("postType", PostType.EXPRESS)}
+    //                 style={{ color: `${this.state.postType === PostType.EXPRESS ? "green" : ""}` }}>
+    //                 Courier parcel express (+ {Constant.POST_EXPRESS_COST} pln)
+    //             </button>
+    //         </>
+    //     );
+    // };
+
+    // private onChangePostPayment = (type: string, value: PaymentType | PostType) => {
+    //     const newState = { ...this.state };
+    //     newState[type] = value;
+    //     this.setState({ ...newState });
+    // };
+
+    // private updateTotalByPostAndPayment = () => {
+    //     let postAndPaymentCosts = 0;
+
+    //     if (this.state.paymentType === PaymentType.CASH_ON_DELIVERY) {
+    //         postAndPaymentCosts += Constant.CASH_ON_DELIVERY_COST;
+    //     }
+
+    //     if (this.state.postType === PostType.NORMAL) {
+    //         postAndPaymentCosts += Constant.POST_NORMAL_COST;
+    //     } else if (this.state.postType === PostType.EXPRESS) {
+    //         postAndPaymentCosts += Constant.POST_EXPRESS_COST;
+    //     }
+
+    //     return postAndPaymentCosts;
+    // };
 
     private onChange = (e: React.ChangeEvent<any>) => {
         const newState: State = {

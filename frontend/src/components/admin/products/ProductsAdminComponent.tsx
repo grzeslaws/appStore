@@ -14,6 +14,7 @@ import { Categories } from "../../../model/Categories";
 import { Category } from "../../../model/Category";
 import { Collection } from "../../../model/Collection";
 import { Collections } from "../../../model/Collections";
+import AddPostPaymentWrapper from "../../../wrappers/AddPostPaymentWrapper";
 import { PaginationComponent } from "../../pagination/PaginationComponent";
 import { CategoriesAdminComponent } from "../categories/CategoriesAdminComponent";
 import { ItemsForProductsComponent } from "../itemsForProducts/ItemsForProductsComponent";
@@ -179,6 +180,10 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
         return (
             <>
                 <AddProductAdminComponent i18n={i18n} addProduct={this.handleAddProduct} />
+                <br />
+                <AddPostPaymentWrapper />
+                <br />
+                <br />
                 {this.props.i18n.products.title}
                 <div style={{ display: "flex" }}>
                     <div>{productList}</div>
