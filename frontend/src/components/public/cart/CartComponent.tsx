@@ -6,7 +6,7 @@ import { Link, RouteProps } from "react-router-dom";
 import { I18N } from "../../../i18n/i18n";
 import { Customer } from "../../../model/Customer";
 import { OrderItem } from "../../../model/OrderItem";
-import { PostPayment } from "../../../model/PostPayment";
+import { PostPayment, PostPaymentEnum } from "../../../model/PostPayment";
 import { Product } from "../../../model/Product";
 import { StatusOrder } from "../../../redux/actions/orderActions";
 import store from "../../../redux/store/store";
@@ -36,8 +36,8 @@ interface State {
     city: string;
     zipCode: string;
     telephone: string;
-    // paymentType: PaymentType;
-    // postType: PostType;
+    paymentTypeId: number;
+    postTypeId: number;
 }
 
 export class CartComponent extends React.Component<CartProps, State> {
@@ -55,8 +55,8 @@ export class CartComponent extends React.Component<CartProps, State> {
             city: "",
             zipCode: "",
             telephone: "",
-            // paymentType: PaymentType.CASH_ON_DELIVERY,
-            // postType: PostType.NORMAL,
+            paymentTypeId: null,
+            postTypeId: null,
         };
     }
 
@@ -74,7 +74,8 @@ export class CartComponent extends React.Component<CartProps, State> {
     }
 
     public render() {
-        const { orderItems, removeProductFromCart, addProductToCart } = this.props;
+        const { orderItems, removeProductFromCart, addProductToCart, postTypes, paymentTypes } = this.props;
+
         const orderList = orderItems
             ? orderItems.map((p, i) => {
                   return (
@@ -93,7 +94,9 @@ export class CartComponent extends React.Component<CartProps, State> {
                   );
               })
             : null;
-        const totalPrice = orderItems.length ? orderItems.map(o => o.product.price * o.quantity).reduce((item, sum) => item + sum) : null;
+        const totalPrice = orderItems.length
+            ? orderItems.map(o => o.product.price * o.quantity).reduce((item, sum) => item + sum) + this.updateTotalByPostAndPayment()
+            : null;
         return (
             <>
                 {orderList}
@@ -102,12 +105,32 @@ export class CartComponent extends React.Component<CartProps, State> {
                 <br />
                 {this.renderCustomerForm()}
                 <br />
-                {/* {this.renderPostMethods()} */}
+                Post type list:
+                {this.renderPostPaymentTypes(PostPaymentEnum.POST, postTypes)}
+                <br />
+                Payment type list:
+                {this.renderPostPaymentTypes(PostPaymentEnum.PAYMENT, paymentTypes)}
                 <br />
                 <button onClick={() => this.createOrder(totalPrice)}>Create order</button>
+                <br />
+                <br />
             </>
         );
     }
+
+    private renderPostPaymentTypes = (type: PostPaymentEnum, postPaymentData: ReadonlyArray<Immutable<PostPayment>>): JSX.Element[] | null => {
+        const postPaymentJsx: JSX.Element[] | null = postPaymentData
+            ? postPaymentData.map((p: Immutable<PostPayment>) => {
+                  return (
+                      <div style={this.setStyleForPostPaymentElement(type, p.id)} key={p.id} onClick={() => this.checkPostPaymentType(type, p.id)}>
+                          <span>{p.name}</span>
+                          <span>{p.cost}</span>
+                      </div>
+                  );
+              })
+            : null;
+        return postPaymentJsx;
+    };
 
     private renderCustomerForm = () => {
         return (
@@ -123,54 +146,34 @@ export class CartComponent extends React.Component<CartProps, State> {
         );
     };
 
-    // private renderPostMethods = () => {
-    //     return (
-    //         <>
-    //             <button
-    //                 onClick={() => this.onChangePostPayment("paymentType", PaymentType.CASH_ON_DELIVERY)}
-    //                 style={{ color: `${this.state.paymentType === PaymentType.CASH_ON_DELIVERY ? "green" : ""}` }}>
-    //                 Cash on Delivery (+ 5 pln)
-    //             </button>
-    //             <button
-    //                 onClick={() => this.onChangePostPayment("paymentType", PaymentType.TRANSFER)}
-    //                 style={{ color: `${this.state.paymentType === PaymentType.TRANSFER ? "green" : ""}` }}>
-    //                 Transfer (0 pln)
-    //             </button>
-    //             <button
-    //                 onClick={() => this.onChangePostPayment("postType", PostType.NORMAL)}
-    //                 style={{ color: `${this.state.postType === PostType.NORMAL ? "green" : ""}` }}>
-    //                 Courier parcel normal (+ {Constant.POST_NORMAL_COST} pln)
-    //             </button>
-    //             <button
-    //                 onClick={() => this.onChangePostPayment("postType", PostType.EXPRESS)}
-    //                 style={{ color: `${this.state.postType === PostType.EXPRESS ? "green" : ""}` }}>
-    //                 Courier parcel express (+ {Constant.POST_EXPRESS_COST} pln)
-    //             </button>
-    //         </>
-    //     );
-    // };
+    private setStyleForPostPaymentElement = (type: PostPaymentEnum, id: number) => {
+        if (type === PostPaymentEnum.POST && this.state.postTypeId === id) {
+            return { color: "green" };
+        }
+        if (type === PostPaymentEnum.PAYMENT && this.state.paymentTypeId === id) {
+            return { color: "green" };
+        }
+    };
 
-    // private onChangePostPayment = (type: string, value: PaymentType | PostType) => {
-    //     const newState = { ...this.state };
-    //     newState[type] = value;
-    //     this.setState({ ...newState });
-    // };
+    private checkPostPaymentType = (type: PostPaymentEnum, postPaymentTypeId: number) => {
+        if (type === PostPaymentEnum.POST) {
+            this.setState({ postTypeId: postPaymentTypeId });
+        } else {
+            this.setState({ paymentTypeId: postPaymentTypeId });
+        }
+    };
 
-    // private updateTotalByPostAndPayment = () => {
-    //     let postAndPaymentCosts = 0;
+    private updateTotalByPostAndPayment = () => {
+        let postAndPaymentCosts = 0;
 
-    //     if (this.state.paymentType === PaymentType.CASH_ON_DELIVERY) {
-    //         postAndPaymentCosts += Constant.CASH_ON_DELIVERY_COST;
-    //     }
+        const checkedPostType = this.props.postTypes.find((p: Immutable<PostPayment>) => p.id === this.state.postTypeId);
+        const checkedPaymentType = this.props.paymentTypes.find((p: Immutable<PostPayment>) => p.id === this.state.paymentTypeId);
 
-    //     if (this.state.postType === PostType.NORMAL) {
-    //         postAndPaymentCosts += Constant.POST_NORMAL_COST;
-    //     } else if (this.state.postType === PostType.EXPRESS) {
-    //         postAndPaymentCosts += Constant.POST_EXPRESS_COST;
-    //     }
+        postAndPaymentCosts += checkedPostType ? checkedPostType.cost : null;
+        postAndPaymentCosts += checkedPaymentType ? checkedPaymentType.cost : null;
 
-    //     return postAndPaymentCosts;
-    // };
+        return postAndPaymentCosts;
+    };
 
     private onChange = (e: React.ChangeEvent<any>) => {
         const newState: State = {

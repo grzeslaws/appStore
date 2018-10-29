@@ -5,9 +5,9 @@ import { addProductToCart, removeProductFromCart } from "../redux/actions/cartAc
 import { createOrderAction } from "../redux/actions/orderActions";
 import { updatePostPaymentAction } from "../redux/actions/postPaymentActions";
 import { ApplicationStore } from "../redux/store/store";
-import { CartComponent, CartProps } from "./../components/public/cart/CartComponent";
+import { CartComponent as Component, CartProps as Props } from "./../components/public/cart/CartComponent";
 
-export function mapStateToProps({ i18n, cart, order, postPayment }: ApplicationStore, ownProps: RouteComponentProps<History>): CartProps {
+export function mapStateToProps({ i18n, cart, order, postPayment }: ApplicationStore, ownProps: RouteComponentProps<History>): Props {
     return {
         i18n: i18n.messages,
         orderItems: cart.orderItems,
@@ -18,9 +18,9 @@ export function mapStateToProps({ i18n, cart, order, postPayment }: ApplicationS
         status: order.order ? order.order.status : null,
         updatePostPaymentAction,
         postTypes: postPayment.postTypes,
-        paymentTypes: postPayment.postTypes,
+        paymentTypes: postPayment.paymentTypes,
         ...ownProps,
     };
 }
 
-export default withRouter(connect(mapStateToProps)(CartComponent));
+export default withRouter(connect(mapStateToProps)(Component));

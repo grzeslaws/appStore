@@ -27,3 +27,19 @@ export function addPostAction(name: string, cost: number) {
         });
     };
 }
+
+export function updatePaymentPaymentAction() {
+    return dispatch => {
+        return http(endpoints.getPostPaymentTypes, "get", {}).then(json => {
+            dispatch(updatePostPayment(parse(PostPaymentGroup, json)));
+        });
+    };
+}
+
+export function addPaymentAction(name: string, cost: number) {
+    return dispatch => {
+        return http(endpoints.addPaymentType, "post", { name, cost }).then(() => {
+            dispatch(updatePostPaymentAction());
+        });
+    };
+}
