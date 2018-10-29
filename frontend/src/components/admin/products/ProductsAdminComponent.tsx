@@ -69,6 +69,12 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
         this.props.getCollections()(store.dispatch);
     }
 
+    public componentWillReceiveProps(nextProps) {
+        if (nextProps.pageNumber !== this.props.pageNumber) {
+            store.dispatch(this.props.fetchAdminProducts(this.props.i18n, nextProps.pageNumber));
+        }
+    }
+
     public render() {
         const { products, i18n, categories, addCategory, deleteCategory, collections, deleteCategoryFromProduct, deleteCollectionFromProduct } = this.props;
 
@@ -198,7 +204,6 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
                         <PaginationComponent
                             i18n={i18n}
                             paginationData={paginationData}
-                            fetchDataForCurrentPage={this.fetchDataForCurrentPage}
                             baseRoute={adminRoutes.productsTemplate}
                         />
                     )}
@@ -206,12 +211,6 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
             </>
         );
     }
-
-    private fetchDataForCurrentPage = ({ categoryId, pageNumber }: { categoryId?: number; pageNumber: number }) => {
-        if (pageNumber !== Number(this.props.pageNumber)) {
-            store.dispatch(this.props.fetchAdminProducts(this.props.i18n, pageNumber));
-        }
-    };
 
     private handleAddProduct = (payload: NewProduct, productImage: FileList, i18n: I18N) => {
         store.dispatch(this.props.addProduct(payload, productImage, i18n));

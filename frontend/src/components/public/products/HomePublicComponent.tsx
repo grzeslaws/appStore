@@ -61,6 +61,12 @@ export class HomePublicComponent extends React.Component<HomePublicProps, HomeSt
         })(store.dispatch);
     }
 
+    public componentWillReceiveProps(nextProps) {
+        if (nextProps.pageNumber !== this.props.pageNumber) {
+            this.fetchDataForOptions({pageNumber: nextProps.pageNumber});
+        }
+    }
+
     public render() {
         const { products, i18n, collections, carouselProducts } = this.props;
         const paginationData = products
@@ -90,7 +96,6 @@ export class HomePublicComponent extends React.Component<HomePublicProps, HomeSt
                         <PaginationComponent
                             i18n={i18n}
                             paginationData={paginationData}
-                            fetchDataForCurrentPage={this.fetchDataForOptions}
                             baseRoute={({ itemId, pageNumber }) => publicRoutes.homeTemplate({ collectionId: itemId, pageNumber })}
                         />
                     )}

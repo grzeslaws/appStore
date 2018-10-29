@@ -45,6 +45,12 @@ export class CategoryPublicComponent extends React.Component<CategoryPublicProps
         this.fetchDataForOptions({ pageNumber: this.props.pageNumber, categoryId: this.props.categoryId });
     }
 
+    public componentWillReceiveProps(nextProps) {
+        if (nextProps.pageNumber !== this.props.pageNumber) {
+            this.fetchDataForOptions({ pageNumber: nextProps.pageNumber });
+        }
+    }
+
     public render() {
         const { products, i18n, categoryId, getCategories, categories } = this.props;
         const paginationData = products
@@ -71,11 +77,7 @@ export class CategoryPublicComponent extends React.Component<CategoryPublicProps
 
         return (
             <>
-                <CategoriesListPublicComponent
-                    categories={categories}
-                    getCategories={getCategories}
-                    fetchDataForCategory={this.fetchDataForOptions}
-                />
+                <CategoriesListPublicComponent categories={categories} getCategories={getCategories} fetchDataForCategory={this.fetchDataForOptions} />
                 {this.props.i18n.products.title}
                 {productList}
                 <div>
@@ -84,8 +86,7 @@ export class CategoryPublicComponent extends React.Component<CategoryPublicProps
                             <PaginationComponent
                                 i18n={i18n}
                                 paginationData={paginationData}
-                                fetchDataForCurrentPage={this.fetchDataForOptions}
-                                baseRoute={({itemId, pageNumber}) => publicRoutes.categoryTemplate({categoryId: itemId, pageNumber})}
+                                baseRoute={({ itemId, pageNumber }) => publicRoutes.categoryTemplate({ categoryId: itemId, pageNumber })}
                                 itemId={categoryId}
                             />
                         )}
