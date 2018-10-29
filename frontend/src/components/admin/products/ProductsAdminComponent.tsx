@@ -25,7 +25,7 @@ export interface ProductsProps {
     products: Immutable<Products>;
     fetchAdminProducts: (i18n: I18N, pageNumber?: number, perPage?: number) => any;
     addProduct: (payload: NewProduct, productImage: FileList, i18n: I18N) => any;
-    editProduct: (productUuid: string, payload: NewProduct, i18n: I18N, productImage?: FileList) => any;
+    editProduct: (productUuid: string, payload: NewProduct, i18n: I18N, pageNumber: number, productImage?: FileList) => any;
     deleteProduct: (productUuid: string, i18n: I18N) => any;
     pageNumber: string;
     categories: Immutable<Categories>;
@@ -45,6 +45,7 @@ interface ProductsState {
     productImage: FileList;
     productCategory: number;
     productCollection: number;
+    productDescription: string;
 }
 
 export class ProductsAdminComponent extends React.Component<ProductsProps, ProductsState> {
@@ -55,8 +56,9 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
             productName: "",
             currentProduct: "",
             productImage: null,
-            productCategory: null,
-            productCollection: null,
+            productCategory: 0,
+            productCollection: 0,
+            productDescription: "",
         };
     }
 
@@ -68,17 +70,8 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
     }
 
     public render() {
-        const {
-            products,
-            i18n,
-            categories,
-            addCategory,
-            deleteCategory,
-            collections,
-            deleteCategoryFromProduct,
-            deleteCollectionFromProduct,
-            // messages,
-        } = this.props;
+        const { products, i18n, categories, addCategory, deleteCategory, collections, deleteCategoryFromProduct, deleteCollectionFromProduct } = this.props;
+
         const paginationData = products
             ? {
                   hasNext: products.hasNext,
@@ -119,7 +112,7 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
                       <div style={simpleStyle} key={p.id}>
                           {p.name}
                           {p.imagePath && <img style={{ maxWidth: "40px" }} src={`${endpoints.getPathForProductImage(p.imagePath)}`} />}
-                          <button onClick={() => this.openEditProduct(p.productUuid, p.name)}>
+                          <button onClick={() => this.openEditProduct(p.productUuid, p.name, p.description)}>
                               {isCurrentProduct ? i18n.products.closeEditor : i18n.products.openEditor}
                           </button>
                           {isCurrentProduct && (
@@ -128,13 +121,20 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
                                       <div style={simpleStyle}>
                                           <label>{i18n.products.imageName}</label>
                                           <input value={this.state.productName} name="productName" onChange={this.onChange} placeholder={p.name} />
+                                          <label>{i18n.products.productDescription}</label>
+                                          <textarea
+                                              value={this.state.productDescription}
+                                              name="productDescription"
+                                              onChange={this.onChange}
+                                              placeholder={p.description}
+                                          />
                                           <input type="file" name="productImage" onChange={this.onChange} />
                                       </div>
                                       {showItemsSelect(p.categories, categories.categories) && (
                                           <div style={simpleStyle}>
                                               Select category:{" "}
                                               <select name="productCategory" value={this.state.productCategory} onChange={this.onChange}>
-                                                  <option key={0} value={null}>
+                                                  <option key={0} value={0}>
                                                       Select category
                                                   </option>
                                                   {itemsSelect(p.categories, categories.categories)}
@@ -145,7 +145,7 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
                                           <div style={simpleStyle}>
                                               Select collection:{" "}
                                               <select name="productCollection" value={this.state.productCollection} onChange={this.onChange}>
-                                                  <option key={0} value={null}>
+                                                  <option key={0} value={0}>
                                                       Select category
                                                   </option>
                                                   {itemsSelect(p.collections, collections.collections)}
@@ -157,7 +157,8 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
                                           items={p.categories}
                                           itemUuid={p.productUuid}
                                           removeItemFromProduct={({ categoryId, productUuid }) =>
-                                              deleteCategoryFromProduct(i18n, categoryId, productUuid)(store.dispatch)}
+                                              deleteCategoryFromProduct(i18n, categoryId, productUuid)(store.dispatch)
+                                          }
                                       />
                                       <br />
                                       Collections list:
@@ -165,9 +166,12 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
                                           items={p.collections}
                                           itemUuid={p.productUuid}
                                           removeItemFromProduct={({ categoryId, productUuid }) =>
-                                              deleteCollectionFromProduct(i18n, categoryId, productUuid)(store.dispatch)}
+                                              deleteCollectionFromProduct(i18n, categoryId, productUuid)(store.dispatch)
+                                          }
                                       />
-                                      <button onClick={() => this.saveChanges(p.productUuid)}>{i18n.products.saveChanges}</button>
+                                      <button onClick={(e: React.MouseEvent<HTMLButtonElement>) => this.saveChanges(e, p.productUuid)}>
+                                          {i18n.products.saveChanges}
+                                      </button>
                                       <button onClick={() => this.handleDeleteProduct(p.productUuid)}> X {i18n.products.deleteProduct}</button>
                                   </div>
                               </>
@@ -226,24 +230,25 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
         });
     };
 
-    private openEditProduct = (productUuid: string, productName: string) => {
+    private openEditProduct = (productUuid: string, productName: string, productDescription: string) => {
         if (this.state.currentProduct === productUuid) {
             this.setState({ currentProduct: null });
         } else {
-            this.setState({ currentProduct: productUuid, productName });
+            this.setState({ currentProduct: productUuid, productName, productDescription });
         }
     };
 
-    private saveChanges = (productUuid: string) => {
+    private saveChanges = (e: React.MouseEvent<HTMLButtonElement>, productUuid: string) => {
+        e.preventDefault();
         if (!this.state.productName && !this.state.productImage) {
             return;
         }
 
-        const payload = new NewProduct(this.state.productName, this.state.productCategory, this.state.productCollection);
-        store.dispatch(this.props.editProduct(productUuid, payload, this.props.i18n, this.state.productImage));
+        const payload = new NewProduct(this.state.productName, this.state.productCategory, this.state.productCollection, this.state.productDescription);
+        store.dispatch(this.props.editProduct(productUuid, payload, this.props.i18n, Number(this.props.pageNumber), this.state.productImage));
         this.setState({ currentProduct: null });
-        this.setState({ productCategory: null });
-        this.setState({ productCollection: null });
+        this.setState({ productCategory: 0 });
+        this.setState({ productCollection: 0 });
     };
 
     private handleDeleteProduct(productUuid: string) {

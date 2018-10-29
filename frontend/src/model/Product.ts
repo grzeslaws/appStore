@@ -10,6 +10,7 @@ export class Product {
         @Field("name") public name: string,
         @Field("price", true) public price: number,
         @Field("quantity", true) public quantity: number,
+        @Field("description", true) public description: string,
         @ArrayField("categories", Category, true) public categories?: Category[],
         @ArrayField("collections", Collection, true) public collections?: Collection[],
         @Field("image_path", true) public imagePath?: string,

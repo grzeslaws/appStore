@@ -175,7 +175,7 @@ export class CartComponent extends React.Component<CartProps, State> {
         return postAndPaymentCosts;
     };
 
-    private onChange = (e: React.ChangeEvent<any>) => {
+    private onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newState: State = {
             ...this.state,
         };

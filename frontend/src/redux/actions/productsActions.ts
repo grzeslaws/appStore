@@ -73,16 +73,16 @@ export function addProduct(payload: NewProduct, productImage: FileList, i18n: I1
     };
 }
 
-export function editProduct(productUuid: string, payload: NewProduct, i18n: I18N, productImage?: FileList) {
+export function editProduct(productUuid: string, payload: NewProduct, i18n: I18N, pageNumber: number, productImage?: FileList) {
     return dispatch => {
         if (productImage) {
             http(endpoints.editProductImage(productUuid), "file", productImage);
         }
         if (payload.name) {
             http(endpoints.editProduct(productUuid), "put", payload).then(json => {
-                dispatch(fetchAdminProducts(i18n));
+                dispatch(fetchAdminProducts(i18n, pageNumber));
                 dispatch(updateMessages({ timestamp: Date.now(), message: "Product has been updated!", type: MessageType.succces, timeToHide: 5 }));
-                dispatch(updateMessages({ timestamp: Date.now(), message: "Product has been updated!", type: MessageType.succces}));
+                dispatch(updateMessages({ timestamp: Date.now(), message: "Product has been updated!", type: MessageType.succces }));
             });
         }
     };

@@ -2,6 +2,7 @@ export const en = {
     products: {
         title: "Products",
         productName: "Product name",
+        productDescription: "Product description",
         imageName: "Image name",
         addProduct: "Add product",
         openEditor: "Open editor",
