@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { match } from "react-router";
 
-import { CategoryPublicComponent, CategoryPublicProps } from "../components/public/category/CategoryPublicComponent";
+import { CategoryPublicComponent as Component, CategoryPublicProps as Props } from "../components/public/category/CategoryPublicComponent";
 import { getCategories } from "../redux/actions/categoriesActions";
 import { fetchPublicProducts } from "../redux/actions/productsActions";
 import { ApplicationStore } from "../redux/store/store";
@@ -9,7 +9,7 @@ import { ApplicationStore } from "../redux/store/store";
 export function mapStateToProps(
     { i18n, products, categories }: ApplicationStore,
     ownProps: { match: match<{ pageNumber: number; perPage: number, categoryId: number }> },
-): CategoryPublicProps {
+): Props {
 
     return {
         i18n: i18n.messages,
@@ -23,4 +23,4 @@ export function mapStateToProps(
     };
 }
 
-export default connect(mapStateToProps)(CategoryPublicComponent);
+export default connect(mapStateToProps)(Component);

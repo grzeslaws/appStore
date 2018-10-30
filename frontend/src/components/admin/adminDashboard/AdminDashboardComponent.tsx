@@ -6,6 +6,8 @@ import store from "../../../redux/store/store";
 import { adminRoutes } from "../../../routes/adminRoutes";
 import { publicRoutes } from "../../../routes/publicRoutes";
 
+import ProductsWrapper from "../../../wrappers/ProductsAdminWrapper";
+
 export class AdminDashboardComponent extends React.Component<{}, {}> {
     constructor(props: any) {
         super(props);
@@ -13,9 +15,16 @@ export class AdminDashboardComponent extends React.Component<{}, {}> {
         this.state = {};
     }
     public render() {
+        console.log("AdminDashboardComponent");
+
         return (
             <>
                 <ul>
+                    <li>
+                        <Link to={publicRoutes.public}>
+                            <button>Home</button>
+                        </Link>
+                    </li>
                     <li>
                         <Link to={adminRoutes.admin}>
                             <button>Dashboard</button>
@@ -31,6 +40,7 @@ export class AdminDashboardComponent extends React.Component<{}, {}> {
                     <div>Dashboard</div>
                     <Route render={({ history }) => <button onClick={() => this.logout(history)}>Logout</button>} />
                 </div>
+                <Route path={adminRoutes.products} component={ProductsWrapper} />
             </>
         );
     }

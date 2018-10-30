@@ -63,11 +63,12 @@ export class HomePublicComponent extends React.Component<HomePublicProps, HomeSt
 
     public componentWillReceiveProps(nextProps) {
         if (nextProps.pageNumber !== this.props.pageNumber) {
-            this.fetchDataForOptions({pageNumber: nextProps.pageNumber});
+            this.fetchDataForOptions({ pageNumber: nextProps.pageNumber });
         }
     }
 
     public render() {
+
         const { products, i18n, collections, carouselProducts } = this.props;
         const paginationData = products
             ? {
@@ -78,8 +79,7 @@ export class HomePublicComponent extends React.Component<HomePublicProps, HomeSt
                   pages: products.pages,
               }
             : null;
-        const productList: ReadonlyArray<JSX.Element> = products
-            ? products.products.map(this.renderOneProduct) : null;
+        const productList: ReadonlyArray<JSX.Element> = products ? products.products.map(this.renderOneProduct) : null;
 
         return (
             <>
