@@ -1,6 +1,6 @@
 import { parse } from "sparkson";
 import { Message } from "src/model/Message";
-import { FetchPublicProductsByCollectionMethod } from "../../components/public/products/HomePublicComponent";
+import { FetchPublicProductsByCollectionMethod } from "../../components/public/home/HomePublicComponent";
 import endpoints from "../../endpoints";
 import http from "../../http";
 import { I18N } from "../../i18n/i18n";

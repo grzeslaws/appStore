@@ -9,8 +9,6 @@ import { Product } from "../../../model/Product";
 import { adminRoutes } from "../../../routes/adminRoutes";
 import { publicRoutes } from "../../../routes/publicRoutes";
 
-import "../../../style.scss";
-
 export interface PublicNavigationProps {
     i18n: Immutable<I18N>;
     orderItems: ReadonlyArray<Immutable<OrderItem>>;

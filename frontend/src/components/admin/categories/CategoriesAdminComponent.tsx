@@ -3,6 +3,10 @@ import * as React from "react";
 import { I18N } from "../../../i18n/i18n";
 import { Categories } from "../../../model/Categories";
 import store from "../../../redux/store/store";
+import { H3 } from "../../../theme/admin/elements/Headings";
+import { Button } from "../../../theme/admin/objects/Buttons";
+import { Input } from "../../../theme/admin/objects/Forms";
+import { PostTypeItem, PostTypeRemove, PostTypeText, Row, WrapperPostType } from "../products/productsStyled";
 
 interface CategoriesAdminProps {
     i18n: Immutable<I18N>;
@@ -28,25 +32,26 @@ export class CategoriesAdminComponent extends React.Component<CategoriesAdminPro
         const { categories, deleteCategory, i18n } = this.props;
         const categoriesList = categories
             ? categories.categories.map(c => (
-                  <li key={c.id}>
-                      {c.name}
-                      <button onClick={() => deleteCategory(i18n, c.id)(store.dispatch)}>Remove category</button>
-                  </li>
+                  <PostTypeItem key={c.id}>
+                      <PostTypeText>{c.name}</PostTypeText>
+                      <PostTypeRemove onClick={() => deleteCategory(i18n, c.id)(store.dispatch)}>remove</PostTypeRemove>
+                  </PostTypeItem>
               ))
             : null;
+
         const addCategoryForm = (
-            <div>
-                <label>Add category </label>
-                <input value={this.state.categoryItem} onChange={this.setCategoryItem} />
-                <button onClick={this.addCategory}>Add</button>
-            </div>
+            <>
+                <Input value={this.state.categoryItem} onChange={this.setCategoryItem} placeholder="Category name" />
+                <Button onClick={this.addCategory}>Add new category</Button>
+            </>
         );
 
         return (
-            <>
-                Categories list: <ul>{categoriesList}</ul>
+            <Row>
+                <H3>Categories list</H3>
+                <WrapperPostType>{categoriesList}</WrapperPostType>
                 {addCategoryForm}
-            </>
+            </Row>
         );
     }
 

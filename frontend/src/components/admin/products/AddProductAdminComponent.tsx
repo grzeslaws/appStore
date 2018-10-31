@@ -2,7 +2,10 @@ import { Immutable } from "immutable-typescript";
 import * as React from "react";
 import { I18N } from "../../../i18n/i18n";
 import { NewProduct } from "../../../model/NewProduct";
-import "./products-admin.scss";
+
+import { H3 } from "../../../theme/admin/elements/Headings";
+import { Button, ButtonInverted } from "../../../theme/admin/objects/Buttons";
+import { Input, WrapperInput } from "../../../theme/admin/objects/Forms";
 
 export interface ProductsProps {
     i18n: Immutable<I18N>;
@@ -27,15 +30,9 @@ export class AddProductAdminComponent extends React.Component<ProductsProps, Add
 
         return (
             <>
-                <div>
-                    <label>{i18n.products.productName} </label>
-                    <input value={this.state.productName} name="productName" onChange={this.onChange} />
-                </div>
-                <div>
-                    <label>{i18n.products.imageName} </label>
-                    <input type="file" name="productImage" onChange={this.onChange} />
-                </div>
-                <button onClick={this.addProduct}>{i18n.products.addProduct}</button>
+                <H3>Add product</H3>
+                <Input value={this.state.productName} name="productName" onChange={this.onChange} placeholder={i18n.products.productName} />
+                <Button onClick={this.addProduct}>{i18n.products.addProduct}</Button>
             </>
         );
     }

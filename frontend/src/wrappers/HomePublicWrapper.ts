@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { match } from "react-router";
 
-import { HomePublicComponent, HomePublicProps } from "../components/public/products/HomePublicComponent";
+import { HomePublicComponent as Component, HomePublicProps as Props } from "../components/public/home/HomePublicComponent";
 import { getCategories } from "../redux/actions/categoriesActions";
 import { getCollections } from "../redux/actions/collectionsActions";
 import { fetchPublicProductsByCollection, getProductsForCarousel } from "../redux/actions/productsActions";
@@ -10,7 +10,7 @@ import { ApplicationStore } from "../redux/store/store";
 export function mapStateToProps(
     { i18n, products, collections, carousel }: ApplicationStore,
     ownProps: { match: match<{ pageNumber: number; perPage: number; collectionId: number }> },
-): HomePublicProps {
+): Props {
     return {
         i18n: i18n.messages,
         products: products.products,
@@ -26,4 +26,4 @@ export function mapStateToProps(
     };
 }
 
-export default connect(mapStateToProps)(HomePublicComponent);
+export default connect(mapStateToProps)(Component);

@@ -18,7 +18,22 @@ import AddPostPaymentWrapper from "../../../wrappers/AddPostPaymentWrapper";
 import { PaginationComponent } from "../../pagination/PaginationComponent";
 import { CategoriesAdminComponent } from "../categories/CategoriesAdminComponent";
 import { ItemsForProductsComponent } from "../itemsForProducts/ItemsForProductsComponent";
-import "./products-admin.scss";
+
+import { ButtonFile, ButtonInverted } from "../../../theme/admin/objects/Buttons";
+import { Input, Label, TextArea, WrapperInput } from "../../../theme/admin/objects/Forms";
+import {
+    BoxProduct,
+    Images,
+    ProductName,
+    Row,
+    RowProductName,
+    ToggleEditor,
+    Wrapper,
+    WrapperDetails,
+    WrapperPagination,
+    WrapperProducts,
+    WrapperSettings,
+} from "./productsStyled";
 
 export interface ProductsProps {
     i18n: Immutable<I18N>;
@@ -115,99 +130,103 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
             ? products.products.map(p => {
                   const isCurrentProduct = this.state.currentProduct === p.productUuid ? true : false;
                   return (
-                      <div style={simpleStyle} key={p.id}>
-                          {p.name}
-                          {p.imagePath && <img style={{ maxWidth: "40px" }} src={`${endpoints.getPathForProductImage(p.imagePath)}`} />}
-                          <button onClick={() => this.openEditProduct(p.productUuid, p.name, p.description)}>
-                              {isCurrentProduct ? i18n.products.closeEditor : i18n.products.openEditor}
-                          </button>
+                      <BoxProduct key={p.id}>
+                          <RowProductName className="inline">
+                              {p.imagePath && <Images style={{ backgroundImage: `url(${endpoints.getPathForProductImage(p.imagePath)})` }} />}
+                              <ProductName onClick={() => this.openEditProduct(p.productUuid, p.name, p.description)}>{p.name}</ProductName>
+
+                              <ToggleEditor small={true} onClick={() => this.openEditProduct(p.productUuid, p.name, p.description)}>
+                                  {isCurrentProduct ? i18n.products.closeEditor : i18n.products.openEditor}
+                              </ToggleEditor>
+                          </RowProductName>
                           {isCurrentProduct && (
-                              <>
-                                  <div>
+                              <WrapperDetails>
+                                  <Row>
+                                      <WrapperInput>
+                                          <Label>{i18n.products.imageName}</Label>
+                                          <Input value={this.state.productName} name="productName" onChange={this.onChange} placeholder={p.name} />
+                                      </WrapperInput>
+                                      <Label>{i18n.products.productDescription}</Label>
+                                      <TextArea
+                                          value={this.state.productDescription}
+                                          name="productDescription"
+                                          onChange={this.onChange}
+                                          placeholder={p.description} />
+                                      <ButtonFile htmlFor="productImage">Import image</ButtonFile>
+                                      <input style={{display: "none"}} type="file" name="productImage" id="productImage" onChange={this.onChange} />
+                                  </Row>
+                                  {showItemsSelect(p.categories, categories.categories) && (
                                       <div style={simpleStyle}>
-                                          <label>{i18n.products.imageName}</label>
-                                          <input value={this.state.productName} name="productName" onChange={this.onChange} placeholder={p.name} />
-                                          <label>{i18n.products.productDescription}</label>
-                                          <textarea
-                                              value={this.state.productDescription}
-                                              name="productDescription"
-                                              onChange={this.onChange}
-                                              placeholder={p.description}
-                                          />
-                                          <input type="file" name="productImage" onChange={this.onChange} />
+                                          Select category:{" "}
+                                          <select name="productCategory" value={this.state.productCategory} onChange={this.onChange}>
+                                              <option key={0} value={0}>
+                                                  Select category
+                                              </option>
+                                              {itemsSelect(p.categories, categories.categories)}
+                                          </select>
                                       </div>
-                                      {showItemsSelect(p.categories, categories.categories) && (
-                                          <div style={simpleStyle}>
-                                              Select category:{" "}
-                                              <select name="productCategory" value={this.state.productCategory} onChange={this.onChange}>
-                                                  <option key={0} value={0}>
-                                                      Select category
-                                                  </option>
-                                                  {itemsSelect(p.categories, categories.categories)}
-                                              </select>
-                                          </div>
-                                      )}
-                                      {showItemsSelect(p.collections, collections.collections) && (
-                                          <div style={simpleStyle}>
-                                              Select collection:{" "}
-                                              <select name="productCollection" value={this.state.productCollection} onChange={this.onChange}>
-                                                  <option key={0} value={0}>
-                                                      Select category
-                                                  </option>
-                                                  {itemsSelect(p.collections, collections.collections)}
-                                              </select>
-                                          </div>
-                                      )}
-                                      Categories list:
-                                      <ItemsForProductsComponent
-                                          items={p.categories}
-                                          itemUuid={p.productUuid}
-                                          removeItemFromProduct={({ categoryId, productUuid }) =>
-                                              deleteCategoryFromProduct(i18n, categoryId, productUuid)(store.dispatch)
-                                          }
-                                      />
-                                      <br />
-                                      Collections list:
-                                      <ItemsForProductsComponent
-                                          items={p.collections}
-                                          itemUuid={p.productUuid}
-                                          removeItemFromProduct={({ categoryId, productUuid }) =>
-                                              deleteCollectionFromProduct(i18n, categoryId, productUuid)(store.dispatch)
-                                          }
-                                      />
-                                      <button onClick={(e: React.MouseEvent<HTMLButtonElement>) => this.saveChanges(e, p.productUuid)}>
-                                          {i18n.products.saveChanges}
-                                      </button>
-                                      <button onClick={() => this.handleDeleteProduct(p.productUuid)}> X {i18n.products.deleteProduct}</button>
-                                  </div>
-                              </>
+                                  )}
+                                  {showItemsSelect(p.collections, collections.collections) && (
+                                      <div style={simpleStyle}>
+                                          Select collection:{" "}
+                                          <select name="productCollection" value={this.state.productCollection} onChange={this.onChange}>
+                                              <option key={0} value={0}>
+                                                  Select category
+                                              </option>
+                                              {itemsSelect(p.collections, collections.collections)}
+                                          </select>
+                                      </div>
+                                  )}
+                                  Categories list:
+                                  <ItemsForProductsComponent
+                                      items={p.categories}
+                                      itemUuid={p.productUuid}
+                                      removeItemFromProduct={({ categoryId, productUuid }) =>
+                                          deleteCategoryFromProduct(i18n, categoryId, productUuid)(store.dispatch)
+                                      }
+                                  />
+                                  <br />
+                                  Collections list:
+                                  <ItemsForProductsComponent
+                                      items={p.collections}
+                                      itemUuid={p.productUuid}
+                                      removeItemFromProduct={({ categoryId, productUuid }) =>
+                                          deleteCollectionFromProduct(i18n, categoryId, productUuid)(store.dispatch)
+                                      }
+                                  />
+                                  <ButtonInverted onClick={(e: React.MouseEvent<HTMLButtonElement>) => this.saveChanges(e, p.productUuid)}>
+                                      {i18n.products.saveChanges}
+                                  </ButtonInverted>
+                                  <ButtonInverted small={true} onClick={() => this.handleDeleteProduct(p.productUuid)}>
+                                      {" "}
+                                      X {i18n.products.deleteProduct}
+                                  </ButtonInverted>
+                              </WrapperDetails>
                           )}
-                      </div>
+                      </BoxProduct>
                   );
               })
             : null;
 
         return (
             <>
-                <AddProductAdminComponent i18n={i18n} addProduct={this.handleAddProduct} />
-                <br />
-                <AddPostPaymentWrapper />
-                <br />
-                <br />
-                {this.props.i18n.products.title}
-                <div style={{ display: "flex" }}>
-                    <div>{productList}</div>
-                    <CategoriesAdminComponent i18n={i18n} categories={categories} addCategory={addCategory} deleteCategory={deleteCategory} />
-                </div>
-                <div>
-                    {products && (
-                        <PaginationComponent
-                            i18n={i18n}
-                            paginationData={paginationData}
-                            baseRoute={adminRoutes.productsTemplate}
-                        />
-                    )}
-                </div>
+                <Wrapper>
+                    <WrapperProducts>{productList}</WrapperProducts>
+                    <WrapperSettings>
+                        <Row>
+                            <AddProductAdminComponent i18n={i18n} addProduct={this.handleAddProduct} />
+                        </Row>
+                        <Row>
+                            <AddPostPaymentWrapper />
+                        </Row>
+                        <Row>
+                            <CategoriesAdminComponent i18n={i18n} categories={categories} addCategory={addCategory} deleteCategory={deleteCategory} />
+                        </Row>
+                    </WrapperSettings>
+                </Wrapper>
+                <WrapperPagination>
+                    {products && <PaginationComponent i18n={i18n} paginationData={paginationData} baseRoute={adminRoutes.productsTemplate} />}
+                </WrapperPagination>
             </>
         );
     }

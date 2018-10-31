@@ -15,9 +15,34 @@ import { setI18N } from "./redux/actions/i18nActions";
 import { adminRoutes } from "./routes/adminRoutes";
 import { publicRoutes } from "./routes/publicRoutes";
 import LoginWrapper from "./wrappers/LoginWrapper";
-import MessagesWrapper from "./wrappers/MessagesWrapper";
-import PrivateRouteWrapper from "./wrappers/PrivateRouteWrapper";
+import AdminRouteWrapper from "./wrappers/PrivateRouteWrapper";
 import PublicRouteWrapper from "./wrappers/PublicRouteWrapper";
+
+import reset from "styled-reset";
+import { injectGlobal } from "./theme/admin";
+
+// tslint:disable-next-line:no-unused-expression
+injectGlobal`
+    @import url('https://fonts.googleapis.com/css?family=Roboto+Slab:300,400,700&subset=latin-ext');
+    ${reset}
+
+    *, *:before, *:after {
+        box-sizing: inherit;
+    }
+
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    #app {
+        min-height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+`;
 
 const messages = new I18nResolver(i18n, "en").translation;
 store.dispatch(setI18N(messages));
@@ -27,10 +52,9 @@ ReactDOM.render(
     <Provider store={store}>
         <HashRouter>
             <>
-                <MessagesWrapper />
                 <Route exact={true} path={publicRoutes.main} render={() => <Redirect to={publicRoutes.public} />} />
                 <Route path={publicRoutes.public} component={PublicRouteWrapper} />
-                <PrivateRouteWrapper path={adminRoutes.admin} component={AdminDashboardComponent} />
+                <AdminRouteWrapper path={adminRoutes.admin} component={AdminDashboardComponent} />
                 <Route exact={true} path={publicRoutes.login} component={LoginWrapper} />
             </>
         </HashRouter>

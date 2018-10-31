@@ -11,8 +11,9 @@ import { publicRoutes } from "../../../routes/publicRoutes";
 import endpoints from "../../../endpoints";
 import { Collections } from "../../../model/Collections";
 import { Product } from "../../../model/Product";
-import PublicNavigationWrapper from "../../../wrappers/PublicNavigationWrapper";
 import { PaginationComponent } from "../../pagination/PaginationComponent";
+
+import styled from "../../../theme/admin";
 
 export type FetchPublicProductsByCollectionMethod = (
     { i18n, collectionId, pageNumber, perPage }: { i18n: I18N; collectionId?: number; pageNumber?: number; perPage?: number },
@@ -68,7 +69,6 @@ export class HomePublicComponent extends React.Component<HomePublicProps, HomeSt
     }
 
     public render() {
-
         const { products, i18n, collections, carouselProducts } = this.props;
         const paginationData = products
             ? {
@@ -85,7 +85,6 @@ export class HomePublicComponent extends React.Component<HomePublicProps, HomeSt
             <>
                 {this.props.i18n.products.title}
                 <br />
-                Carousel:
                 <br />
                 {carouselProducts && this.renderCarouselProducts(carouselProducts)}
                 <br />
