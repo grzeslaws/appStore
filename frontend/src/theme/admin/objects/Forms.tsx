@@ -1,5 +1,9 @@
 import styled from "..";
-import { placeholder } from "../tools/utils";
+import { hoverOpacity, placeholder } from "../tools/utils";
+
+interface Form {
+    big?: boolean;
+}
 
 const Form = styled.form`
     display: flex;
@@ -9,38 +13,95 @@ const Form = styled.form`
 const WrapperInput = styled.div`
     display: flex;
     flex-direction: column;
-    margin-bottom: ${props => props.theme.spacing.defaultSpacing(1)};
+    margin-bottom: ${props => props.theme.spacing.defaultSpacing()};
 `;
 
-const Input = styled.input`
+const Input = styled<Form, "input">("input")`
     border: 1px solid ${props => props.theme.colors.colorGrayLight};
     border-radius: ${props => props.theme.radius.defaultRadius};
-    height: ${props => props.theme.spacing.defaultSpacing(3)};
+    min-height: ${props => (props.big ? props.theme.spacing.defaultSpacing(4) : props.theme.spacing.defaultSpacing(3))};
     padding: 0 ${props => props.theme.spacing.defaultSpacing(1)};
     font-size: ${props => props.theme.fonts.h4};
-    color: ${props => props.theme.colors.colorGray};
+    color: ${props => props.theme.colors.colorGray()};
     outline: 0;
     transition: ${props => props.theme.transitions.transitionDefault};
-    color: ${props => props.theme.colors.colorGray};
+    color: ${props => props.theme.colors.colorGray()};
     width: 100%;
     margin-bottom: ${props => props.theme.spacing.defaultSpacing(1)};
-    ${props => placeholder(props.theme.colors.colorGray, props.theme.fonts.fontLight, props.theme.fonts.fontFamilyDefault)};
+    font-family: ${props => props.theme.fonts.fontFamilyDefault};
+    ${props => placeholder(props.theme.colors.colorGray(), props.theme.fonts.fontLight, props.theme.fonts.fontFamilyDefault, props.theme.fonts.h5)};
 
     &:focus {
-        border-color: ${props => props.theme.colors.colorPrimary};
-        color: ${props => props.theme.colors.colorPrimary};
+        border-color: ${props => props.theme.colors.colorPrimary()};
+        color: ${props => props.theme.colors.colorPrimary()};
     }
 `;
 
 const TextArea = styled(Input.withComponent("textarea"))`
-    height: ${props => props.theme.spacing.defaultSpacing(10)};
+    min-height: ${props => props.theme.spacing.defaultSpacing(8)};
     padding-top: ${props => props.theme.spacing.defaultSpacing(1)};
     padding-bottom: ${props => props.theme.spacing.defaultSpacing(1)};
 `;
 
 const Label = styled.label`
     margin-bottom: ${props => props.theme.spacing.defaultSpacing(0.8)};
+    font-size: ${props => props.theme.fonts.h5};
     display: block;
 `;
 
-export { Input, Label, WrapperInput, Form, TextArea };
+const WrapperSelect = styled(Input.withComponent("div"))`
+    ${props => {
+        const { paths, spacing, colors } = props.theme;
+        return `
+            ${hoverOpacity}
+            position: relative;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            width: auto;
+            cursor: pointer;
+
+            &:before {
+                content: "";
+                position: relative;
+                left: calc(100% - ${spacing.defaultSpacing(3.2)});
+                width: ${spacing.defaultSpacing(0.1)};
+                height: ${spacing.defaultSpacing(2)};
+                background-color: ${colors.colorGrayLight};
+                display: inline-block;
+                z-index: 0;
+            }
+
+            &:after {
+                content: "";
+                background-image: url(${paths.imagePath("arrow-breadcrumb.svg")});
+                background-repeat: no-repeat;
+                position: relative;
+                right: ${spacing.defaultSpacing(1.4)};
+                width: ${spacing.defaultSpacing(0.6)};
+                height: ${spacing.defaultSpacing(1)};
+                transform: rotate(90deg);
+                display: inline-block;
+                z-index: 0;
+            }
+
+            & > select {
+                    min-height: inherit;
+                    background: none;
+                    border: 0;
+                    color: inherit;
+                    outline: inherit;
+                    appearance: none;
+                    padding-left: ${spacing.defaultSpacing(1)};
+                    padding-right: ${spacing.defaultSpacing(7)};
+                    cursor: pointer;
+                    position: relative;
+                    z-index: 1;
+                    font-family: inherit;
+                    width: 100%;
+                }
+        `;
+    }};
+`;
+
+export { Input, Label, WrapperInput, Form, TextArea, WrapperSelect };

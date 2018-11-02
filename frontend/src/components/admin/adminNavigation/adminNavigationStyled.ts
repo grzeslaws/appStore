@@ -12,13 +12,13 @@ export const MenuItem = styled.li`
 
 export const LinkStyled = styled(Link)`
     font-family: ${props => props.theme.fonts.fontFamilyDefault};
-    color: ${props => props.theme.colors.colorGray};
+    color: ${props => props.theme.colors.colorGray()};
     text-decoration: none;
     font-weight: bold;
     transition: ${props => props.theme.transitions.transitionDefault};
 
     &:hover {
-        color: ${props => props.theme.colors.colorPrimary};
+        color: ${props => props.theme.colors.colorPrimary()};
     }
 `;
 

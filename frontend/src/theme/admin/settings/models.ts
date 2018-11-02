@@ -3,15 +3,15 @@ export interface Colors {
     colorLight: string;
     colorSecondary: string;
     colorSuccess: string;
-    colorPrimary: string;
+    colorPrimary: (opacity?: number) => string;
     colorWhite: string;
-    colorGray: string;
+    colorGray: (opacity?: number) => string;
     colorGrayLight: string;
     colorBlack: string;
 }
 
 export interface Spacing {
-    defaultSpacing: (n: number) => string;
+    defaultSpacing: (n?: number) => string;
 }
 
 export interface Radius {
@@ -25,6 +25,7 @@ export interface Fonts {
     h2: string;
     h3: string;
     h4: string;
+    h5: string;
     fontLight: number;
     fontMedium: number;
     fontBold: number;
@@ -35,10 +36,15 @@ export interface Transitions {
     transitionDefault: string;
 }
 
+export interface Paths {
+    imagePath: (imagePath: string) => string;
+}
+
 export default interface ThemeAdmin {
     colors: Colors;
     spacing: Spacing;
     radius: Radius;
     fonts: Fonts;
     transitions: Transitions;
+    paths: Paths;
 }

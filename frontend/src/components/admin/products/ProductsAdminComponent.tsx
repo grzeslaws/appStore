@@ -19,19 +19,28 @@ import { PaginationComponent } from "../../pagination/PaginationComponent";
 import { CategoriesAdminComponent } from "../categories/CategoriesAdminComponent";
 import { ItemsForProductsComponent } from "../itemsForProducts/ItemsForProductsComponent";
 
-import { ButtonFile, ButtonInverted } from "../../../theme/admin/objects/Buttons";
+import { ButtonSuccess } from "../../../theme/admin/objects/Buttons";
 import { Input, Label, TextArea, WrapperInput } from "../../../theme/admin/objects/Forms";
 import {
     BoxProduct,
+    ButtonDeleteProduct,
+    ButtonFileMod,
+    ButtonsInline,
+    ImageName,
     Images,
     ProductName,
     Row,
     RowProductName,
     ToggleEditor,
     Wrapper,
+    WrapperButtonFile,
     WrapperDetails,
+    WrapperInputInline,
+    WrapperItemsForProducts,
     WrapperPagination,
+    WrapperProduct,
     WrapperProducts,
+    WrapperSelectMod,
     WrapperSettings,
 } from "./productsStyled";
 
@@ -49,8 +58,8 @@ export interface ProductsProps {
     getCollections: () => any;
     addCategory: (i18n: I18N, categoryName: string) => any;
     deleteCategory: (i18n: I18N, categoryId: number) => any;
-    deleteCategoryFromProduct: (i18n: I18N, categoryId: number, productUuid: string) => any;
-    deleteCollectionFromProduct: (i18n: I18N, collectionId: number, productUuid: string) => any;
+    deleteCategoryFromProduct: (i18n: I18N, categoryId: number, productUuid: string, pageNumber: number) => any;
+    deleteCollectionFromProduct: (i18n: I18N, collectionId: number, productUuid: string, pageNumber: number) => any;
     perPage?: string;
 }
 
@@ -91,7 +100,17 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
     }
 
     public render() {
-        const { products, i18n, categories, addCategory, deleteCategory, collections, deleteCategoryFromProduct, deleteCollectionFromProduct } = this.props;
+        const {
+            products,
+            i18n,
+            categories,
+            addCategory,
+            deleteCategory,
+            collections,
+            deleteCategoryFromProduct,
+            deleteCollectionFromProduct,
+            pageNumber,
+        } = this.props;
 
         const paginationData = products
             ? {
@@ -124,16 +143,50 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
             return productItems && allItems ? _.intersectionBy(productItems, allItems, "id").length !== allItems.length : null;
         };
 
-        const simpleStyle = { border: "1px solid", padding: "10px", marginBottom: "10px" }; // to remove
+        console.log(categories);
 
         const productList: ReadonlyArray<JSX.Element> = products
             ? products.products.map(p => {
                   const isCurrentProduct = this.state.currentProduct === p.productUuid ? true : false;
                   return (
                       <BoxProduct key={p.id}>
-                          <RowProductName className="inline">
+                          <RowProductName>
                               {p.imagePath && <Images style={{ backgroundImage: `url(${endpoints.getPathForProductImage(p.imagePath)})` }} />}
-                              <ProductName onClick={() => this.openEditProduct(p.productUuid, p.name, p.description)}>{p.name}</ProductName>
+                              <WrapperProduct>
+                                  <ProductName onClick={() => this.openEditProduct(p.productUuid, p.name, p.description)}>{p.name}</ProductName>
+                                  {p.categories.length > 0 && (
+                                      <WrapperItemsForProducts>
+                                          <span>Categories:</span>
+                                          <ItemsForProductsComponent
+                                              items={p.categories}
+                                              itemUuid={p.productUuid}
+                                              removeItemFromProduct={({ categoryId, productUuid }) =>
+                                                  deleteCategoryFromProduct(i18n, categoryId, productUuid, Number(pageNumber))(store.dispatch)
+                                              }
+                                          />
+                                      </WrapperItemsForProducts>
+                                  )}
+                                  {p.collections.length > 0 && (
+                                      <WrapperItemsForProducts>
+                                          <span>Collections:</span>
+                                          <ItemsForProductsComponent
+                                              items={p.collections}
+                                              itemUuid={p.productUuid}
+                                              removeItemFromProduct={({ categoryId, productUuid }) =>
+                                                  deleteCollectionFromProduct(i18n, categoryId, productUuid, Number(pageNumber))(store.dispatch)
+                                              }
+                                          />
+                                      </WrapperItemsForProducts>
+                                  )}
+                                  <WrapperItemsForProducts className="matginTop">
+                                      <span>Price:</span>
+                                      {p.price} pln
+                                  </WrapperItemsForProducts>
+                                  <WrapperItemsForProducts>
+                                      <span>Quantity:</span>
+                                      {p.quantity}
+                                  </WrapperItemsForProducts>
+                              </WrapperProduct>
 
                               <ToggleEditor small={true} onClick={() => this.openEditProduct(p.productUuid, p.name, p.description)}>
                                   {isCurrentProduct ? i18n.products.closeEditor : i18n.products.openEditor}
@@ -151,56 +204,50 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
                                           value={this.state.productDescription}
                                           name="productDescription"
                                           onChange={this.onChange}
-                                          placeholder={p.description} />
-                                      <ButtonFile htmlFor="productImage">Import image</ButtonFile>
-                                      <input style={{display: "none"}} type="file" name="productImage" id="productImage" onChange={this.onChange} />
+                                          placeholder={p.description}
+                                      />
                                   </Row>
-                                  {showItemsSelect(p.categories, categories.categories) && (
-                                      <div style={simpleStyle}>
-                                          Select category:{" "}
-                                          <select name="productCategory" value={this.state.productCategory} onChange={this.onChange}>
-                                              <option key={0} value={0}>
-                                                  Select category
-                                              </option>
-                                              {itemsSelect(p.categories, categories.categories)}
-                                          </select>
-                                      </div>
-                                  )}
-                                  {showItemsSelect(p.collections, collections.collections) && (
-                                      <div style={simpleStyle}>
-                                          Select collection:{" "}
-                                          <select name="productCollection" value={this.state.productCollection} onChange={this.onChange}>
-                                              <option key={0} value={0}>
-                                                  Select category
-                                              </option>
-                                              {itemsSelect(p.collections, collections.collections)}
-                                          </select>
-                                      </div>
-                                  )}
-                                  Categories list:
-                                  <ItemsForProductsComponent
-                                      items={p.categories}
-                                      itemUuid={p.productUuid}
-                                      removeItemFromProduct={({ categoryId, productUuid }) =>
-                                          deleteCategoryFromProduct(i18n, categoryId, productUuid)(store.dispatch)
-                                      }
-                                  />
-                                  <br />
-                                  Collections list:
-                                  <ItemsForProductsComponent
-                                      items={p.collections}
-                                      itemUuid={p.productUuid}
-                                      removeItemFromProduct={({ categoryId, productUuid }) =>
-                                          deleteCollectionFromProduct(i18n, categoryId, productUuid)(store.dispatch)
-                                      }
-                                  />
-                                  <ButtonInverted onClick={(e: React.MouseEvent<HTMLButtonElement>) => this.saveChanges(e, p.productUuid)}>
-                                      {i18n.products.saveChanges}
-                                  </ButtonInverted>
-                                  <ButtonInverted small={true} onClick={() => this.handleDeleteProduct(p.productUuid)}>
-                                      {" "}
-                                      X {i18n.products.deleteProduct}
-                                  </ButtonInverted>
+                                  <Row className="inline">
+                                      <WrapperButtonFile>
+                                          <ButtonFileMod htmlFor="productImage">Import image</ButtonFileMod>
+                                          <input style={{ display: "none" }} type="file" name="productImage" id="productImage" onChange={this.onChange} />
+                                          {this.state.productImage && <ImageName>{this.state.productImage[0].name}</ImageName>}
+                                      </WrapperButtonFile>
+                                      {showItemsSelect(p.categories, categories.categories) && (
+                                          <WrapperSelectMod big={true}>
+                                              <select name="productCategory" value={this.state.productCategory} onChange={this.onChange}>
+                                                  <option key={0} value={0}>
+                                                      Select category
+                                                  </option>
+                                                  {itemsSelect(p.categories, categories.categories)}
+                                              </select>
+                                          </WrapperSelectMod>
+                                      )}
+                                      {showItemsSelect(p.collections, collections.collections) && (
+                                          <WrapperSelectMod big={true}>
+                                              <select name="productCollection" value={this.state.productCollection} onChange={this.onChange}>
+                                                  <option key={0} value={0}>
+                                                      Select category
+                                                  </option>
+                                                  {itemsSelect(p.collections, collections.collections)}
+                                              </select>
+                                          </WrapperSelectMod>
+                                      )}
+                                      <WrapperInputInline>
+                                          <Input big={true} name="productPrice" type="number" onChange={this.onChange} placeholder="Price" />
+                                      </WrapperInputInline>
+                                      <WrapperInputInline>
+                                          <Input big={true} name="productQuantity" type="number" onChange={this.onChange} placeholder="Quantity" />
+                                      </WrapperInputInline>
+                                  </Row>
+                                  <ButtonsInline>
+                                      <ButtonSuccess onClick={(e: React.MouseEvent<HTMLButtonElement>) => this.saveChanges(e, p.productUuid)}>
+                                          {i18n.products.saveChanges}
+                                      </ButtonSuccess>
+                                      <ButtonDeleteProduct small={true} onClick={() => this.handleDeleteProduct(p.productUuid)}>
+                                          {i18n.products.deleteProduct}
+                                      </ButtonDeleteProduct>
+                                  </ButtonsInline>
                               </WrapperDetails>
                           )}
                       </BoxProduct>

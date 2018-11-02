@@ -32,8 +32,8 @@ export function deleteCategory(i18n: I18N, categoryId: number) {
     };
 }
 
-export function deleteCategoryFromProduct(i18n: I18N, categoryId: number, productUuid: string) {
+export function deleteCategoryFromProduct(i18n: I18N, categoryId: number, productUuid: string, pageNumber: number) {
     return dispatch => {
-        return http(endpoints.deleteCategoryFromProduct(categoryId, productUuid), "get", {}).then(() => dispatch(fetchAdminProducts(i18n)));
+        return http(endpoints.deleteCategoryFromProduct(categoryId, productUuid), "get", {}).then(() => dispatch(fetchAdminProducts(i18n, pageNumber)));
     };
 }

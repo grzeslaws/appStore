@@ -1,4 +1,4 @@
-import styled from "..";
+import styled, {css} from "..";
 
 interface Button {
     small?: boolean;
@@ -12,7 +12,7 @@ const Button = styled<Button, "button">("button")`
     padding: ${props => props.theme.spacing.defaultSpacing(0.3) + " " + props.theme.spacing.defaultSpacing(2)};
     min-height: ${props => (props.small ? props.theme.spacing.defaultSpacing(3) : props.theme.spacing.defaultSpacing(4))};
     border-radius: ${props => props.theme.radius.defaultRadius};
-    background-color: ${props => props.theme.colors.colorPrimary};
+    background-color: ${props => props.theme.colors.colorPrimary()};
     font-size: ${props => props.theme.fonts.h4};
     outline: 0;
     cursor: pointer;
@@ -22,18 +22,31 @@ const Button = styled<Button, "button">("button")`
     align-items: center;
     line-height: 1;
     justify-content: center;
+    height: fit-content;
 
     &:hover {
         opacity: 0.8;
     }
 `;
 
-const ButtonInverted = styled(Button)`
+const InvertedCss = css`
     background-color: ${props => props.theme.colors.colorWhite};
-    border: 1px solid ${props => props.theme.colors.colorPrimary};
-    color: ${props => props.theme.colors.colorPrimary};
+    border: 1px solid ${props => props.theme.colors.colorPrimary()};
+    color: ${props => props.theme.colors.colorPrimary()};
 `;
 
-const ButtonFile = styled(Button.withComponent("label"))``;
+const ButtonInverted = styled(Button)`
+    ${InvertedCss}
+`;
 
-export { Button, ButtonInverted, ButtonFile };
+const ButtonAlert = styled(Button)`
+    background-color: ${props => props.theme.colors.colorAlert};
+`;
+
+const ButtonSuccess = styled(Button)`
+    background-color: ${props => props.theme.colors.colorSuccess};
+`;
+
+const ButtonFile = styled(Button.withComponent("label"))`${InvertedCss}`;
+
+export { Button, ButtonInverted, ButtonFile, ButtonAlert, ButtonSuccess };

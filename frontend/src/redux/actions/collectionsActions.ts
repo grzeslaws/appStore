@@ -19,8 +19,8 @@ export function getCollections() {
     };
 }
 
-export function deleteCollectionFromProduct(i18n: I18N, collectionId: number, productUuid: string) {
+export function deleteCollectionFromProduct(i18n: I18N, collectionId: number, productUuid: string, pageNumber: number) {
     return dispatch => {
-        return http(endpoints.deleteCollectionFromProduct(collectionId, productUuid), "get", {}).then(() => dispatch(fetchAdminProducts(i18n)));
+        return http(endpoints.deleteCollectionFromProduct(collectionId, productUuid), "get", {}).then(() => dispatch(fetchAdminProducts(i18n, pageNumber)));
     };
 }

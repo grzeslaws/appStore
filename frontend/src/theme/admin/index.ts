@@ -13,4 +13,5 @@ export const themeAdmin = {
     radius: settings.radius,
     fonts: settings.fonts,
     transitions: settings.transitions,
+    paths: settings.paths,
 };

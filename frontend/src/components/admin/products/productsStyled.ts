@@ -1,6 +1,7 @@
 import styled from "../../../theme/admin";
 import { H2 } from "../../../theme/admin/elements/Headings";
-import { ButtonInverted } from "../../../theme/admin/objects/Buttons";
+import { ButtonAlert, ButtonFile, ButtonInverted } from "../../../theme/admin/objects/Buttons";
+import { Input, WrapperSelect } from "../../../theme/admin/objects/Forms";
 import { hoverOpacity } from "../../../theme/admin/tools/utils";
 
 export const BoxProduct = styled.div`
@@ -65,15 +66,15 @@ export const PostTypeRemove = styled(PostTypeText)`
 
 export const Images = styled.div`
     border-radius: ${props => props.theme.radius.defaultRadius};
-    width: ${props => props.theme.spacing.defaultSpacing(4)};
-    height: ${props => props.theme.spacing.defaultSpacing(4)};
+    width: ${props => props.theme.spacing.defaultSpacing(12)};
+    height: ${props => props.theme.spacing.defaultSpacing(12)};
     background-size: cover;
-    margin-right: ${props => props.theme.spacing.defaultSpacing(1)};
+    margin-right: ${props => props.theme.spacing.defaultSpacing(2)};
     background-position: center;
 `;
 
 export const ProductName = styled(H2)`
-    margin-bottom: unset;
+    margin-bottom: ${props => props.theme.spacing.defaultSpacing(0.8)};
     font-weight: ${props => props.theme.fonts.fontBold};
     cursor: pointer;
     ${hoverOpacity()};
@@ -85,4 +86,61 @@ export const ToggleEditor = styled(ButtonInverted)`
 
 export const WrapperDetails = styled.div`
     margin-top: ${props => props.theme.spacing.defaultSpacing(3)};
+`;
+
+export const ButtonsInline = styled.div`
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+`;
+
+export const ButtonDeleteProduct = styled(ButtonAlert)`
+    margin-left: ${props => props.theme.spacing.defaultSpacing(1)};
+`;
+
+export const WrapperProduct = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
+export const WrapperItemsForProducts = styled.div`
+    display: flex;
+    align-items: baseline;
+    margin-bottom: ${props => props.theme.spacing.defaultSpacing(0.2)};
+
+    & > span {
+        color: ${props => props.theme.colors.colorGray(0.7)};
+        margin-right: ${props => props.theme.spacing.defaultSpacing(1)};
+        font-size: ${props => props.theme.fonts.h5};
+        font-weight: ${props => props.theme.fonts.fontLight};
+    }
+
+    &.matginTop {
+        margin-top: ${props => props.theme.spacing.defaultSpacing(1)};
+    }
+`;
+
+export const WrapperSelectMod = styled(WrapperSelect)`
+    flex: 1;
+    margin-left: ${props => props.theme.spacing.defaultSpacing(2)};
+    /* height: max-content; */
+`;
+
+export const WrapperInputInline = styled.div`
+    flex: 1;
+    margin-left: ${props => props.theme.spacing.defaultSpacing(2)};
+    height: max-content;
+`;
+
+export const ButtonFileMod = styled(ButtonFile)`
+    flex: 1;
+`;
+
+export const ImageName = styled.div`
+    font-size: ${props => props.theme.fonts.h5};
+    margin-top: ${props => props.theme.spacing.defaultSpacing(0.5)};
+`;
+
+export const WrapperButtonFile = styled.div`
+    flex: 1;
 `;

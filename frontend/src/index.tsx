@@ -14,21 +14,22 @@ import { getAdminProfile } from "./redux/actions/adminProfileActions";
 import { setI18N } from "./redux/actions/i18nActions";
 import { adminRoutes } from "./routes/adminRoutes";
 import { publicRoutes } from "./routes/publicRoutes";
+import boxSizing from "./theme/admin/generic/box-sizing";
+import normalize from "./theme/admin/generic/normalize";
+import reset from "./theme/admin/generic/reset";
+import fonts from "./theme/admin/settings/fonts";
 import LoginWrapper from "./wrappers/LoginWrapper";
 import AdminRouteWrapper from "./wrappers/PrivateRouteWrapper";
 import PublicRouteWrapper from "./wrappers/PublicRouteWrapper";
 
-import reset from "styled-reset";
 import { injectGlobal } from "./theme/admin";
 
 // tslint:disable-next-line:no-unused-expression
 injectGlobal`
-    @import url('https://fonts.googleapis.com/css?family=Roboto+Slab:300,400,700&subset=latin-ext');
+    ${fonts}
+    ${boxSizing}
+    ${normalize}
     ${reset}
-
-    *, *:before, *:after {
-        box-sizing: inherit;
-    }
 
     html,
     body {
