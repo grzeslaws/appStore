@@ -123,7 +123,6 @@ export const WrapperItemsForProducts = styled.div`
 export const WrapperSelectMod = styled(WrapperSelect)`
     flex: 1;
     margin-left: ${props => props.theme.spacing.defaultSpacing(2)};
-    /* height: max-content; */
 `;
 
 export const WrapperInputInline = styled.div`

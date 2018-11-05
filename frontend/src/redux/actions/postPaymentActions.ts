@@ -43,3 +43,15 @@ export function addPaymentAction(name: string, cost: number) {
         });
     };
 }
+
+export function deletePaymentAction(id: number) {
+    return dispatch => {
+        return http(endpoints.deletePaymentType(id), "get", {}).then(() => dispatch(updatePostPaymentAction()));
+    };
+}
+
+export function deletePostAction(id: number) {
+    return dispatch => {
+        return http(endpoints.deletePostType(id), "get", {}).then(() => dispatch(updatePostPaymentAction()));
+    };
+}

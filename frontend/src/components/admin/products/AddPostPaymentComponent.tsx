@@ -7,12 +7,14 @@ import store from "../../../redux/store/store";
 
 import { H3 } from "../../../theme/admin/elements/Headings";
 import { Button } from "../../../theme/admin/objects/Buttons";
-import { Form, Input, WrapperInput } from "../../../theme/admin/objects/Forms";
+import { Form, Input } from "../../../theme/admin/objects/Forms";
 import { PostTypeItem, PostTypeRemove, PostTypeText, Row, WrapperPostType } from "./productsStyled";
 
 export interface Props {
     i18n: Immutable<I18N>;
     addPostAction: (name: string, cost: number) => any;
+    deletePaymentAction: (id: number) => any;
+    deletePostAction: (id: number) => any;
     addPaymentAction: (name: string, cost: number) => any;
     updatePostPaymentAction: () => any;
     postTypes: ReadonlyArray<Immutable<PostPayment>>;
@@ -50,7 +52,7 @@ export class AddPostPaymentComponent extends React.Component<Props, State> {
             <>
                 <Row>
                     <H3>Post types</H3>
-                    {this.renderPostPaymentTypes(postTypes)}
+                    {this.renderPostPaymentTypes(postTypes, PostPaymentEnum.POST)}
                     <Form onSubmit={(e: React.ChangeEvent<HTMLFormElement>) => this.addPostType(e, PostPaymentEnum.POST, postTypeName, postTypeCost)}>
                         <Input onChange={this.onChange} name="postTypeName" placeholder="Post type name" />
                         <Input onChange={this.onChange} name="postTypeCost" type="number" min="0" placeholder="New post type cost" />
@@ -58,7 +60,7 @@ export class AddPostPaymentComponent extends React.Component<Props, State> {
                     </Form>
                 </Row>
                 <H3>Payment type</H3>
-                {this.renderPostPaymentTypes(paymentTypes)}
+                {this.renderPostPaymentTypes(paymentTypes, PostPaymentEnum.PAYMENT)}
                 <Form onSubmit={(e: React.ChangeEvent<HTMLFormElement>) => this.addPostType(e, PostPaymentEnum.PAYMENT, paymentTypeName, paymentTypeCost)}>
                     <Input onChange={this.onChange} name="paymentTypeName" placeholder="Payment type name" />
                     <Input onChange={this.onChange} name="paymentTypeCost" type="number" min="0" placeholder="New payment type cost" />
@@ -68,14 +70,18 @@ export class AddPostPaymentComponent extends React.Component<Props, State> {
         );
     }
 
-    private renderPostPaymentTypes = (postPaymentData: ReadonlyArray<Immutable<PostPayment>>): JSX.Element => {
+    private renderPostPaymentTypes = (postPaymentData: ReadonlyArray<Immutable<PostPayment>>, postPaymentEnum: PostPaymentEnum): JSX.Element => {
         const postPaymentJsx: JSX.Element[] | null = postPaymentData
             ? postPaymentData.map((p: Immutable<PostPayment>) => {
                   return (
                       <PostTypeItem key={p.id}>
                           {p.name}
                           <PostTypeText>{p.cost} pln</PostTypeText>
-                          <PostTypeRemove>remove</PostTypeRemove>
+                          {postPaymentEnum === PostPaymentEnum.POST ? (
+                              <PostTypeRemove onClick={() => this.props.deletePostAction(p.id)(store.dispatch)}>remove</PostTypeRemove>
+                          ) : (
+                              <PostTypeRemove onClick={() => this.props.deletePaymentAction(p.id)(store.dispatch)}>remove</PostTypeRemove>
+                          )}
                       </PostTypeItem>
                   );
               })
@@ -104,7 +110,7 @@ export class AddPostPaymentComponent extends React.Component<Props, State> {
             this.setState({ postTypeName: "", postTypeCost: 0 });
         } else {
             this.props.addPaymentAction(name, cost)(store.dispatch);
-            this.setState({ paymentTypeName: "", postTypeCost: 0 });
+            this.setState({ paymentTypeName: "", paymentTypeCost: 0 });
         }
     };
 }

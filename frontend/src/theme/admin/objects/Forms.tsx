@@ -5,6 +5,10 @@ interface Form {
     big?: boolean;
 }
 
+interface Select {
+    placeholderStyle?: boolean;
+}
+
 const Form = styled.form`
     display: flex;
     flex-direction: column;
@@ -86,7 +90,6 @@ const WrapperSelect = styled(Input.withComponent("div"))`
             }
 
             & > select {
-                    min-height: inherit;
                     background: none;
                     border: 0;
                     color: inherit;
@@ -99,9 +102,24 @@ const WrapperSelect = styled(Input.withComponent("div"))`
                     z-index: 1;
                     font-family: inherit;
                     width: 100%;
+                    height: 100%;
+                    line-height: 1.4;
                 }
         `;
     }};
 `;
 
-export { Input, Label, WrapperInput, Form, TextArea, WrapperSelect };
+const Select = styled<Select, "select">("select")`
+    ${props => {
+        if (props.placeholderStyle) {
+            return `
+                color: ${props.theme.colors.colorGray()};
+                font-style: italic;
+                font-weight: ${props.theme.fonts.fontLight};
+                font-family: ${props.theme.fonts.fontFamilyDefault};
+                font-size: ${props.theme.fonts.h5}`;
+        }
+    }};
+`;
+
+export { Input, Label, WrapperInput, Form, TextArea, WrapperSelect, Select };

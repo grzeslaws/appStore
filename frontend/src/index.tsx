@@ -4,7 +4,7 @@ import * as ReactDOM from "react-dom";
 import "reflect-metadata";
 
 import { Provider } from "react-redux";
-import { HashRouter, Redirect, Route, Switch } from "react-router-dom";
+import { HashRouter, Redirect, Route } from "react-router-dom";
 
 import { i18n } from "./i18n/i18n";
 import store from "./redux/store/store";
@@ -35,7 +35,6 @@ injectGlobal`
     body {
         height: 100%;
         margin: 0;
-        box-sizing: border-box;
     }
 
     #app {
