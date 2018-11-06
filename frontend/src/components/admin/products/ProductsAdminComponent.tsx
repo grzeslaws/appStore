@@ -48,7 +48,7 @@ export interface ProductsProps {
     i18n: Immutable<I18N>;
     products: Immutable<Products>;
     fetchAdminProducts: (i18n: I18N, pageNumber?: number, perPage?: number) => any;
-    addProduct: (payload: NewProduct, productImage: FileList, i18n: I18N) => any;
+    addProduct: (payload: NewProduct, productImage: FileList, pageNumber: number, i18n: I18N) => any;
     editProduct: (productUuid: string, payload: NewProduct, i18n: I18N, pageNumber: number, productImage?: FileList) => any;
     deleteProduct: (productUuid: string, i18n: I18N) => any;
     pageNumber: string;
@@ -146,9 +146,6 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
         ) => {
             return productItems && allItems ? _.intersectionBy(productItems, allItems, "id").length !== allItems.length : null;
         };
-
-        console.log(this.state.productCategory);
-        console.log(typeof this.state.productCategory);
 
         const productList: ReadonlyArray<JSX.Element> = products
             ? products.products.map(p => {
@@ -294,7 +291,7 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
     }
 
     private handleAddProduct = (payload: NewProduct, productImage: FileList, i18n: I18N) => {
-        store.dispatch(this.props.addProduct(payload, productImage, i18n));
+        store.dispatch(this.props.addProduct(payload, productImage, Number(this.props.pageNumber), i18n));
     };
 
     private onChange = (e: React.ChangeEvent<any>) => {

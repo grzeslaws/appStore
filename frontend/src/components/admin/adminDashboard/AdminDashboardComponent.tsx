@@ -14,7 +14,7 @@ export class AdminDashboardComponent extends React.Component<{}, {}> {
         return (
             <ThemeProvider theme={themeAdmin}>
                 <WrapperDashboard>
-                    {/* <MessagesWrapper /> */}
+                    <MessagesWrapper />
                     <AdminNavigationWrapper />
                     <Route exact={true} path={adminRoutes.admin} render={() => <Redirect to={adminRoutes.products} />} />
                     <Route path={adminRoutes.products} component={ProductsAdminWrapper} />

@@ -64,12 +64,12 @@ export const fetchPublicProductsByCollection: FetchPublicProductsByCollectionMet
     };
 };
 
-export function addProduct(payload: NewProduct, productImage: FileList, i18n: I18N) {
+export function addProduct(payload: NewProduct, productImage: FileList, pageNumber: number, i18n: I18N) {
     const product = new NewProduct(payload.name);
 
     return dispatch => {
         http(endpoints.addProductImage, "file", productImage);
-        return http(endpoints.products, "post", product).then(json => dispatch(fetchAdminProducts(i18n)));
+        return http(endpoints.products, "post", product).then(json => dispatch(fetchAdminProducts(i18n, pageNumber)));
     };
 }
 
@@ -81,8 +81,7 @@ export function editProduct(productUuid: string, payload: NewProduct, i18n: I18N
         if (payload.name) {
             http(endpoints.editProduct(productUuid), "put", payload).then(json => {
                 dispatch(fetchAdminProducts(i18n, pageNumber));
-                dispatch(updateMessages({ timestamp: Date.now(), message: "Product has been updated!", type: MessageType.succces, timeToHide: 5 }));
-                dispatch(updateMessages({ timestamp: Date.now(), message: "Product has been updated!", type: MessageType.succces }));
+                dispatch(updateMessages({ message: "Product has been updated!", type: MessageType.succces, timeToHide: 2 }));
             });
         }
     };

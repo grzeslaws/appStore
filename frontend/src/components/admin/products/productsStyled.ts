@@ -1,7 +1,7 @@
 import styled from "../../../theme/admin";
 import { H2 } from "../../../theme/admin/elements/Headings";
 import { ButtonAlert, ButtonFile, ButtonInverted } from "../../../theme/admin/objects/Buttons";
-import { Input, WrapperSelect } from "../../../theme/admin/objects/Forms";
+import { WrapperSelect } from "../../../theme/admin/objects/Forms";
 import { hoverOpacity } from "../../../theme/admin/tools/utils";
 
 export const BoxProduct = styled.div`

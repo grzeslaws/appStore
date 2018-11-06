@@ -3,6 +3,7 @@ import * as React from "react";
 import { I18N } from "../../../i18n/i18n";
 import { Message } from "../../../model/Message";
 import store from "../../../redux/store/store";
+import { RemoveMessage, Wrapper, WrapperMessage } from "./MessagesStyled";
 
 export interface Props {
     i18n: Immutable<I18N>;
@@ -14,7 +15,7 @@ export class MessagesComponent extends React.Component<Props, {}> {
     private static MILLIS_PER_SEC = 1000;
 
     public render() {
-        return <>Mess: {this.renderMessage()}</>;
+        return <Wrapper>{this.renderMessage()}</Wrapper>;
     }
 
     private renderMessage = () => {
@@ -26,10 +27,10 @@ export class MessagesComponent extends React.Component<Props, {}> {
                       }, m.timeToHide * MessagesComponent.MILLIS_PER_SEC);
                   }
                   return (
-                      <div key={m.timestamp}>
+                      <WrapperMessage type={m.type} show={!!m.message} key={m.timestamp}>
                           {m.message}
-                          <button onClick={() => store.dispatch(this.props.removeMessage(m))}>X</button>
-                      </div>
+                          <RemoveMessage onClick={() => store.dispatch(this.props.removeMessage(m))}>x</RemoveMessage>
+                      </WrapperMessage>
                   );
               })
             : null;

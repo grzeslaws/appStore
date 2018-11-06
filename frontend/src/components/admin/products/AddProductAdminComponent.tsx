@@ -4,8 +4,8 @@ import { I18N } from "../../../i18n/i18n";
 import { NewProduct } from "../../../model/NewProduct";
 
 import { H3 } from "../../../theme/admin/elements/Headings";
-import { Button, ButtonInverted } from "../../../theme/admin/objects/Buttons";
-import { Input, WrapperInput } from "../../../theme/admin/objects/Forms";
+import { Button } from "../../../theme/admin/objects/Buttons";
+import { Input } from "../../../theme/admin/objects/Forms";
 
 export interface ProductsProps {
     i18n: Immutable<I18N>;

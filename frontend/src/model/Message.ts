@@ -6,9 +6,9 @@ export enum MessageType {
 
 export class Message {
     constructor(
-        @Field("timestamp") public timestamp: number,
         @Field("message") public message: string,
         @Field("type") public type: MessageType,
+        @Field("timestamp", true) public timestamp?: number,
         @Field("timeToHide", true) public timeToHide?: number,
     ) {}
 }

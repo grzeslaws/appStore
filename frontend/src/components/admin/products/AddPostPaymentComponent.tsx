@@ -77,11 +77,14 @@ export class AddPostPaymentComponent extends React.Component<Props, State> {
                       <PostTypeItem key={p.id}>
                           {p.name}
                           <PostTypeText>{p.cost} pln</PostTypeText>
-                          {postPaymentEnum === PostPaymentEnum.POST ? (
-                              <PostTypeRemove onClick={() => this.props.deletePostAction(p.id)(store.dispatch)}>remove</PostTypeRemove>
-                          ) : (
-                              <PostTypeRemove onClick={() => this.props.deletePaymentAction(p.id)(store.dispatch)}>remove</PostTypeRemove>
-                          )}
+                          <PostTypeRemove
+                              onClick={() => {
+                                  postPaymentEnum === PostPaymentEnum.POST
+                                      ? this.props.deletePostAction(p.id)(store.dispatch)
+                                      : this.props.deletePaymentAction(p.id)(store.dispatch);
+                              }}>
+                              remove
+                          </PostTypeRemove>
                       </PostTypeItem>
                   );
               })

@@ -1,7 +1,7 @@
 import { connect } from "react-redux";
 import { removeMessage } from "../redux/actions/messagesActions";
 import { ApplicationStore } from "../redux/store/store";
-import { MessagesComponent, Props } from "./../components/public/messages/MessagesComponent";
+import { MessagesComponent as Component, Props } from "./../components/public/messages/MessagesComponent";
 
 export function mapStateToProps(
     { i18n, messages }: ApplicationStore): Props {
@@ -12,4 +12,4 @@ export function mapStateToProps(
     };
 }
 
-export default connect(mapStateToProps)(MessagesComponent);
+export default connect(mapStateToProps)(Component);

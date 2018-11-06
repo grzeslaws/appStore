@@ -96,7 +96,7 @@ const WrapperSelect = styled(Input.withComponent("div"))`
                     outline: inherit;
                     appearance: none;
                     padding-left: ${spacing.defaultSpacing(1)};
-                    padding-right: ${spacing.defaultSpacing(7)};
+                    padding-right: ${spacing.defaultSpacing(3)};
                     cursor: pointer;
                     position: relative;
                     z-index: 1;
