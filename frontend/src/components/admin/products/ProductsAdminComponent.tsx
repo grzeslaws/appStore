@@ -156,7 +156,10 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
                               <RowProductName>
                                   {p.imagePath && <Images style={{ backgroundImage: `url(${endpoints.getPathForProductImage(p.imagePath)})` }} />}
                                   <WrapperProduct>
-                                      <ProductName onClick={() => this.openEditProduct(p.productUuid, p.name, p.description)}>{p.name}</ProductName>
+                                      <ProductName
+                                          onClick={(e: React.MouseEvent<HTMLElement>) => this.openEditProduct(e, p.productUuid, p.name, p.description)}>
+                                          {p.name}
+                                      </ProductName>
                                       {p.categories.length > 0 && (
                                           <WrapperItemsForProducts>
                                               <span>Categories:</span>
@@ -191,7 +194,9 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
                                       </WrapperItemsForProducts>
                                   </WrapperProduct>
 
-                                  <ToggleEditor small={true} onClick={() => this.openEditProduct(p.productUuid, p.name, p.description)}>
+                                  <ToggleEditor
+                                      small={true}
+                                      onClick={(e: React.MouseEvent<HTMLButtonElement>) => this.openEditProduct(e, p.productUuid, p.name, p.description)}>
                                       {isCurrentProduct ? i18n.products.closeEditor : i18n.products.openEditor}
                                   </ToggleEditor>
                               </RowProductName>
@@ -307,7 +312,8 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
         });
     };
 
-    private openEditProduct = (productUuid: string, productName: string, productDescription: string) => {
+    private openEditProduct = (e: React.MouseEvent<HTMLElement>, productUuid: string, productName: string, productDescription: string) => {
+        e.preventDefault();
         if (this.state.currentProduct === productUuid) {
             this.setState({ currentProduct: null });
         } else {

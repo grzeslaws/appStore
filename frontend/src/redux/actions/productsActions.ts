@@ -79,9 +79,9 @@ export function editProduct(productUuid: string, payload: NewProduct, i18n: I18N
             http(endpoints.editProductImage(productUuid), "file", productImage);
         }
         if (payload.name) {
-            http(endpoints.editProduct(productUuid), "put", payload).then(json => {
+            http(endpoints.editProduct(productUuid), "put", payload).then(() => {
                 dispatch(fetchAdminProducts(i18n, pageNumber));
-                dispatch(updateMessages({ message: "Product has been updated!", type: MessageType.succces, timeToHide: 2 }));
+                dispatch(updateMessages({ message: "Product has been updated!", type: MessageType.succces }));
             });
         }
     };

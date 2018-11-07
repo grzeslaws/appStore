@@ -35,7 +35,7 @@ const fonts: Fonts = {
 };
 
 const transitions: Transitions = {
-    transitionDefault: "all 300ms ease",
+    transitionDefault: "300ms ease",
 };
 
 const paths: Paths = {

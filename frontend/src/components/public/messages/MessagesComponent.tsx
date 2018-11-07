@@ -3,7 +3,11 @@ import * as React from "react";
 import { I18N } from "../../../i18n/i18n";
 import { Message } from "../../../model/Message";
 import store from "../../../redux/store/store";
-import { RemoveMessage, Wrapper, WrapperMessage } from "./MessagesStyled";
+import { IconToClose, Wrapper, WrapperMessage } from "./MessagesStyled";
+
+/* tslint:disable:no-implicit-dependencies */
+// import IconClose from "-!svg-react-loader?name=Icon!../../../assets/images/icon-close.svg";
+/* tslint:enable:no-implicit-dependencies */
 
 export interface Props {
     i18n: Immutable<I18N>;
@@ -29,7 +33,7 @@ export class MessagesComponent extends React.Component<Props, {}> {
                   return (
                       <WrapperMessage type={m.type} show={!!m.message} key={m.timestamp}>
                           {m.message}
-                          <RemoveMessage onClick={() => store.dispatch(this.props.removeMessage(m))}>x</RemoveMessage>
+                          <IconToClose onClick={() => store.dispatch(this.props.removeMessage(m))} />
                       </WrapperMessage>
                   );
               })
