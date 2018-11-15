@@ -22,7 +22,10 @@ import LoginWrapper from "./wrappers/LoginWrapper";
 import AdminRouteWrapper from "./wrappers/PrivateRouteWrapper";
 import PublicRouteWrapper from "./wrappers/PublicRouteWrapper";
 
+import { registerCustomMappers } from "./sparksonConfig";
 import { injectGlobal } from "./theme/admin";
+
+registerCustomMappers();
 
 // tslint:disable-next-line:no-unused-expression
 injectGlobal`

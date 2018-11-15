@@ -26,7 +26,7 @@ export const WrapperNavigation = styled.div`
     display: flex;
     align-items: center;
     padding-bottom: ${props => props.theme.spacing.defaultSpacing(1.8)};
-    border-bottom: 1px solid ${props => props.theme.colors.colorGrayLight};
+    border-bottom: 1px solid ${props => props.theme.colors.colorGrayLight()};
     margin-bottom: ${props => props.theme.spacing.defaultSpacing(3)};
 `;
 

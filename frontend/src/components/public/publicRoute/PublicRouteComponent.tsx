@@ -18,7 +18,6 @@ export interface Props {
 
 export class PublicRouteComponent extends React.Component<Props, {}> {
     public render() {
-        console.log("PublicRouteComponent");
         return (
             <>
                 <PublicNavigationWrapper />

@@ -1,12 +1,11 @@
-const path = require('path');
-const SpriteLoaderPlugin = require('svg-sprite-loader/plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require("path");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
     entry: "./src/index.tsx",
     output: {
         filename: "bundle.js",
-        path: __dirname + "/static"
+        path: __dirname + "/static",
     },
 
     mode: "development",
@@ -22,67 +21,52 @@ module.exports = {
     module: {
         rules: [
             // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-            { test: /\.(ts|tsx)?$/, loaders: ['awesome-typescript-loader'] },
+            { test: /\.(ts|tsx)?$/, loaders: ["awesome-typescript-loader"] },
 
             {
                 test: /\.scss$/,
-                loaders: [ 'style-loader', 'css-loader?sourceMap', 'sass-loader?sourceMap' ]
+                loaders: ["style-loader", "css-loader?sourceMap", "sass-loader?sourceMap"],
             },
 
             {
                 test: /\.(ttf|eot|woff|woff2)$/,
-                loader: "url-loader"
+                loader: "url-loader",
             },
-
-            {
-                test: /\.svg$/,
-                loader: "svg-sprite-loader",
-            },
-
 
             {
                 test: /\.(png|jpg|gif)$/,
                 use: [
                     {
-                      loader: 'file-loader',
-                      options: {}
-                    }
-                ]
+                        loader: "file-loader",
+                        options: {},
+                    },
+                ],
             },
 
             // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-            { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
-        ]
+            { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
+        ],
     },
 
     // When importing a module whose path matches one of the following, just
     // assume a corresponding global variable exists and use that instead.
     // This is important because it allows us to avoid bundling all of our
     // dependencies, which allows browsers to cache those libraries between builds.
-    externals: {
-
-    },
-    plugins: [
-        new SpriteLoaderPlugin(),
-        new CopyWebpackPlugin([
-            { from: "src/assets/images/*.*", flatten: true},
-        ]) 
-    ],
+    externals: {},
+    plugins: [new CopyWebpackPlugin([{ from: "src/assets/images/*.*", flatten: true }])],
     devServer: {
         headers: { "Access-Control-Allow-Origin": "*" },
         publicPath: "/static",
         historyApiFallback: true,
         hot: true,
         port: 4444,
-        host: '0.0.0.0',
+        host: "0.0.0.0",
         proxy: {
             "/api": {
                 target: "http://localhost:5000",
                 // target: "https://app-store-backend.herokuapp.com",
                 changeOrigin: true,
             },
-        }
-    }
+        },
+    },
 };
-
-

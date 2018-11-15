@@ -5,7 +5,7 @@ import { WrapperSelect } from "../../../theme/admin/objects/Forms";
 import { hoverOpacity } from "../../../theme/admin/tools/utils";
 
 export const BoxProduct = styled.div`
-    border-bottom: 1px solid ${props => props.theme.colors.colorGrayLight};
+    border-bottom: 1px solid ${props => props.theme.colors.colorGrayLight()};
     padding-top: ${props => props.theme.spacing.defaultSpacing(2)};
     padding-bottom: ${props => props.theme.spacing.defaultSpacing(2)};
     background-color: ${props => props.theme.colors.colorWhite};

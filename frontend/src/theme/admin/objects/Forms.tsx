@@ -21,7 +21,7 @@ const WrapperInput = styled.div`
 `;
 
 const Input = styled<Form, "input">("input")`
-    border: 1px solid ${props => props.theme.colors.colorGrayLight};
+    border: 1px solid ${props => props.theme.colors.colorGrayLight()};
     border-radius: ${props => props.theme.radius.defaultRadius};
     min-height: ${props => (props.big ? props.theme.spacing.defaultSpacing(4) : props.theme.spacing.defaultSpacing(3))};
     padding: 0 ${props => props.theme.spacing.defaultSpacing(1)};
@@ -71,7 +71,7 @@ const WrapperSelect = styled(Input.withComponent("div"))`
                 left: calc(100% - ${spacing.defaultSpacing(3.2)});
                 width: ${spacing.defaultSpacing(0.1)};
                 height: ${spacing.defaultSpacing(2)};
-                background-color: ${colors.colorGrayLight};
+                background-color: ${colors.colorGrayLight()};
                 display: inline-block;
                 z-index: 0;
             }
