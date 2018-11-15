@@ -6,6 +6,7 @@ import { Customer } from "../../../model/Customer";
 import { Order } from "../../../model/Order";
 import { OrderItemSpark } from "../../../model/OrderItemSpark";
 import store from "../../../redux/store/store";
+import { renderStatus } from "../../../utils/utilsMethods";
 import { Headline, Label, Row, Status, Value, ValueDescription, WrapperProduct } from "./ordersStyled";
 
 export interface Props {
@@ -55,7 +56,7 @@ export class OrderComponent extends React.Component<Props, {}> {
                 </Row>
                 <Row>
                     <Label>Status:</Label>
-                    <Status status={order.status}>{order.status ? order.status : "Undefined"}</Status>
+                    <Status status={order.status}>{renderStatus(order.status)}</Status>
                 </Row>
             </>
         );

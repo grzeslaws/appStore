@@ -24,20 +24,6 @@ export const WrapperOrder = styled(Link)`
     }
 `;
 
-export const Uuid = styled.span`
-    font-weight: ${props => props.theme.fonts.fontBold};
-`;
-
-export const DateString = styled.span`
-    margin-right: ${props => props.theme.spacing.defaultSpacing()};
-    font-weight: ${props => props.theme.fonts.fontBold};
-`;
-
-export const TotalPrice = styled.span`
-    margin-left: auto;
-    font-weight: ${props => props.theme.fonts.fontBold};
-`;
-
 export const Label = styled.span`
     font-weight: ${props => props.theme.fonts.fontLight};
     font-size: ${props => props.theme.fonts.small};
@@ -50,6 +36,7 @@ export const Row = styled.div`
 `;
 
 export const Value = styled.span`
+    margin-right: ${props => props.theme.spacing.defaultSpacing()};
     font-weight: ${props => props.theme.fonts.fontBold};
 `;
 
@@ -74,19 +61,26 @@ export const WrapperProduct = styled.div`
 export const Status = styled<Status, "span">("span")`
     font-size: ${props => props.theme.fonts.small};
     background-color: ${props => {
-        if (status === StatusOrder.canceled) {
+        console.log(props.status);
+
+        if (props.status === StatusOrder.canceled) {
             return props.theme.colors.colorAlert;
-        } else if (status === StatusOrder.completed) {
+        } else if (props.status === StatusOrder.completed) {
             return props.theme.colors.colorSuccess;
-        } else if (status === StatusOrder.pending) {
+        } else if (props.status === StatusOrder.pending) {
             return props.theme.colors.colorPrimary();
-        } else if (status === StatusOrder.rejected) {
+        } else if (props.status === StatusOrder.rejected) {
             return props.theme.colors.colorAlert;
         } else {
             return props.theme.colors.colorGray();
         }
     }};
     color: ${props => props.theme.colors.colorWhite};
-    padding: ${props => props.theme.spacing.defaultSpacing(0.1) + " " + props.theme.spacing.defaultSpacing(0.4)};
+    padding: ${props =>
+        props.theme.spacing.defaultSpacing(0.1) + " " + props.theme.spacing.defaultSpacing(0.4) + " " + props.theme.spacing.defaultSpacing(0.2)};
     border-radius: ${props => props.theme.radius.smallRadius};
+`;
+
+export const StatusWrapper = styled.span`
+    margin-left: auto;
 `;

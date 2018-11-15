@@ -15,6 +15,7 @@ let stausInterval = null;
 const intervalStep = 3000;
 
 export enum StatusOrder {
+    undefined = "UNDEFINED",
     pending = "PENDING",
     waitingForConfirmation = "WAITING_FOR_CONFIRMATION",
     completed = "COMPLETED",
@@ -56,9 +57,11 @@ export function createOrderAction(orderItems: ReadonlyArray<Immutable<OrderItem>
     };
 }
 
-export function updateOrdersAction() {
+export function updateOrdersAction(pageNumber = "1") {
+    console.log(pageNumber);
+
     return dispatch => {
-        return http(endpoints.getOrders, "get", {}).then((json: Orders) => {
+        return http(endpoints.getOrders(Number(pageNumber)), "get", {}).then((json: Orders) => {
             dispatch(updateOrders(parse(Orders, json)));
         });
     };

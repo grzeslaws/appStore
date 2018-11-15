@@ -1,10 +1,10 @@
 import { Immutable } from "immutable-typescript";
-import { Link } from "react-router-dom";
 import { I18N } from "../../i18n/i18n";
 
 import * as React from "react";
+import { LinkItem, Wrapper } from "./PaginationStyled";
 
-interface PaginationData {
+export interface PaginationData {
     hasNext: boolean;
     hasPrev: boolean;
     nextNum: number;
@@ -21,6 +21,11 @@ interface PaginationProps {
 
 export const PaginationComponent: React.SFC<PaginationProps> = props => {
     const { paginationData, i18n, baseRoute, itemId } = props;
+
+    if (!paginationData) {
+        return null;
+    }
+
     const { hasNext, hasPrev, nextNum, prevNum, pages } = paginationData;
     let paginate;
 
@@ -28,9 +33,9 @@ export const PaginationComponent: React.SFC<PaginationProps> = props => {
         let paginateItems = [];
         for (let pageNumber = 1; pageNumber <= pages; pageNumber++) {
             const paginateItem = (
-                <li key={pageNumber}>
-                    <Link to={baseRoute({ itemId, pageNumber })}>{pageNumber} |</Link>
-                </li>
+                <LinkItem current={itemId ? pageNumber === itemId : false} key={pageNumber} to={baseRoute({ itemId, pageNumber })}>
+                    {pageNumber}
+                </LinkItem>
             );
             paginateItems = [...paginateItems, paginateItem];
         }
@@ -39,5 +44,5 @@ export const PaginationComponent: React.SFC<PaginationProps> = props => {
         return paginate;
     };
 
-    return <>Pagination: {renderPaginate()}</>;
+    return <Wrapper>{renderPaginate()}</Wrapper>;
 };

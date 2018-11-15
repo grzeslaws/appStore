@@ -6,22 +6,41 @@ import { Order } from "../../../model/Order";
 import { Orders } from "../../../model/Orders";
 import store from "../../../redux/store/store";
 import { adminRoutes } from "../../../routes/adminRoutes";
-import { DateString, Label, TotalPrice, Uuid, WrapperOrder } from "./ordersStyled";
+import { renderStatus } from "../../../utils/utilsMethods";
+import { PaginationComponent, PaginationData } from "../../pagination/PaginationComponent";
+import { Label, Status, StatusWrapper, Value, WrapperOrder } from "./ordersStyled";
 
 export interface Props {
     i18n: Immutable<I18N>;
     orders: Immutable<Orders>;
-    updateOrdersAction: () => any;
+    updateOrdersAction: (pageNumber?: string) => any;
+    pageNumber: string;
 }
 
 export class OrdersComponent extends React.Component<Props, {}> {
     public componentWillMount() {
-        this.props.updateOrdersAction()(store.dispatch);
+        this.props.updateOrdersAction(this.props.pageNumber)(store.dispatch);
+    }
+
+    public componentWillReceiveProps(nextProps) {
+        if (nextProps.pageNumber !== this.props.pageNumber) {
+            this.props.updateOrdersAction(nextProps.pageNumber)(store.dispatch);
+        }
     }
 
     public render() {
-        const { orders } = this.props;
-        return <>{this.renderOrders(orders)}</>;
+        const { orders, pageNumber } = this.props;
+        return (
+            <>
+                {this.renderOrders(orders)}
+                <PaginationComponent
+                    i18n={this.props.i18n}
+                    paginationData={this.paginationData(orders)}
+                    baseRoute={adminRoutes.ordersTemplate}
+                    itemId={Number(pageNumber)}
+                />
+            </>
+        );
     }
 
     private renderOrders = (ordersImmutable: Immutable<Orders>) => {
@@ -30,18 +49,22 @@ export class OrdersComponent extends React.Component<Props, {}> {
             ? orders.orders.map((o: Order) => {
                   return (
                       <WrapperOrder to={adminRoutes.orderTemplate(o.orderUuid)} key={o.orderUuid}>
-                          <DateString>
+                          <Value>
                               <Label>Date:</Label>
                               {o.timestamp.dateString}
-                          </DateString>
-                          <Uuid>
+                          </Value>
+                          <Value>
                               <Label>Order id:</Label>
                               {o.orderUuid}
-                          </Uuid>
-                          <TotalPrice>
+                          </Value>
+                          <Value>
                               <Label>Total price:</Label>
                               {o.totalPrice} pln
-                          </TotalPrice>
+                          </Value>
+                          <StatusWrapper>
+                              <Label>Status:</Label>
+                              <Status status={o.status}>{renderStatus(o.status)}</Status>
+                          </StatusWrapper>
                       </WrapperOrder>
                   );
               })
@@ -49,4 +72,18 @@ export class OrdersComponent extends React.Component<Props, {}> {
 
         return rendererOrders;
     };
+
+    private paginationData(ordersImmutable: Immutable<Orders>): Immutable<PaginationData> {
+        const paginationData = ordersImmutable
+            ? {
+                  hasNext: ordersImmutable.hasNext,
+                  hasPrev: ordersImmutable.hasNext,
+                  nextNum: ordersImmutable.nextNum,
+                  prevNum: ordersImmutable.prevNum,
+                  pages: ordersImmutable.pages,
+              }
+            : null;
+
+        return paginationData;
+    }
 }
