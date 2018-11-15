@@ -110,3 +110,13 @@ export function getSelectedOrderAction(oUuid: string, i18n: I18N) {
         });
     };
 }
+
+export function searchOrdersAction(query: string, pageNumber: string) {
+    return dispatch => {
+        return http(endpoints.searchOrders(query, Number(pageNumber)), "get", {}).then(json => {
+            console.log(json);
+
+            dispatch(updateOrders(parse(Orders, json)));
+        });
+    };
+}

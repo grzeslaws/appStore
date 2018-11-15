@@ -2,7 +2,7 @@ import * as React from "react";
 import { Link, LinkProps } from "react-router-dom";
 import styled from "../../theme/admin";
 
-export const LinkItem = styled<{ current: boolean } & LinkProps>(({ current, ...rest }) => <Link {...rest} />)`
+export const LinkItem = styled<{ current?: boolean } & LinkProps>(({ current, ...rest }) => <Link {...rest} />)`
     background-color: ${props => {
         if (props.current) {
             return props.theme.colors.colorGray(0.5);
@@ -18,8 +18,16 @@ export const LinkItem = styled<{ current: boolean } & LinkProps>(({ current, ...
     min-width: ${props => props.theme.spacing.defaultSpacing(2)};
     min-height: ${props => props.theme.spacing.defaultSpacing(2)};
     text-align: center;
+    cursor: ${props => {
+        if (props.current) {
+            return "not-allowed";
+        } else {
+            return null;
+        }
+    }};
 `;
 
 export const Wrapper = styled.div`
     margin-top: ${props => props.theme.spacing.defaultSpacing(3)};
+    display: flex;
 `;

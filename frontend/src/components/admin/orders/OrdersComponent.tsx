@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { Immutable } from "immutable-typescript";
+import { DebounceInput } from "react-debounce-input";
 import { I18N } from "../../../i18n/i18n";
 import { Order } from "../../../model/Order";
 import { Orders } from "../../../model/Orders";
@@ -8,13 +9,14 @@ import store from "../../../redux/store/store";
 import { adminRoutes } from "../../../routes/adminRoutes";
 import { renderStatus } from "../../../utils/utilsMethods";
 import { PaginationComponent, PaginationData } from "../../pagination/PaginationComponent";
-import { Label, Status, StatusWrapper, Value, WrapperOrder } from "./ordersStyled";
+import { Label, SearchInput, Status, StatusWrapper, Value, WrapperOrder } from "./ordersStyled";
 
 export interface Props {
     i18n: Immutable<I18N>;
     orders: Immutable<Orders>;
     updateOrdersAction: (pageNumber?: string) => any;
     pageNumber: string;
+    searchOrdersAction: (query: string, pageNumber: string) => any;
 }
 
 export class OrdersComponent extends React.Component<Props, {}> {
@@ -32,6 +34,7 @@ export class OrdersComponent extends React.Component<Props, {}> {
         const { orders, pageNumber } = this.props;
         return (
             <>
+                {this.renderSearch()}
                 {this.renderOrders(orders)}
                 <PaginationComponent
                     i18n={this.props.i18n}
@@ -86,4 +89,15 @@ export class OrdersComponent extends React.Component<Props, {}> {
 
         return paginationData;
     }
+
+    private renderSearch = (): JSX.Element => {
+        return (
+            <SearchInput
+                debounceTimeout={500}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.props.searchOrdersAction(e.target.value, this.props.pageNumber)(store.dispatch)}
+                placeholder="Search order by id"
+                big={true}
+            />
+        );
+    };
 }

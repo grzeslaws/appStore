@@ -36,6 +36,7 @@ const endpoints = {
     addPaymentType: "/api/admin/add_payment_type",
     deletePaymentType: (id: number) => `/api/admin/delete_payment_type/${id}`,
     getOrders: (pageNumber: number = 1) => `/api/admin/get_orders/${pageNumber}`,
+    searchOrders: (query: string, pageNumber: number) => `/api/admin/search_orders/${pageNumber}/${query}`,
 };
 
 export default endpoints;

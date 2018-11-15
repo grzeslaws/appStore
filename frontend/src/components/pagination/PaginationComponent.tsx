@@ -16,7 +16,7 @@ interface PaginationProps {
     i18n: Immutable<I18N>;
     paginationData: Immutable<PaginationData>;
     baseRoute: ({ itemId, pageNumber }: { itemId: number; pageNumber: number }) => any;
-    itemId?: number;
+    itemId: number;
 }
 
 export const PaginationComponent: React.SFC<PaginationProps> = props => {
@@ -32,17 +32,18 @@ export const PaginationComponent: React.SFC<PaginationProps> = props => {
     const renderPaginate = () => {
         let paginateItems = [];
         for (let pageNumber = 1; pageNumber <= pages; pageNumber++) {
+            const isCurrent = itemId ? pageNumber === itemId : false;
             const paginateItem = (
-                <LinkItem current={itemId ? pageNumber === itemId : false} key={pageNumber} to={baseRoute({ itemId, pageNumber })}>
+                <LinkItem current={isCurrent} key={pageNumber} to={baseRoute({ itemId, pageNumber })}>
                     {pageNumber}
                 </LinkItem>
             );
             paginateItems = [...paginateItems, paginateItem];
         }
-        paginate = <ul style={{ display: "flex" }}>{paginateItems}</ul>;
+        paginate = <Wrapper>{paginateItems}</Wrapper>;
 
         return paginate;
     };
 
-    return <Wrapper>{renderPaginate()}</Wrapper>;
+    return renderPaginate();
 };
