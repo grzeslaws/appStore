@@ -27,6 +27,9 @@ export class AdminNavigationComponent extends React.Component<{}, {}> {
                     <MenuItem>
                         <LinkStyled to={adminRoutes.productsTemplate({})}>Products</LinkStyled>
                     </MenuItem>
+                    <MenuItem>
+                        <LinkStyled to={adminRoutes.orders}>Orders</LinkStyled>
+                    </MenuItem>
                 </WrapperMenu>
                 <Route
                     render={({ history }) => (

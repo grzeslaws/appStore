@@ -1,8 +1,7 @@
 import { History } from "history";
 import { Immutable } from "immutable-typescript";
 import * as React from "react";
-import { Redirect, Route, RouteComponentProps } from "react-router";
-import { Link, RouteProps } from "react-router-dom";
+import { RouteComponentProps } from "react-router";
 import { I18N } from "../../../i18n/i18n";
 import { Customer } from "../../../model/Customer";
 import { OrderItem } from "../../../model/OrderItem";
@@ -166,8 +165,10 @@ export class CartComponent extends React.Component<CartProps, State> {
     private updateTotalByPostAndPayment = () => {
         let postAndPaymentCosts = 0;
 
-        const checkedPostType = this.props.postTypes.find((p: Immutable<PostPayment>) => p.id === this.state.postTypeId);
-        const checkedPaymentType = this.props.paymentTypes.find((p: Immutable<PostPayment>) => p.id === this.state.paymentTypeId);
+        const checkedPostType = this.props.postTypes ? this.props.postTypes.find((p: Immutable<PostPayment>) => p.id === this.state.postTypeId) : null;
+        const checkedPaymentType = this.props.paymentTypes
+            ? this.props.paymentTypes.find((p: Immutable<PostPayment>) => p.id === this.state.paymentTypeId)
+            : null;
 
         postAndPaymentCosts += checkedPostType ? checkedPostType.cost : null;
         postAndPaymentCosts += checkedPaymentType ? checkedPaymentType.cost : null;

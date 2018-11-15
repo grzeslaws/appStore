@@ -8,7 +8,7 @@ const colors: Colors = {
     colorPrimary: (opacity = 1) => `rgba(157, 105, 163, ${opacity})`,
     colorWhite: "#fff",
     colorGray: (opacity = 1) => `rgba(159, 172, 189, ${opacity})`,
-    colorGrayLight: "#e8edf2",
+    colorGrayLight: (opacity = 1) => `rgba(232, 237, 242, ${opacity})`,
     colorBlack: "#3c4859",
 };
 
@@ -19,6 +19,7 @@ const spacing: Spacing = {
 const radius: Radius = {
     defaultRadius: "5px",
     ovalRadius: "50px",
+    smallRadius: "3px",
 };
 
 const fonts: Fonts = {

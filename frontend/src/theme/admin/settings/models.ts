@@ -6,7 +6,7 @@ export interface Colors {
     colorPrimary: (opacity?: number) => string;
     colorWhite: string;
     colorGray: (opacity?: number) => string;
-    colorGrayLight: string;
+    colorGrayLight: (opacity?: number) => string;
     colorBlack: string;
 }
 
@@ -17,6 +17,7 @@ export interface Spacing {
 export interface Radius {
     defaultRadius: string;
     ovalRadius: string;
+    smallRadius: string;
 }
 
 export interface Fonts {

@@ -1,13 +1,15 @@
 import { Immutable } from "immutable-typescript";
-import { parse } from "sparkson";
+import { parse, parseArray } from "sparkson";
 import { OrderItem } from "src/model/OrderItem";
 import endpoints from "../../endpoints";
 import http from "../../http";
 import { Customer } from "../../model/Customer";
 import { Order } from "../../model/Order";
+import { Orders } from "../../model/Orders";
 import { Action } from "./action";
 
 import * as _ from "lodash";
+import { I18N } from "../../i18n/i18n";
 
 let stausInterval = null;
 const intervalStep = 3000;
@@ -32,6 +34,13 @@ function updateOrder(order: Order): Action<"UPDATE_ORDER", Order> {
     };
 }
 
+function updateOrders(orders: Orders): Action<"UPDATE_ORDERS", Orders> {
+    return {
+        type: "UPDATE_ORDERS",
+        payload: orders,
+    };
+}
+
 function updateCustomer(customer: Customer): Action<"UPDATE_CUSTOMER", Customer> {
     return {
         type: "UPDATE_CUSTOMER",
@@ -43,6 +52,14 @@ export function createOrderAction(orderItems: ReadonlyArray<Immutable<OrderItem>
     return dispatch => {
         return http(endpoints.createOrder, "post", { orderItems, totalPrice, customerPayloads }).then((json: OrderDetails) => {
             dispatch(getOrderAction(json.orderUuid, json.customer));
+        });
+    };
+}
+
+export function updateOrdersAction() {
+    return dispatch => {
+        return http(endpoints.getOrders, "get", {}).then((json: Orders) => {
+            dispatch(updateOrders(parse(Orders, json)));
         });
     };
 }
@@ -79,6 +96,14 @@ export function getOrderAction(oUuid: string, customer: Customer) {
             stausInterval = setInterval(() => {
                 dispatch(updateStatusOrderAction(oUuid));
             }, intervalStep);
+        });
+    };
+}
+
+export function getSelectedOrderAction(oUuid: string, i18n: I18N) {
+    return dispatch => {
+        return http(endpoints.getOrder(oUuid), "get", {}).then(json => {
+            dispatch(updateOrder(parse(Order, json)));
         });
     };
 }
