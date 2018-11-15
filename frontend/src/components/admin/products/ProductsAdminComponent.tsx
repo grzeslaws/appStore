@@ -289,7 +289,12 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
                     </WrapperSettings>
                 </Wrapper>
                 <WrapperPagination>
-                    <PaginationComponent i18n={i18n} paginationData={paginationData} baseRoute={adminRoutes.productsTemplate} />
+                    <PaginationComponent
+                        i18n={i18n}
+                        paginationData={paginationData}
+                        baseRoute={adminRoutes.productsTemplate}
+                        itemId={Number(this.props.pageNumber)}
+                    />
                 </WrapperPagination>
             </>
         );

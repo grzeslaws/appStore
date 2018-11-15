@@ -1,7 +1,9 @@
+import { DebounceInput } from "react-debounce-input";
 import { Link } from "react-router-dom";
 import { StatusOrder } from "../../../redux/actions/orderActions";
 import styled from "../../../theme/admin";
 import { H2 } from "../../../theme/admin/elements/Headings";
+import { Input } from "../../../theme/admin/objects/Forms";
 
 interface Status {
     status: string;
@@ -83,4 +85,8 @@ export const Status = styled<Status, "span">("span")`
 
 export const StatusWrapper = styled.span`
     margin-left: auto;
+`;
+
+export const SearchInput = styled(Input.withComponent(DebounceInput))`
+
 `;

@@ -96,6 +96,7 @@ export class HomePublicComponent extends React.Component<HomePublicProps, HomeSt
                             i18n={i18n}
                             paginationData={paginationData}
                             baseRoute={({ itemId, pageNumber }) => publicRoutes.homeTemplate({ collectionId: itemId, pageNumber })}
+                            itemId={this.props.pageNumber}
                         />
                     )}
                 </div>
