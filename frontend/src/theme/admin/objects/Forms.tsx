@@ -1,7 +1,7 @@
 import styled from "..";
 import { hoverOpacity, placeholder } from "../tools/utils";
 
-interface Form {
+export interface FormInterface {
     big?: boolean;
 }
 
@@ -20,7 +20,7 @@ const WrapperInput = styled.div`
     margin-bottom: ${props => props.theme.spacing.defaultSpacing()};
 `;
 
-const Input = styled<Form, "input">("input")`
+const Input = styled<FormInterface, "input">("input")`
     border: 1px solid ${props => props.theme.colors.colorGrayLight()};
     border-radius: ${props => props.theme.radius.defaultRadius};
     min-height: ${props => (props.big ? props.theme.spacing.defaultSpacing(4) : props.theme.spacing.defaultSpacing(3))};
@@ -111,6 +111,7 @@ const WrapperSelect = styled(Input.withComponent("div"))`
 
 const Select = styled<Select, "select">("select")`
     ${props => {
+        console.log(props.placeholderStyle);
         if (props.placeholderStyle) {
             return `
                 color: ${props.theme.colors.colorGray()};

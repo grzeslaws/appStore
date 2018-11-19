@@ -5,7 +5,7 @@ import endpoints from "../../endpoints";
 import http from "../../http";
 import { Customer } from "../../model/Customer";
 import { Order } from "../../model/Order";
-import { Orders } from "../../model/Orders";
+import { OrderBy, Orders } from "../../model/Orders";
 import { Action } from "./action";
 
 import * as _ from "lodash";
@@ -57,11 +57,10 @@ export function createOrderAction(orderItems: ReadonlyArray<Immutable<OrderItem>
     };
 }
 
-export function updateOrdersAction(pageNumber = "1") {
-    console.log(pageNumber);
+export function updateOrdersAction(pageNumber = "1", orderBy: OrderBy = OrderBy.TIMESTAMP) {
 
     return dispatch => {
-        return http(endpoints.getOrders(Number(pageNumber)), "get", {}).then((json: Orders) => {
+        return http(endpoints.getOrders(Number(pageNumber), orderBy), "get", {}).then((json: Orders) => {
             dispatch(updateOrders(parse(Orders, json)));
         });
     };

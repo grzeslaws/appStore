@@ -1,6 +1,13 @@
 import { ArrayField, Field } from "sparkson";
 import { Order } from "./Order";
 
+export enum OrderBy {
+    PLACEHOLDER = "Order by",
+    TIMESTAMP = "Date",
+    STATUS = "Status",
+    TOTAL_PRICE = "Total price",
+}
+
 export class Orders {
     constructor(
         @ArrayField("orders", Order) public orders: Order[],

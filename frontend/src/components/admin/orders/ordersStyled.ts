@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { StatusOrder } from "../../../redux/actions/orderActions";
 import styled from "../../../theme/admin";
 import { H2 } from "../../../theme/admin/elements/Headings";
-import { Input } from "../../../theme/admin/objects/Forms";
+import { WrapperSelect } from "../../../theme/admin/objects/Forms";
+import { placeholder } from "../../../theme/admin/tools/utils";
 
 interface Status {
     status: string;
@@ -87,6 +88,35 @@ export const StatusWrapper = styled.span`
     margin-left: auto;
 `;
 
-export const SearchInput = styled(Input.withComponent(DebounceInput))`
+const DebounceInputTemp = styled(DebounceInput)``;
 
+export const SearchInput = styled(DebounceInputTemp.withComponent("input"))`
+    border: 1px solid ${props => props.theme.colors.colorGrayLight()};
+    border-radius: ${props => props.theme.radius.defaultRadius};
+    min-height: ${props => props.theme.spacing.defaultSpacing(4)};
+    padding: 0 ${props => props.theme.spacing.defaultSpacing(1)};
+    font-size: ${props => props.theme.fonts.h4};
+    color: ${props => props.theme.colors.colorGray()};
+    outline: 0;
+    transition: ${props => props.theme.transitions.transitionDefault};
+    color: ${props => props.theme.colors.colorGray()};
+    width: 100%;
+    margin-bottom: ${props => props.theme.spacing.defaultSpacing(1)};
+    font-family: ${props => props.theme.fonts.fontFamilyDefault};
+    ${props => placeholder(props.theme.colors.colorGray(), props.theme.fonts.fontLight, props.theme.fonts.fontFamilyDefault, props.theme.fonts.h5)};
+    flex: 2;
+
+    &:focus {
+        border-color: ${props => props.theme.colors.colorPrimary()};
+        color: ${props => props.theme.colors.colorPrimary()};
+    }
+`;
+
+export const WrapperInputs = styled.div`
+    display: flex;
+`;
+
+export const WrapperSelectMod = styled(WrapperSelect)`
+    flex: 1;
+    margin-left: ${props => props.theme.spacing.defaultSpacing(2)};
 `;
