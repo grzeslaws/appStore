@@ -14,6 +14,7 @@ import { Categories } from "../../../model/Categories";
 import { Category } from "../../../model/Category";
 import { Collection } from "../../../model/Collection";
 import { Collections } from "../../../model/Collections";
+import { Message, MessageType } from "../../../model/Message";
 import AddPostPaymentWrapper from "../../../wrappers/AddPostPaymentWrapper";
 import { PaginationComponent } from "../../pagination/PaginationComponent";
 import { CategoriesAdminComponent } from "../categories/CategoriesAdminComponent";
@@ -60,6 +61,7 @@ export interface ProductsProps {
     deleteCategory: (i18n: I18N, categoryId: number) => any;
     deleteCategoryFromProduct: (i18n: I18N, categoryId: number, productUuid: string, pageNumber: number) => any;
     deleteCollectionFromProduct: (i18n: I18N, collectionId: number, productUuid: string, pageNumber: number) => any;
+    showMessage: (message: Message) => any;
     perPage?: string;
 }
 
@@ -104,7 +106,6 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
     }
 
     public render() {
-        console.log(this.state);
 
         const {
             products,
@@ -220,7 +221,7 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
                                       <Row className="inline">
                                           <WrapperButtonFile>
                                               <ButtonFileMod htmlFor="productImage">Import image</ButtonFileMod>
-                                              <input style={{display: "none"}} type="file" name="productImage" id="productImage" onChange={this.onChange} />
+                                              <input style={{ display: "none" }} type="file" name="productImage" id="productImage" onChange={this.onChange} />
                                               {this.state.productImage && this.state.productImage.length !== 0 && (
                                                   <ImageName>{this.state.productImage[0].name}</ImageName>
                                               )}
@@ -309,6 +310,14 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
     };
 
     private onChange = (e: React.ChangeEvent<any>) => {
+        if (e.target.files) {
+            const allowExtends: string[] = ["png", "jpg"];
+            const extend = e.target.files[0].name.split(".").pop();
+            if (allowExtends.indexOf(extend) === -1) {
+                this.props.showMessage({message: "Not allowed extension", type: MessageType.error, timeToHide: 2})(store.dispatch);
+                return;
+            }
+        }
         const newProduct: ProductsState = {
             ...this.state,
         };

@@ -21,3 +21,7 @@ export const removeMessage = (message: Message): Action<ActionType, Message> => 
         payload: message,
     };
 };
+
+export const showMessage = (message: Message) => {
+    return dispatch => dispatch(updateMessages(message));
+};

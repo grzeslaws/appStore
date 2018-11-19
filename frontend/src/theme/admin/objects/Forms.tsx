@@ -112,7 +112,6 @@ const WrapperSelect = styled(Input.withComponent("div"))`
 
 const Select = styled<Select, "select">("select")`
     ${props => {
-        console.log(props.placeholderStyle);
         if (props.placeholderStyle) {
             return `
                 color: ${props.theme.colors.colorGray()};
