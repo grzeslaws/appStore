@@ -1,4 +1,4 @@
-import { config } from "./config/config";
+// import { config } from "./config/config";
 
 const endpoints = {
     // public
@@ -35,7 +35,7 @@ const endpoints = {
     deletePostType: (id: number) => `/api/admin/delete_post_type/${id}`,
     addPaymentType: "/api/admin/add_payment_type",
     deletePaymentType: (id: number) => `/api/admin/delete_payment_type/${id}`,
-    getOrders: (pageNumber: number = 1) => `/api/admin/get_orders/${pageNumber}`,
+    getOrders: (pageNumber: number, orderBy) => `/api/admin/get_orders/${pageNumber}/${orderBy}`,
     searchOrders: (query: string, pageNumber: number) => `/api/admin/search_orders/${pageNumber}/${query}`,
 };
 

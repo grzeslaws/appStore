@@ -4,22 +4,35 @@ import { Immutable } from "immutable-typescript";
 import { DebounceInput } from "react-debounce-input";
 import { I18N } from "../../../i18n/i18n";
 import { Order } from "../../../model/Order";
-import { Orders } from "../../../model/Orders";
+import { OrderBy, Orders } from "../../../model/Orders";
 import store from "../../../redux/store/store";
 import { adminRoutes } from "../../../routes/adminRoutes";
+import { Select } from "../../../theme/admin/objects/Forms";
 import { renderStatus } from "../../../utils/utilsMethods";
 import { PaginationComponent, PaginationData } from "../../pagination/PaginationComponent";
-import { Label, SearchInput, Status, StatusWrapper, Value, WrapperOrder } from "./ordersStyled";
+import { Label, SearchInput, Status, StatusWrapper, Value, WrapperInputs, WrapperOrder, WrapperSelectMod } from "./ordersStyled";
 
 export interface Props {
     i18n: Immutable<I18N>;
     orders: Immutable<Orders>;
-    updateOrdersAction: (pageNumber?: string) => any;
     pageNumber: string;
+    updateOrdersAction: (pageNumber?: string, orderBy?: OrderBy) => any;
     searchOrdersAction: (query: string, pageNumber: string) => any;
 }
 
-export class OrdersComponent extends React.Component<Props, {}> {
+interface State {
+    orderBy: OrderBy;
+}
+
+export class OrdersComponent extends React.Component<Props, State> {
+    constructor(props: Props) {
+        super(props);
+
+        this.state = {
+            orderBy: OrderBy.PLACEHOLDER,
+        };
+    }
+
     public componentWillMount() {
         this.props.updateOrdersAction(this.props.pageNumber)(store.dispatch);
     }
@@ -34,8 +47,12 @@ export class OrdersComponent extends React.Component<Props, {}> {
         const { orders, pageNumber } = this.props;
         return (
             <>
-                {this.renderSearch()}
+                <WrapperInputs>
+                    {this.renderSearch()}
+                    {this.renderOrderSelector()}
+                </WrapperInputs>
                 {this.renderOrders(orders)}
+
                 <PaginationComponent
                     i18n={this.props.i18n}
                     paginationData={this.paginationData(orders)}
@@ -56,10 +73,12 @@ export class OrdersComponent extends React.Component<Props, {}> {
                               <Label>Date:</Label>
                               {o.timestamp.dateString}
                           </Value>
-                          <Value>
-                              <Label>Order id:</Label>
-                              {o.orderUuid}
-                          </Value>
+                          {o.customer.email && (
+                              <Value>
+                                  <Label>Customer email:</Label>
+                                  {o.customer.email}
+                              </Value>
+                          )}
                           <Value>
                               <Label>Total price:</Label>
                               {o.totalPrice} pln
@@ -96,8 +115,40 @@ export class OrdersComponent extends React.Component<Props, {}> {
                 debounceTimeout={500}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.props.searchOrdersAction(e.target.value, this.props.pageNumber)(store.dispatch)}
                 placeholder="Search order by id"
-                big={true}
             />
         );
+    };
+
+    private renderOrderSelector = () => {
+        const optionsElement = Object.keys(OrderBy).map((o: OrderBy) => {
+            return (
+                <option key={Math.random()} value={o}>
+                    {OrderBy[o]}
+                </option>
+            );
+        });
+        return (
+            <WrapperSelectMod big={true}>
+                <Select
+                    value={this.state.orderBy}
+                    placeholderStyle={OrderBy[this.state.orderBy] === OrderBy.PLACEHOLDER || this.state.orderBy === OrderBy.PLACEHOLDER}
+                    name="orderBy"
+                    onChange={this.onChange}>
+                    {optionsElement}
+                </Select>
+            </WrapperSelectMod>
+        );
+    };
+
+    private onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const newState = {
+            ...this.state,
+            [e.target.name]: e.target.value,
+        };
+        this.setState(newState);
+
+        if (e.target.value !== OrderBy.PLACEHOLDER) {
+            this.props.updateOrdersAction(this.props.pageNumber, OrderBy[e.target.value])(store.dispatch);
+        }
     };
 }
