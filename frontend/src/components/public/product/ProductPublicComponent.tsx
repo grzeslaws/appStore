@@ -31,10 +31,13 @@ export class ProductPublicComponent extends React.Component<ProductPublicProps, 
             <>
                 {product && (
                     <div>
-                        Product name: {product.name}<br/>
-                        Price: {product.price}<br/>
-                        Quantity: {product.quantity}<br/>
-                        <img style={{ maxWidth: "40px" }} src={`${endpoints.getPathForProductImage(product.imagePath)}`} />
+                        Product name: {product.name}
+                        <br />
+                        Price: {product.price}
+                        <br />
+                        Quantity: {product.quantity}
+                        <br />
+                        <img style={{ maxWidth: "40px" }} src={`${endpoints.getPathForProductImage(product.imagePath, product.productUuid, "medium")}`} />
                         <button onClick={() => store.dispatch(addProductToCart(product))}>Add to cart</button>
                     </div>
                 )}
