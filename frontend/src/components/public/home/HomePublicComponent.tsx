@@ -124,7 +124,9 @@ export class HomePublicComponent extends React.Component<HomePublicProps, HomeSt
                 <Link to={publicRoutes.productTemplate + product.productUuid}>{product.name}</Link>
                 <div>Quantity: {product.quantity}</div>
                 <div>Price: {product.price}</div>
-                {product.imagePath && <img style={{ maxWidth: "40px" }} src={`${endpoints.getPathForProductImage(product.imagePath)}`} />}
+                {product.imagePath && (
+                    <img style={{ maxWidth: "40px" }} src={`${endpoints.getPathForProductImage(product.imagePath, product.productUuid, "medium")}`} />
+                )}
             </div>
         );
     }

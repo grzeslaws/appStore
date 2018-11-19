@@ -69,7 +69,9 @@ export class CategoryPublicComponent extends React.Component<CategoryPublicProps
                           <Link to={publicRoutes.productTemplate + p.productUuid}>{p.name}</Link>
                           <div>Quantity: {p.quantity}</div>
                           <div>Price: {p.price}</div>
-                          {p.imagePath && <img style={{ maxWidth: "40px" }} src={`${endpoints.getPathForProductImage(p.imagePath)}`} />}
+                          {p.imagePath && (
+                              <img style={{ maxWidth: "40px" }} src={`${endpoints.getPathForProductImage(p.imagePath, p.productUuid, "medium")}`} />
+                          )}
                       </div>
                   );
               })
@@ -81,15 +83,14 @@ export class CategoryPublicComponent extends React.Component<CategoryPublicProps
                 {this.props.i18n.products.title}
                 {productList}
                 <div>
-                    {products &&
-                        categoryId && (
-                            <PaginationComponent
-                                i18n={i18n}
-                                paginationData={paginationData}
-                                baseRoute={({ itemId, pageNumber }) => publicRoutes.categoryTemplate({ categoryId: itemId, pageNumber })}
-                                itemId={categoryId}
-                            />
-                        )}
+                    {products && categoryId && (
+                        <PaginationComponent
+                            i18n={i18n}
+                            paginationData={paginationData}
+                            baseRoute={({ itemId, pageNumber }) => publicRoutes.categoryTemplate({ categoryId: itemId, pageNumber })}
+                            itemId={categoryId}
+                        />
+                    )}
                 </div>
             </>
         );

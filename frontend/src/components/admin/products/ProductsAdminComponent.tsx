@@ -106,7 +106,6 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
     }
 
     public render() {
-
         const {
             products,
             i18n,
@@ -157,7 +156,9 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
                       <BoxProduct key={p.id}>
                           <form onSubmit={(e: React.ChangeEvent<HTMLFormElement>) => this.saveChanges(e, p.productUuid)}>
                               <RowProductName>
-                                  {p.imagePath && <Images style={{ backgroundImage: `url(${endpoints.getPathForProductImage(p.imagePath)})` }} />}
+                                  {p.imagePath && (
+                                      <Images style={{ backgroundImage: `url(${endpoints.getPathForProductImage(p.imagePath, p.productUuid, "medium")})` }} />
+                                  )}
                                   <WrapperProduct>
                                       <ProductName
                                           onClick={(e: React.MouseEvent<HTMLElement>) => this.openEditProduct(e, p.productUuid, p.name, p.description)}>
@@ -312,9 +313,12 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
     private onChange = (e: React.ChangeEvent<any>) => {
         if (e.target.files) {
             const allowExtends: string[] = ["png", "jpg"];
-            const extend = e.target.files[0].name.split(".").pop();
+            const extend: string = e.target.files[0].name
+                .split(".")
+                .pop()
+                .toLowerCase();
             if (allowExtends.indexOf(extend) === -1) {
-                this.props.showMessage({message: "Not allowed extension", type: MessageType.error, timeToHide: 2})(store.dispatch);
+                this.props.showMessage({ message: "Not allowed extension", type: MessageType.error, timeToHide: 2 })(store.dispatch);
                 return;
             }
         }

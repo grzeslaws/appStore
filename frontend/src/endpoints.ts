@@ -6,7 +6,7 @@ const endpoints = {
     getPublicProduct: (productUuid: string) => `/api/public/get_product/${productUuid}`,
     getProductsByCollection: ({ collectionId = 1, pageNumber = 1, perPage = 5 }) =>
         `/api/public/get_products_by_collection/${collectionId}/${pageNumber}/${perPage}`,
-    getPathForProductImage: (pathToImage: string) => `api/public/get_image/${pathToImage}`,
+    getPathForProductImage: (pathToImage: string, productUuid: string, imageSize: string) => `api/public/get_image/${pathToImage}/${productUuid}/${imageSize}`,
     addOneProduct: (productUuuid: string) => `/api/public/add_one_product/${productUuuid}`,
     removeOneProduct: (productUuid: string) => `/api/public/remove_one_product/${productUuid}`,
     getCategories: `/api/public/get_categories`,
