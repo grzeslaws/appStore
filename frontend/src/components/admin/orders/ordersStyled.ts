@@ -64,7 +64,6 @@ export const WrapperProduct = styled.div`
 export const Status = styled<Status, "span">("span")`
     font-size: ${props => props.theme.fonts.small};
     background-color: ${props => {
-        console.log(props.status);
 
         if (props.status === StatusOrder.canceled) {
             return props.theme.colors.colorAlert;

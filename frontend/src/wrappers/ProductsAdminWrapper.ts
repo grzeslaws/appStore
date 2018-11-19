@@ -4,6 +4,7 @@ import { match } from "react-router";
 import { ProductsAdminComponent as Component, ProductsProps as Props } from "../components/admin/products/ProductsAdminComponent";
 import { addCategory, deleteCategory, deleteCategoryFromProduct,  getCategories } from "../redux/actions/categoriesActions";
 import { deleteCollectionFromProduct, getCollections } from "../redux/actions/collectionsActions";
+import { showMessage } from "../redux/actions/messagesActions";
 import { addProduct, deleteProduct, editProduct, fetchAdminProducts } from "../redux/actions/productsActions";
 import { ApplicationStore } from "../redux/store/store";
 
@@ -28,6 +29,7 @@ export function mapStateToProps(
         deleteCollectionFromProduct,
         getCollections,
         collections: collections.collection,
+        showMessage,
         // messages,
     };
 }
