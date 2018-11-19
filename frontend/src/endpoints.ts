@@ -22,7 +22,6 @@ const endpoints = {
     products: `/api/admin/products`,
     adminProfile: `/api/admin/profile`,
     getAllAdminProducts: (pageNumber = 1, perPage = 5) => `/api/admin/get_all_products/${pageNumber}/${perPage}`,
-    addProductImage: `/api/admin/add_product_image`,
     editProductImage: (productUuid: string) => `/api/admin/edit_product_image/${productUuid}`,
     editProduct: (productUuid: string) => `/api/admin/edit_product/${productUuid}`,
     deleteProduct: (productUuid: string) => `/api/admin/delete_product/${productUuid}`,

@@ -1,7 +1,6 @@
 import * as React from "react";
 
 import { Immutable } from "immutable-typescript";
-import { DebounceInput } from "react-debounce-input";
 import { I18N } from "../../../i18n/i18n";
 import { Order } from "../../../model/Order";
 import { OrderBy, Orders } from "../../../model/Orders";
@@ -10,6 +9,7 @@ import { adminRoutes } from "../../../routes/adminRoutes";
 import { Select } from "../../../theme/admin/objects/Forms";
 import { renderStatus } from "../../../utils/utilsMethods";
 import { PaginationComponent, PaginationData } from "../../pagination/PaginationComponent";
+
 import { Label, SearchInput, Status, StatusWrapper, Value, WrapperInputs, WrapperOrder, WrapperSelectMod } from "./ordersStyled";
 
 export interface Props {

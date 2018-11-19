@@ -64,6 +64,7 @@ const WrapperSelect = styled(Input.withComponent("div"))`
             align-items: center;
             width: auto;
             cursor: pointer;
+            height: max-content;
 
             &:before {
                 content: "";

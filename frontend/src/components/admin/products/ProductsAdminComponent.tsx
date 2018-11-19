@@ -104,6 +104,8 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
     }
 
     public render() {
+        console.log(this.state);
+
         const {
             products,
             i18n,
@@ -218,8 +220,10 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
                                       <Row className="inline">
                                           <WrapperButtonFile>
                                               <ButtonFileMod htmlFor="productImage">Import image</ButtonFileMod>
-                                              <input style={{ display: "none" }} type="file" name="productImage" id="productImage" onChange={this.onChange} />
-                                              {this.state.productImage && <ImageName>{this.state.productImage[0].name}</ImageName>}
+                                              <input style={{display: "none"}} type="file" name="productImage" id="productImage" onChange={this.onChange} />
+                                              {this.state.productImage && this.state.productImage.length !== 0 && (
+                                                  <ImageName>{this.state.productImage[0].name}</ImageName>
+                                              )}
                                           </WrapperButtonFile>
                                           {showItemsSelect(p.categories, categories.categories) && (
                                               <WrapperSelectMod big={true}>
@@ -328,7 +332,6 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
 
     private saveChanges = (e: React.ChangeEvent<HTMLFormElement>, productUuid: string) => {
         e.preventDefault();
-        e.target.reset();
         if (!this.state.productName && !this.state.productImage) {
             return;
         }
@@ -346,6 +349,8 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
         this.setState({ productCollection: 0 });
         this.setState({ productPrice: 0 });
         this.setState({ productQuantity: 0 });
+
+        e.target.reset();
     };
 
     private handleDeleteProduct(e: React.MouseEvent<HTMLButtonElement>, productUuid: string) {

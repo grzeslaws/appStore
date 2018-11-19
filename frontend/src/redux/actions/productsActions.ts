@@ -68,20 +68,18 @@ export function addProduct(payload: NewProduct, productImage: FileList, pageNumb
     const product = new NewProduct(payload.name);
 
     return dispatch => {
-        http(endpoints.addProductImage, "file", productImage);
         return http(endpoints.products, "post", product).then(json => dispatch(fetchAdminProducts(i18n, pageNumber)));
     };
 }
 
 export function editProduct(productUuid: string, payload: NewProduct, i18n: I18N, pageNumber: number, productImage?: FileList) {
     return dispatch => {
-        if (productImage) {
-            http(endpoints.editProductImage(productUuid), "file", productImage);
-        }
         if (payload.name) {
-            http(endpoints.editProduct(productUuid), "put", payload).then(() => {
+            const editProductImagePromise = productImage ? http(endpoints.editProductImage(productUuid), "file", productImage) : null;
+            const editProductPromise = http(endpoints.editProduct(productUuid), "put", payload);
+            return Promise.all([editProductImagePromise, editProductPromise]).then(() => {
                 dispatch(fetchAdminProducts(i18n, pageNumber));
-                dispatch(updateMessages({ message: "Product has been updated!", type: MessageType.succces }));
+                dispatch(updateMessages({ message: "Product has been updated!", type: MessageType.succces, timeToHide: 2 }));
             });
         }
     };
