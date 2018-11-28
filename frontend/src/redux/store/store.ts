@@ -11,6 +11,7 @@ import i18nReducer from "../reducers/i18nReducer";
 import messageReducer from "../reducers/messageReducer";
 import orderReducer from "../reducers/orderReducer";
 import postPaymentReducer from "../reducers/postPaymentReducer";
+import postStatusReducer from "../reducers/postStatusReducer";
 import productsReducer from "../reducers/productsReducer";
 
 import carouselReducer from "../reducers/carouselReducer";
@@ -23,6 +24,7 @@ import I18NStore from "./i18nStore";
 import MessageStore from "./messageStore";
 import OrderStore from "./orderStore";
 import PostPaymentStore from "./postPaymentStore";
+import PostStatusStore from "./postStatusStore";
 import ProductsStore from "./productsStore";
 
 const middleware =  applyMiddleware(thunk, createLogger());
@@ -37,6 +39,7 @@ const reducers = combineReducers({
     messages: messageReducer,
     order: orderReducer,
     postPayment: postPaymentReducer,
+    postStatus: postStatusReducer,
 });
 
 export interface ApplicationStore {
@@ -50,6 +53,7 @@ export interface ApplicationStore {
     messages: MessageStore;
     order: OrderStore;
     postPayment: PostPaymentStore;
+    postStatus: PostStatusStore;
 }
 
 export default createStore(reducers, middleware) as Store<Immutable<ApplicationStore>>;

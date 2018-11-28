@@ -6,6 +6,7 @@ import { NewProduct } from "../../../model/NewProduct";
 import { H3 } from "../../../theme/admin/elements/Headings";
 import { Button } from "../../../theme/admin/objects/Buttons";
 import { Input } from "../../../theme/admin/objects/Forms";
+import { Row } from "../../../theme/admin/objects/Layouts";
 
 export interface ProductsProps {
     i18n: Immutable<I18N>;
@@ -29,11 +30,11 @@ export class AddProductAdminComponent extends React.Component<ProductsProps, Add
         const { i18n } = this.props;
 
         return (
-            <>
+            <Row>
                 <H3>Add product</H3>
                 <Input value={this.state.productName} name="productName" onChange={this.onChange} placeholder={i18n.products.productName} />
                 <Button onClick={this.addProduct}>{i18n.products.addProduct}</Button>
-            </>
+            </Row>
         );
     }
 

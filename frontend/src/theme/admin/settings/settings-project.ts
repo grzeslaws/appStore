@@ -1,4 +1,4 @@
-import { Colors, Fonts, Paths, Radius, Spacing, Transitions } from "./models";
+import { Colors, ColorsPostStatus, Fonts, Paths, Radius, Spacing, Transitions } from "./models";
 
 const colors: Colors = {
     colorAlert: "#E85D75",
@@ -10,6 +10,13 @@ const colors: Colors = {
     colorGray: (opacity = 1) => `rgba(159, 172, 189, ${opacity})`,
     colorGrayLight: (opacity = 1) => `rgba(232, 237, 242, ${opacity})`,
     colorBlack: "#3c4859",
+};
+
+const colorsPostStatus: ColorsPostStatus = {
+    red: colors.colorAlert,
+    blue: "#1a73e8",
+    green: colors.colorSuccess,
+    gray: colors.colorGray(),
 };
 
 const spacing: Spacing = {
@@ -43,4 +50,4 @@ const paths: Paths = {
     imagePath: (path: string) => `/static/${path}`,
 };
 
-export { colors, spacing, radius, fonts, transitions, paths };
+export { colors, spacing, radius, fonts, transitions, paths, colorsPostStatus };

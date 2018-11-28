@@ -19,25 +19,8 @@ export const Wrapper = styled.div`
     display: flex;
 `;
 
-export const WrapperSettings = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: ${props => props.theme.spacing.defaultSpacing(35)};
-    margin-left: ${props => props.theme.spacing.defaultSpacing(3)};
-`;
-
 export const WrapperPagination = styled.div`
     margin-top: ${props => props.theme.spacing.defaultSpacing(3)};
-`;
-
-export const Row = styled.div`
-    margin-bottom: ${props => props.theme.spacing.defaultSpacing(3)};
-    display: flex;
-    flex-direction: column;
-
-    &.inline {
-        flex-direction: unset;
-    }
 `;
 
 export const RowProductName = styled.div`

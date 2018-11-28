@@ -10,6 +10,13 @@ export interface Colors {
     colorBlack: string;
 }
 
+export interface ColorsPostStatus {
+    red: string;
+    blue: string;
+    green: string;
+    gray: string;
+}
+
 export interface Spacing {
     defaultSpacing: (n?: number) => string;
 }
@@ -43,6 +50,7 @@ export interface Paths {
 
 export default interface ThemeAdmin {
     colors: Colors;
+    colorsPostStatus: ColorsPostStatus;
     spacing: Spacing;
     radius: Radius;
     fonts: Fonts;

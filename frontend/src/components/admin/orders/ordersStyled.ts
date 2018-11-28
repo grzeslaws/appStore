@@ -1,14 +1,28 @@
 import { DebounceInput } from "react-debounce-input";
 import { Link } from "react-router-dom";
+import { ColorPostStatus } from "../../../model/PostStatus";
 import { StatusOrder } from "../../../redux/actions/orderActions";
 import styled from "../../../theme/admin";
 import { H2 } from "../../../theme/admin/elements/Headings";
 import { WrapperSelect } from "../../../theme/admin/objects/Forms";
-import { placeholder } from "../../../theme/admin/tools/utils";
+import { hoverOpacity, placeholder } from "../../../theme/admin/tools/utils";
 
 interface Status {
     status: string;
 }
+
+interface ColorBox {
+    color: string;
+    isSelected: boolean;
+}
+
+interface PostStatus {
+    color: string;
+}
+
+export const WrapperContent = styled.div`
+    flex: 1;
+`;
 
 export const WrapperOrder = styled(Link)`
     margin-bottom: ${props => props.theme.spacing.defaultSpacing()};
@@ -64,7 +78,6 @@ export const WrapperProduct = styled.div`
 export const Status = styled<Status, "span">("span")`
     font-size: ${props => props.theme.fonts.small};
     background-color: ${props => {
-
         if (props.status === StatusOrder.canceled) {
             return props.theme.colors.colorAlert;
         } else if (props.status === StatusOrder.completed) {
@@ -118,4 +131,55 @@ export const WrapperInputs = styled.div`
 export const WrapperSelectMod = styled(WrapperSelect)`
     flex: 1;
     margin-left: ${props => props.theme.spacing.defaultSpacing(2)};
+`;
+
+const statusColor = props => {
+    if (props.color === ColorPostStatus.BLUE) {
+        return props.theme.colorsPostStatus.blue;
+    } else if (props.color === ColorPostStatus.GRAY) {
+        return props.theme.colorsPostStatus.gray;
+    } else if (props.color === ColorPostStatus.GREEN) {
+        return props.theme.colorsPostStatus.green;
+    } else {
+        return props.theme.colorsPostStatus.red;
+    }
+};
+
+export const ColorBox = styled<ColorBox, "div">("div")`
+    width: ${props => props.theme.spacing.defaultSpacing(2)};
+    height: ${props => props.theme.spacing.defaultSpacing(2)};
+    background-color: ${props => (props.isSelected ? statusColor(props) : "transparent")};
+    border: 1px solid ${props => statusColor(props)};
+    border-radius: ${props => props.theme.radius.defaultRadius};
+    margin-right: ${props => props.theme.spacing.defaultSpacing(0.5)};
+    cursor: pointer;
+    ${hoverOpacity}
+`;
+
+export const WrapperColorBox = styled.div`
+    display: flex;
+    margin-bottom: ${props => props.theme.spacing.defaultSpacing(1)};
+`;
+
+export const PostStatusLabel = styled<PostStatus, "span">("span")`
+    font-size: ${props => props.theme.fonts.small};
+    background-color: ${props => statusColor(props)};
+    color: ${props => props.theme.colors.colorWhite};
+    padding: ${props =>
+        props.theme.spacing.defaultSpacing(0.1) + " " + props.theme.spacing.defaultSpacing(0.4) + " " + props.theme.spacing.defaultSpacing(0.2)};
+    border-radius: ${props => props.theme.radius.smallRadius};
+    margin-right: ${props => props.theme.spacing.defaultSpacing(0.5)};
+    margin-bottom: ${props => props.theme.spacing.defaultSpacing(0.3)};
+`;
+
+export const WrapperPostStatus = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: ${props => props.theme.spacing.defaultSpacing()};
+`;
+
+export const RemovePostStatus = styled.span`
+    ${hoverOpacity};
+    cursor: pointer;
+    margin-left: ${props => props.theme.spacing.defaultSpacing(0.3)};
 `;

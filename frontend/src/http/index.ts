@@ -21,6 +21,7 @@ const http = (endpoint, method = "get", options?) => {
         defaultOptions = { ...DEFAULT_OPTIONS };
         switch (method) {
             case "get":
+
                 const esc = encodeURIComponent;
                 params += Object.keys(options)
                     .map(k => esc(k) + "=" + esc(typeof options[k] !== "undefined" ? options[k] : ""))

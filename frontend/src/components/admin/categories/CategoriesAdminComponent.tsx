@@ -6,7 +6,8 @@ import store from "../../../redux/store/store";
 import { H3 } from "../../../theme/admin/elements/Headings";
 import { Button } from "../../../theme/admin/objects/Buttons";
 import { Input } from "../../../theme/admin/objects/Forms";
-import { PostTypeItem, PostTypeRemove, PostTypeText, Row, WrapperPostType } from "../products/productsStyled";
+import { Row } from "../../../theme/admin/objects/Layouts";
+import { PostTypeItem, PostTypeRemove, PostTypeText, WrapperPostType } from "../products/productsStyled";
 
 interface CategoriesAdminProps {
     i18n: Immutable<I18N>;

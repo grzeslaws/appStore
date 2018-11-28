@@ -3,7 +3,7 @@ import { Order } from "./Order";
 
 export enum OrderBy {
     PLACEHOLDER = "Order by",
-    TIMESTAMP = "Date",
+    TIMESTAMP = "Timestamp",
     STATUS = "Status",
     TOTAL_PRICE = "Total price",
 }
