@@ -6,22 +6,47 @@ import { Order } from "../../../model/Order";
 import { OrderBy, Orders } from "../../../model/Orders";
 import store from "../../../redux/store/store";
 import { adminRoutes } from "../../../routes/adminRoutes";
-import { Select } from "../../../theme/admin/objects/Forms";
+import { Form, Input, Select } from "../../../theme/admin/objects/Forms";
 import { renderStatus } from "../../../utils/utilsMethods";
 import { PaginationComponent, PaginationData } from "../../pagination/PaginationComponent";
 
-import { Label, SearchInput, Status, StatusWrapper, Value, WrapperInputs, WrapperOrder, WrapperSelectMod } from "./ordersStyled";
+import { ColorPostStatus, PostStatus } from "../../../model/PostStatus";
+import { H3 } from "../../../theme/admin/elements/Headings";
+import { Button } from "../../../theme/admin/objects/Buttons";
+import { Row, WrapperFlex, WrapperSidebar } from "../../../theme/admin/objects/Layouts";
+import {
+    ColorBox,
+    Label,
+    PostStatusLabel,
+    RemovePostStatus,
+    SearchInput,
+    Status,
+    StatusWrapper,
+    Value,
+    WrapperColorBox,
+    WrapperContent,
+    WrapperInputs,
+    WrapperOrder,
+    WrapperPostStatus,
+    WrapperSelectMod,
+} from "./ordersStyled";
 
 export interface Props {
     i18n: Immutable<I18N>;
     orders: Immutable<Orders>;
     pageNumber: string;
+    postStatuses: ReadonlyArray<Immutable<PostStatus>>;
     updateOrdersAction: (pageNumber?: string, orderBy?: OrderBy) => any;
     searchOrdersAction: (query: string, pageNumber: string) => any;
+    addPostStatus: (postStatus: PostStatus) => any;
+    getPostStatuses: () => any;
+    removePostStatus: (postStatusId: number) => any;
 }
 
 interface State {
     orderBy: OrderBy;
+    selectedColor: ColorPostStatus;
+    postStatusName: string;
 }
 
 export class OrdersComponent extends React.Component<Props, State> {
@@ -30,11 +55,14 @@ export class OrdersComponent extends React.Component<Props, State> {
 
         this.state = {
             orderBy: OrderBy.PLACEHOLDER,
+            selectedColor: ColorPostStatus.GRAY,
+            postStatusName: "",
         };
     }
 
     public componentWillMount() {
         this.props.updateOrdersAction(this.props.pageNumber)(store.dispatch);
+        this.props.getPostStatuses()(store.dispatch);
     }
 
     public componentWillReceiveProps(nextProps) {
@@ -46,20 +74,31 @@ export class OrdersComponent extends React.Component<Props, State> {
     public render() {
         const { orders, pageNumber } = this.props;
         return (
-            <>
-                <WrapperInputs>
-                    {this.renderSearch()}
-                    {this.renderOrderSelector()}
-                </WrapperInputs>
-                {this.renderOrders(orders)}
+            <WrapperFlex>
+                <WrapperContent>
+                    <WrapperInputs>
+                        {this.renderSearch()}
+                        {this.renderOrderSelector()}
+                    </WrapperInputs>
+                    {this.renderOrders(orders)}
 
-                <PaginationComponent
-                    i18n={this.props.i18n}
-                    paginationData={this.paginationData(orders)}
-                    baseRoute={adminRoutes.ordersTemplate}
-                    itemId={Number(pageNumber)}
-                />
-            </>
+                    <PaginationComponent
+                        i18n={this.props.i18n}
+                        paginationData={this.paginationData(orders)}
+                        baseRoute={adminRoutes.ordersTemplate}
+                        itemId={Number(pageNumber)}
+                    />
+                </WrapperContent>
+                <WrapperSidebar>
+                    <H3>Add post status</H3>
+                    {this.renderPostStatuses()}
+                    {this.renderColorsToSelect()}
+                    <Form onSubmit={(e: React.ChangeEvent<HTMLFormElement>) => this.addColorPostStatus(e)}>
+                        <Input type="text" name="postStatusName" onChange={this.onChange} placeholder="Post status name" />
+                        <Button>Add post status</Button>
+                    </Form>
+                </WrapperSidebar>
+            </WrapperFlex>
         );
     }
 
@@ -109,17 +148,33 @@ export class OrdersComponent extends React.Component<Props, State> {
         return paginationData;
     }
 
+    private renderPostStatuses = (): JSX.Element => {
+        const postStatuses = this.props.postStatuses
+            ? this.props.postStatuses.map((ps: PostStatus) => {
+                  return (
+                      <PostStatusLabel key={ps.id} color={ColorPostStatus[ps.color]}>
+                          {ps.name}
+                          <RemovePostStatus onClick={() => this.props.removePostStatus(ps.id)(store.dispatch)}>x</RemovePostStatus>
+                      </PostStatusLabel>
+                  );
+              })
+            : null;
+
+        return <WrapperPostStatus>{postStatuses}</WrapperPostStatus>;
+    };
+
     private renderSearch = (): JSX.Element => {
         return (
             <SearchInput
                 debounceTimeout={500}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => this.props.searchOrdersAction(e.target.value, this.props.pageNumber)(store.dispatch)}
                 placeholder="Search order by id"
+                name="search"
             />
         );
     };
 
-    private renderOrderSelector = () => {
+    private renderOrderSelector = (): JSX.Element => {
         const optionsElement = Object.keys(OrderBy).map((o: OrderBy) => {
             return (
                 <option key={Math.random()} value={o}>
@@ -140,15 +195,41 @@ export class OrdersComponent extends React.Component<Props, State> {
         );
     };
 
-    private onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    private onChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>): void => {
         const newState = {
             ...this.state,
             [e.target.name]: e.target.value,
         };
         this.setState(newState);
 
-        if (e.target.value !== OrderBy.PLACEHOLDER) {
+        if (e.target.name === "orderBy" && e.target.value !== OrderBy.PLACEHOLDER) {
             this.props.updateOrdersAction(this.props.pageNumber, OrderBy[e.target.value])(store.dispatch);
         }
+    };
+
+    private renderColorsToSelect = (): JSX.Element => {
+        const colors = Object.keys(ColorPostStatus).map((c: string) => {
+            return (
+                <ColorBox
+                    onClick={() => this.selectPostsStatusColor(ColorPostStatus[c])}
+                    color={ColorPostStatus[c]}
+                    isSelected={this.state.selectedColor === c || this.state.selectedColor === ColorPostStatus[c]}
+                    key={c}
+                />
+            );
+        });
+
+        return <WrapperColorBox>{colors}</WrapperColorBox>;
+    };
+
+    private selectPostsStatusColor = (color: ColorPostStatus): void => {
+        this.setState({ selectedColor: color });
+    };
+
+    private addColorPostStatus = (e: React.ChangeEvent<HTMLFormElement>): void => {
+        e.preventDefault();
+        e.target.reset();
+
+        this.props.addPostStatus({ name: this.state.postStatusName, color: this.state.selectedColor })(store.dispatch);
     };
 }

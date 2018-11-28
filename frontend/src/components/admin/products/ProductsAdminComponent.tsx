@@ -22,6 +22,8 @@ import { ItemsForProductsComponent } from "../itemsForProducts/ItemsForProductsC
 
 import { ButtonSuccess } from "../../../theme/admin/objects/Buttons";
 import { Input, Label, Select, TextArea, WrapperInput } from "../../../theme/admin/objects/Forms";
+import { WrapperSidebar } from "../../../theme/admin/objects/Layouts";
+import { Row } from "../orders/ordersStyled";
 import {
     BoxProduct,
     ButtonDeleteProduct,
@@ -30,7 +32,6 @@ import {
     ImageName,
     Images,
     ProductName,
-    Row,
     RowProductName,
     ToggleEditor,
     Wrapper,
@@ -42,7 +43,6 @@ import {
     WrapperProduct,
     WrapperProducts,
     WrapperSelectMod,
-    WrapperSettings,
 } from "./productsStyled";
 
 export interface ProductsProps {
@@ -281,27 +281,23 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
         return (
             <>
                 <Wrapper>
-                    <WrapperProducts>{productList}</WrapperProducts>
-                    <WrapperSettings>
-                        <Row>
-                            <AddProductAdminComponent i18n={i18n} addProduct={this.handleAddProduct} />
-                        </Row>
-                        <Row>
-                            <AddPostPaymentWrapper />
-                        </Row>
-                        <Row>
-                            <CategoriesAdminComponent i18n={i18n} categories={categories} addCategory={addCategory} deleteCategory={deleteCategory} />
-                        </Row>
-                    </WrapperSettings>
+                    <WrapperProducts>
+                        {productList}
+                        <WrapperPagination>
+                            <PaginationComponent
+                                i18n={i18n}
+                                paginationData={paginationData}
+                                baseRoute={adminRoutes.productsTemplate}
+                                itemId={Number(this.props.pageNumber)}
+                            />
+                        </WrapperPagination>
+                    </WrapperProducts>
+                    <WrapperSidebar>
+                        <AddProductAdminComponent i18n={i18n} addProduct={this.handleAddProduct} />
+                        <AddPostPaymentWrapper />
+                        <CategoriesAdminComponent i18n={i18n} categories={categories} addCategory={addCategory} deleteCategory={deleteCategory} />
+                    </WrapperSidebar>
                 </Wrapper>
-                <WrapperPagination>
-                    <PaginationComponent
-                        i18n={i18n}
-                        paginationData={paginationData}
-                        baseRoute={adminRoutes.productsTemplate}
-                        itemId={Number(this.props.pageNumber)}
-                    />
-                </WrapperPagination>
             </>
         );
     }

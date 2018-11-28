@@ -1,14 +1,14 @@
 import { Immutable } from "immutable-typescript";
 import * as React from "react";
 import { I18N } from "../../../i18n/i18n";
-import { NewProduct } from "../../../model/NewProduct";
 import { PostPayment, PostPaymentEnum } from "../../../model/PostPayment";
 import store from "../../../redux/store/store";
 
 import { H3 } from "../../../theme/admin/elements/Headings";
 import { Button } from "../../../theme/admin/objects/Buttons";
 import { Form, Input } from "../../../theme/admin/objects/Forms";
-import { PostTypeItem, PostTypeRemove, PostTypeText, Row, WrapperPostType } from "./productsStyled";
+import { Row } from "../../../theme/admin/objects/Layouts";
+import { PostTypeItem, PostTypeRemove, PostTypeText, WrapperPostType } from "./productsStyled";
 
 export interface Props {
     i18n: Immutable<I18N>;
@@ -59,13 +59,15 @@ export class AddPostPaymentComponent extends React.Component<Props, State> {
                         <Button>Add new post type</Button>
                     </Form>
                 </Row>
-                <H3>Payment type</H3>
-                {this.renderPostPaymentTypes(paymentTypes, PostPaymentEnum.PAYMENT)}
-                <Form onSubmit={(e: React.ChangeEvent<HTMLFormElement>) => this.addPostType(e, PostPaymentEnum.PAYMENT, paymentTypeName, paymentTypeCost)}>
-                    <Input onChange={this.onChange} name="paymentTypeName" placeholder="Payment type name" />
-                    <Input onChange={this.onChange} name="paymentTypeCost" type="number" min="0" placeholder="New payment type cost" />
-                    <Button>Add new payment type</Button>
-                </Form>
+                <Row>
+                    <H3>Payment type</H3>
+                    {this.renderPostPaymentTypes(paymentTypes, PostPaymentEnum.PAYMENT)}
+                    <Form onSubmit={(e: React.ChangeEvent<HTMLFormElement>) => this.addPostType(e, PostPaymentEnum.PAYMENT, paymentTypeName, paymentTypeCost)}>
+                        <Input onChange={this.onChange} name="paymentTypeName" placeholder="Payment type name" />
+                        <Input onChange={this.onChange} name="paymentTypeCost" type="number" min="0" placeholder="New payment type cost" />
+                        <Button>Add new payment type</Button>
+                    </Form>
+                </Row>
             </>
         );
     }

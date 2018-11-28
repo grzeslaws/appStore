@@ -57,8 +57,8 @@ export function createOrderAction(orderItems: ReadonlyArray<Immutable<OrderItem>
     };
 }
 
-export function updateOrdersAction(pageNumber = "1", orderBy: OrderBy = OrderBy.TIMESTAMP) {
-
+export function updateOrdersAction(pageNumber = "1", orderBy: OrderBy) {
+    console.log(pageNumber, orderBy);
     return dispatch => {
         return http(endpoints.getOrders(Number(pageNumber), orderBy), "get", {}).then((json: Orders) => {
             dispatch(updateOrders(parse(Orders, json)));
@@ -113,7 +113,6 @@ export function getSelectedOrderAction(oUuid: string, i18n: I18N) {
 export function searchOrdersAction(query: string, pageNumber: string) {
     return dispatch => {
         return http(endpoints.searchOrders(query, Number(pageNumber)), "get", {}).then(json => {
-
             dispatch(updateOrders(parse(Orders, json)));
         });
     };

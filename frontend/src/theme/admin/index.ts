@@ -9,6 +9,7 @@ export { css, injectGlobal, keyframes, ThemeProvider };
 
 export const themeAdmin = {
     colors: settings.colors,
+    colorsPostStatus: settings.colorsPostStatus,
     spacing: settings.spacing,
     radius: settings.radius,
     fonts: settings.fonts,
