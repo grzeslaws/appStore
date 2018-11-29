@@ -1,11 +1,7 @@
-import { connect } from "react-redux";
-import { match } from "react-router";
-
-import { RouteProps } from "react-router-dom";
-
-import { LoginComponent, LoginProps } from "../components/admin/login/LoginComponent";
-import { getAdminProfile } from "../redux/actions/adminProfileActions";
 import { ApplicationStore } from "../redux/store/store";
+import { connect } from "react-redux";
+import { LoginComponent, LoginProps } from "../components/admin/login/LoginComponent";
+import { RouteProps } from "react-router-dom";
 
 export function mapStateToProps({ i18n, adminProfile }: ApplicationStore, ownProps: RouteProps): LoginProps {
     return {

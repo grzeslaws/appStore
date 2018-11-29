@@ -12,5 +12,5 @@ export const publicRoutes = {
     cart: `/public/cart`,
     payu: `/public/payu`,
     thankYouPage: `/public/thankYouPage`,
-    login: "/public/login/",
+    login: "/login",
 };

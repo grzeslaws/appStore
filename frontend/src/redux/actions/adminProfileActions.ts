@@ -1,12 +1,11 @@
-import { parse } from "sparkson";
 import endpoints from "../../endpoints";
 import http from "../../http";
 import { I18N } from "../../i18n/i18n";
 import { AdminProfile } from "../../model/AdminProfile";
-import { NewProduct } from "../../model/NewProduct";
-import { Products } from "../../model/Products";
+import { MessageType } from "../../model/Message";
+import store from "../store/store";
 import { Action } from "./action";
-import { requestFailed } from "./fetchActions";
+import { showMessage } from "./messagesActions";
 
 function getAdminProfileAction(adminProfile): Action<"GET_ADMIN_PROFILE", AdminProfile | null> {
     return {
@@ -42,14 +41,17 @@ interface Token {
 }
 
 export function login(name: string, password: string): any {
-    return dispatch => {
-        return http(endpoints.login, "post", {
-            name,
-            password,
-        }).then(token => {
+    return async dispatch => {
+        try {
+            const token = await http(endpoints.login, "post", {
+                name,
+                password,
+            });
             localStorage.setItem("x-access-token", (token as Token).token);
             dispatch(getAdminProfile());
-        });
+        } catch (e) {
+            showMessage({ message: "Not allowed extension", type: MessageType.error })(store.dispatch);
+        }
     };
 }
 
