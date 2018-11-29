@@ -22,8 +22,4 @@ export const removeMessage = (message: Message): Action<ActionType, Message> => 
     };
 };
 
-export const showMessage = (message: Message) => {
-    console.log("mess")
-    
-    return dispatch => dispatch(updateMessages(message));
-};
+export const showMessage = (message: Message) => dispatch => dispatch(updateMessages(message));
