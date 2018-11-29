@@ -23,8 +23,7 @@ export type ActionType =
     | "DELETE_PAYMENT_TYPES"
     | "UPDATE_POST_PAYMENT_TYPES"
     | "UPDATE_ORDERS"
-    | "UPDATE_POST_STATUS"
-    | "UPDATE_STATUS_POST_ORDER";
+    | "UPDATE_POST_STATUS";
 
 export interface Action<Type extends ActionType, Payload> {
     type: Type;
