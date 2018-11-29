@@ -13,7 +13,7 @@ import { PaginationComponent, PaginationData } from "../../pagination/Pagination
 import { ColorPostStatus, PostStatus } from "../../../model/PostStatus";
 import { H3 } from "../../../theme/admin/elements/Headings";
 import { Button } from "../../../theme/admin/objects/Buttons";
-import { Row, WrapperFlex, WrapperSidebar } from "../../../theme/admin/objects/Layouts";
+import { WrapperFlex, WrapperSidebar } from "../../../theme/admin/objects/Layouts";
 import {
     ColorBox,
     Label,
@@ -56,7 +56,7 @@ export class OrdersComponent extends React.Component<Props, State> {
         this.state = {
             orderBy: OrderBy.PLACEHOLDER,
             selectedColor: ColorPostStatus.GRAY,
-            postStatusName: "",
+            postStatusName: null,
         };
     }
 
@@ -95,7 +95,7 @@ export class OrdersComponent extends React.Component<Props, State> {
                     {this.renderColorsToSelect()}
                     <Form onSubmit={(e: React.ChangeEvent<HTMLFormElement>) => this.addColorPostStatus(e)}>
                         <Input type="text" name="postStatusName" onChange={this.onChange} placeholder="Post status name" />
-                        <Button>Add post status</Button>
+                        <Button disabled={!this.state.postStatusName}>Add post status</Button>
                     </Form>
                 </WrapperSidebar>
             </WrapperFlex>
@@ -228,8 +228,12 @@ export class OrdersComponent extends React.Component<Props, State> {
 
     private addColorPostStatus = (e: React.ChangeEvent<HTMLFormElement>): void => {
         e.preventDefault();
-        e.target.reset();
+        if (!this.state.postStatusName) {
+            return;
+        }
 
         this.props.addPostStatus({ name: this.state.postStatusName, color: this.state.selectedColor })(store.dispatch);
+        this.setState({ postStatusName: null });
+        e.target.reset();
     };
 }

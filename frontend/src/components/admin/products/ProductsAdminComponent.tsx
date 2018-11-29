@@ -20,10 +20,9 @@ import { PaginationComponent } from "../../pagination/PaginationComponent";
 import { CategoriesAdminComponent } from "../categories/CategoriesAdminComponent";
 import { ItemsForProductsComponent } from "../itemsForProducts/ItemsForProductsComponent";
 
-import { ButtonSuccess } from "../../../theme/admin/objects/Buttons";
+import { Button } from "../../../theme/admin/objects/Buttons";
 import { Input, Label, Select, TextArea, WrapperInput } from "../../../theme/admin/objects/Forms";
-import { WrapperSidebar } from "../../../theme/admin/objects/Layouts";
-import { Row } from "../orders/ordersStyled";
+import { Row, WrapperSidebar } from "../../../theme/admin/objects/Layouts";
 import {
     BoxProduct,
     ButtonDeleteProduct,
@@ -263,7 +262,7 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
                                           </WrapperInputInline>
                                       </Row>
                                       <ButtonsInline>
-                                          <ButtonSuccess>{i18n.products.saveChanges}</ButtonSuccess>
+                                          <Button success={true} disabled={this.isValidFormProduct()}>{i18n.products.saveChanges}</Button>
                                           <ButtonDeleteProduct
                                               small={true}
                                               onClick={(e: React.MouseEvent<HTMLButtonElement>) => this.handleDeleteProduct(e, p.productUuid)}>
@@ -360,6 +359,18 @@ export class ProductsAdminComponent extends React.Component<ProductsProps, Produ
         this.setState({ productQuantity: 0 });
 
         e.target.reset();
+    };
+
+    private isValidFormProduct = (): boolean => {
+        const payload =
+            !this.state.productName &&
+            !this.state.productCategory &&
+            !this.state.productCollection &&
+            !this.state.productDescription &&
+            !this.state.productPrice &&
+            !this.state.productQuantity &&
+            !this.state.productImage;
+        return payload;
     };
 
     private handleDeleteProduct(e: React.MouseEvent<HTMLButtonElement>, productUuid: string) {

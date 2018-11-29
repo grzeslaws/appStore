@@ -81,7 +81,7 @@ export const Status = styled<Status, "span">("span")`
         if (props.status === StatusOrder.canceled) {
             return props.theme.colors.colorAlert;
         } else if (props.status === StatusOrder.completed) {
-            return props.theme.colors.colorSuccess;
+            return props.theme.colors.colorSuccess();
         } else if (props.status === StatusOrder.pending) {
             return props.theme.colors.colorPrimary();
         } else if (props.status === StatusOrder.rejected) {

@@ -29,7 +29,7 @@ const showMessage = keyframes`
 export const WrapperMessage = styled<Type, "div">("div")`
     background-color: ${props => {
         if (props.type === MessageType.succces) {
-            return props.theme.colors.colorSuccess;
+            return props.theme.colors.colorSuccess();
         } else if (props.type === MessageType.error) {
             return props.theme.colors.colorAlert;
         } else if (props.type === MessageType.warning) {

@@ -56,7 +56,7 @@ export class AddPostPaymentComponent extends React.Component<Props, State> {
                     <Form onSubmit={(e: React.ChangeEvent<HTMLFormElement>) => this.addPostType(e, PostPaymentEnum.POST, postTypeName, postTypeCost)}>
                         <Input onChange={this.onChange} name="postTypeName" placeholder="Post type name" />
                         <Input onChange={this.onChange} name="postTypeCost" type="number" min="0" placeholder="New post type cost" />
-                        <Button>Add new post type</Button>
+                        <Button disabled={!this.state.postTypeName || !this.state.postTypeCost}>Add new post type</Button>
                     </Form>
                 </Row>
                 <Row>
@@ -65,7 +65,7 @@ export class AddPostPaymentComponent extends React.Component<Props, State> {
                     <Form onSubmit={(e: React.ChangeEvent<HTMLFormElement>) => this.addPostType(e, PostPaymentEnum.PAYMENT, paymentTypeName, paymentTypeCost)}>
                         <Input onChange={this.onChange} name="paymentTypeName" placeholder="Payment type name" />
                         <Input onChange={this.onChange} name="paymentTypeCost" type="number" min="0" placeholder="New payment type cost" />
-                        <Button>Add new payment type</Button>
+                        <Button disabled={!this.state.paymentTypeName || !this.state.paymentTypeCost}>Add new payment type</Button>
                     </Form>
                 </Row>
             </>

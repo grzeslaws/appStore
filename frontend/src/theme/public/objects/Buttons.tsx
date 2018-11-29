@@ -44,7 +44,7 @@ const ButtonAlert = styled(Button)`
 `;
 
 const ButtonSuccess = styled(Button)`
-    background-color: ${props => props.theme.colors.colorSuccess};
+    background-color: ${props => props.theme.colors.colorSuccess()};
 `;
 
 const ButtonFile = styled(Button.withComponent("label"))`${InvertedCss}`;

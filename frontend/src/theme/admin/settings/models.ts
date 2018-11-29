@@ -2,7 +2,7 @@ export interface Colors {
     colorAlert: string;
     colorLight: string;
     colorSecondary: string;
-    colorSuccess: string;
+    colorSuccess: (opacity?: number) => string;
     colorPrimary: (opacity?: number) => string;
     colorWhite: string;
     colorGray: (opacity?: number) => string;

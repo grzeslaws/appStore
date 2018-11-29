@@ -43,7 +43,7 @@ export class CategoriesAdminComponent extends React.Component<CategoriesAdminPro
         const addCategoryForm = (
             <>
                 <Input value={this.state.categoryItem} onChange={this.setCategoryItem} placeholder="Category name" />
-                <Button onClick={this.addCategory}>Add new category</Button>
+                <Button disabled={!this.state.categoryItem} onClick={this.addCategory}>Add new category</Button>
             </>
         );
 

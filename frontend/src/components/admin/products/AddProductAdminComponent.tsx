@@ -33,7 +33,7 @@ export class AddProductAdminComponent extends React.Component<ProductsProps, Add
             <Row>
                 <H3>Add product</H3>
                 <Input value={this.state.productName} name="productName" onChange={this.onChange} placeholder={i18n.products.productName} />
-                <Button onClick={this.addProduct}>{i18n.products.addProduct}</Button>
+                <Button disabled={!this.state.productName} onClick={this.addProduct}>{i18n.products.addProduct}</Button>
             </Row>
         );
     }
