@@ -18,11 +18,9 @@ export default function reducer(state = initialState, action: Action<ActionType,
             return ImmutableUtils.update(state).set("order", newState);
 
         case "UPDATE_CUSTOMER":
-            newState.customer = action.payload;
             return ImmutableUtils.update(state).set("order", action.payload);
 
         case "UPDATE_ORDERS":
-            newState.customer = action.payload;
             return ImmutableUtils.update(state).set("orders", action.payload);
     }
     return state;

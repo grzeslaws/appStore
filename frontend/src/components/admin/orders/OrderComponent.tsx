@@ -1,5 +1,8 @@
 import * as React from "react";
 
+import { ColorPostStatus, PostStatus } from "../../../model/PostStatus";
+import { Headline, Label, PostStatusLabel, Row, Status, Value, ValueDescription, WrapperPostStatus, WrapperProduct } from "./ordersStyled";
+
 import { Immutable } from "immutable-typescript";
 import { I18N } from "../../../i18n/i18n";
 import { Customer } from "../../../model/Customer";
@@ -7,18 +10,21 @@ import { Order } from "../../../model/Order";
 import { OrderItemSpark } from "../../../model/OrderItemSpark";
 import store from "../../../redux/store/store";
 import { renderStatus } from "../../../utils/utilsMethods";
-import { Headline, Label, Row, Status, Value, ValueDescription, WrapperProduct } from "./ordersStyled";
 
 export interface Props {
     i18n: Immutable<I18N>;
     order: Immutable<Order>;
     getSelectedOrderAction: (OrderUuid: string, i18n: I18N) => any;
     orderUuid: string;
+    postStatuses: ReadonlyArray<Immutable<PostStatus>>;
+    getPostStatuses: () => any;
+    updatePostStatusOrderAction: (orderUuid: string, postStatusId: number, i18n: I18N) => any;
 }
 
 export class OrderComponent extends React.Component<Props, {}> {
     public componentWillMount() {
         this.props.getSelectedOrderAction(this.props.orderUuid, this.props.i18n)(store.dispatch);
+        this.props.getPostStatuses()(store.dispatch);
     }
 
     public render() {
@@ -34,7 +40,7 @@ export class OrderComponent extends React.Component<Props, {}> {
 
     private renderOrderDetaild = (order: Immutable<Order>): JSX.Element => {
         if (!order) {
-            return <></>;
+            return null;
         }
         return (
             <>
@@ -58,13 +64,17 @@ export class OrderComponent extends React.Component<Props, {}> {
                     <Label>Status:</Label>
                     <Status status={order.status}>{renderStatus(order.status)}</Status>
                 </Row>
+                <Row>
+                    <Label>Update post status:</Label>
+                    {this.renderPostStatuses()}
+                </Row>
             </>
         );
     };
 
     private renderCustomer(customer: Customer): JSX.Element {
         if (!customer) {
-            return <></>;
+            return null;
         }
         return (
             <Value>
@@ -76,9 +86,9 @@ export class OrderComponent extends React.Component<Props, {}> {
         );
     }
 
-    private renderProducts(orderItems: ReadonlyArray<Immutable<OrderItemSpark>>): JSX.Element {
+    private renderProducts(orderItems: ReadonlyArray<Immutable<OrderItemSpark>>): JSX.Element[] {
         if (!orderItems) {
-            return <></>;
+            return null;
         }
         const orderItemsElement = orderItems.map(oi => {
             return (
@@ -109,6 +119,24 @@ export class OrderComponent extends React.Component<Props, {}> {
             );
         });
 
-        return <>{orderItemsElement}</>;
+        return orderItemsElement;
     }
+
+    private renderPostStatuses = (): JSX.Element => {
+        const postStatuses = this.props.postStatuses
+            ? this.props.postStatuses.map((ps: PostStatus) => {
+                  return (
+                      <PostStatusLabel
+                          isSelected={ps.id === (this.props.order.postStatus ? this.props.order.postStatus.id : null)}
+                          key={ps.id}
+                          color={ColorPostStatus[ps.color]}
+                          onClick={() => this.props.updatePostStatusOrderAction(this.props.order.orderUuid, ps.id, this.props.i18n)(store.dispatch)}>
+                          {ps.name}
+                      </PostStatusLabel>
+                  );
+              })
+            : null;
+
+        return <WrapperPostStatus>{postStatuses}</WrapperPostStatus>;
+    };
 }

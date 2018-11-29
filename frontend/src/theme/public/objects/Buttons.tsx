@@ -1,4 +1,4 @@
-import styled, {css} from "..";
+import styled, { css } from "..";
 
 interface Button {
     small?: boolean;
@@ -43,10 +43,8 @@ const ButtonAlert = styled(Button)`
     background-color: ${props => props.theme.colors.colorAlert};
 `;
 
-const ButtonSuccess = styled(Button)`
-    background-color: ${props => props.theme.colors.colorSuccess()};
+const ButtonFile = styled(Button.withComponent("label"))`
+    ${InvertedCss}
 `;
 
-const ButtonFile = styled(Button.withComponent("label"))`${InvertedCss}`;
-
-export { Button, ButtonInverted, ButtonFile, ButtonAlert, ButtonSuccess };
+export { Button, ButtonInverted, ButtonFile, ButtonAlert };

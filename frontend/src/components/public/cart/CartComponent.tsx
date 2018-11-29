@@ -1,17 +1,16 @@
-import { History } from "history";
-import { Immutable } from "immutable-typescript";
+import * as _ from "lodash";
 import * as React from "react";
-import { RouteComponentProps } from "react-router";
-import { I18N } from "../../../i18n/i18n";
+import store from "../../../redux/store/store";
 import { Customer } from "../../../model/Customer";
+import { History } from "history";
+import { I18N } from "../../../i18n/i18n";
+import { Immutable } from "immutable-typescript";
 import { OrderItem } from "../../../model/OrderItem";
 import { PostPayment, PostPaymentEnum } from "../../../model/PostPayment";
 import { Product } from "../../../model/Product";
-import { StatusOrder } from "../../../redux/actions/orderActions";
-import store from "../../../redux/store/store";
 import { publicRoutes } from "../../../routes/publicRoutes";
-
-import * as _ from "lodash";
+import { RouteComponentProps } from "react-router";
+import { StatusOrderEnum } from "../../../redux/actions/orderActions";
 
 export interface CartProps extends RouteComponentProps<History> {
     i18n: Immutable<I18N>;
@@ -67,7 +66,7 @@ export class CartComponent extends React.Component<CartProps, State> {
         if (nextProps.linkToPayment !== null && this.redirectToPayment) {
             window.open(nextProps.linkToPayment);
             this.redirectToPayment = false;
-        } else if (_.includes([StatusOrder.completed, StatusOrder.rejected, StatusOrder.canceled], nextProps.status)) {
+        } else if (_.includes([StatusOrderEnum.completed, StatusOrderEnum.rejected, StatusOrderEnum.canceled], nextProps.status)) {
             this.props.history.push(publicRoutes.thankYouPage);
         }
     }

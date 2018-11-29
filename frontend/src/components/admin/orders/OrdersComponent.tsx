@@ -104,6 +104,7 @@ export class OrdersComponent extends React.Component<Props, State> {
 
     private renderOrders = (ordersImmutable: Immutable<Orders>) => {
         const orders = ordersImmutable as Orders;
+
         const rendererOrders = orders
             ? orders.orders.map((o: Order) => {
                   return (
@@ -125,6 +126,12 @@ export class OrdersComponent extends React.Component<Props, State> {
                           <StatusWrapper>
                               <Label>Status:</Label>
                               <Status status={o.status}>{renderStatus(o.status)}</Status>
+                              {o.postStatus && (
+                                  <>
+                                      <Label marginLeft={true}>Post status:</Label>
+                                      <PostStatusLabel isSelected={true} color={ColorPostStatus[o.postStatus.color]}>{o.postStatus.name}</PostStatusLabel>
+                                  </>
+                              )}
                           </StatusWrapper>
                       </WrapperOrder>
                   );
@@ -152,7 +159,7 @@ export class OrdersComponent extends React.Component<Props, State> {
         const postStatuses = this.props.postStatuses
             ? this.props.postStatuses.map((ps: PostStatus) => {
                   return (
-                      <PostStatusLabel key={ps.id} color={ColorPostStatus[ps.color]}>
+                      <PostStatusLabel isSelected={true} key={ps.id} color={ColorPostStatus[ps.color]}>
                           {ps.name}
                           <RemovePostStatus onClick={() => this.props.removePostStatus(ps.id)(store.dispatch)}>x</RemovePostStatus>
                       </PostStatusLabel>
