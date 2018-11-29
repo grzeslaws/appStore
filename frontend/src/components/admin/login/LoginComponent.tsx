@@ -1,11 +1,18 @@
-import { Immutable } from "immutable-typescript";
-import * as React from "react";
-import { I18N } from "../../../i18n/i18n";
+import "./loginStyled";
 
+import * as React from "react";
+
+import { Immutable } from "immutable-typescript";
 import { Redirect, RouteProps } from "react-router-dom";
+import { I18N } from "../../../i18n/i18n";
 import { login } from "../../../redux/actions/adminProfileActions";
 import store from "../../../redux/store/store";
+import { adminRoutes } from "../../../routes/adminRoutes";
 import { publicRoutes } from "../../../routes/publicRoutes";
+import { Button } from "../../../theme/admin/objects/Buttons";
+import { Form, Input, WrapperInput } from "../../../theme/admin/objects/Forms";
+import MessagesWrapper from "../../../wrappers/MessagesWrapper";
+import { WrapperLogin, WrapperPage } from "./loginStyled";
 
 interface LoginState {
     adminName: string;
@@ -20,7 +27,7 @@ export interface LoginProps extends RouteProps {
 }
 
 export class LoginComponent extends React.Component<LoginProps, LoginState> {
-    constructor(props: any) {
+    constructor(props: LoginProps) {
         super(props);
 
         this.state = {
@@ -32,27 +39,36 @@ export class LoginComponent extends React.Component<LoginProps, LoginState> {
     public render() {
         const { from } = this.props.location.state || { from: publicRoutes.main };
         const { adminProfile, gettingProfileInProgress } = this.props;
+
         const loginForm = (
-            <>
-                <div>
-                    <label>Admin name:</label>
-                    <br />
-                    <input name="adminName" onChange={this.onChange} />
-                </div>
-                <div>
-                    <label>Password:</label>
-                    <br />
-                    <input name="password" onChange={this.onChange} />
-                </div>
-                <button onClick={this.login}>Log in</button>
-                {gettingProfileInProgress && "Login in progress..."}
-            </>
+            <WrapperPage>
+                <WrapperLogin>
+                    <Form onSubmit={(e: React.MouseEvent<HTMLFormElement>) => this.login(e)}>
+                        <WrapperInput>
+                            <Input big={true} name="adminName" onChange={this.onChange} placeholder="Admin name" />
+                        </WrapperInput>
+                        <WrapperInput>
+                            <Input big={true} name="password" onChange={this.onChange} placeholder="Admin passwors" />
+                        </WrapperInput>
+                        <Button>Log in</Button>
+                        {gettingProfileInProgress && "Login in progress..."}
+                    </Form>
+                </WrapperLogin>
+            </WrapperPage>
         );
 
-        return adminProfile ? <Redirect to={from} /> : <>{loginForm}</>;
+        return adminProfile ? (
+            <Redirect to={from} />
+        ) : (
+            <>
+                <MessagesWrapper />
+                {loginForm}
+            </>
+        );
     }
 
     private login = (e: React.MouseEvent<HTMLElement>) => {
+        e.preventDefault();
         if (!this.state.adminName || !this.state.password) {
             return;
         }

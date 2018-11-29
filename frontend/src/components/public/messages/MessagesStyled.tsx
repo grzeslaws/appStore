@@ -42,6 +42,8 @@ export const WrapperMessage = styled<Type, "div">("div")`
     align-items: center;
     justify-content: center;
     transition: ${props => props.theme.transitions.transitionDefault};
+    font-family: ${props => props.theme.fonts.fontFamilyDefault};
+    font-weight: ${props => props.theme.fonts.fontLight};
     opacity: ${props => (props.show ? 1 : 0)};
     animation: ${showMessage} ${props => props.theme.transitions.transitionDefault};
 `;

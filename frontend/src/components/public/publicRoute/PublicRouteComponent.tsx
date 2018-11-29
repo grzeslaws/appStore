@@ -11,8 +11,6 @@ import ProductPublicWrapper from "../../../wrappers/ProductPublicWrapper";
 import PublicNavigationWrapper from "../../../wrappers/PublicNavigationWrapper";
 import ThankYouPageWrapper from "../../../wrappers/ThankYouPageWrapper";
 
-// import "../../../style.scss";
-
 export interface Props {
     i18n: Immutable<I18N>;
 }
