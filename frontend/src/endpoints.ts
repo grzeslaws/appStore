@@ -39,6 +39,7 @@ const endpoints = {
     addPostStatus: `/api/admin/add_post_status`,
     deletePostStatus: (id: number) => `/api/admin/delete_post_status/${id}`,
     getPostStatuses: `/api/admin/get_post_statuses`,
+    updatePostStatusOrder: (orderUuid: string, postStatusId: number) => `/api/admin/update_post_status_order/${orderUuid}/${postStatusId}`,
 };
 
 export default endpoints;

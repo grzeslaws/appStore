@@ -1,6 +1,7 @@
 import { ArrayField, Field } from "sparkson";
 import { Customer } from "./Customer";
 import { OrderItemSpark } from "./OrderItemSpark";
+import { PostStatus } from "./PostStatus";
 import { TimestampToDateString } from "./TimestampToDateString";
 
 export class Order {
@@ -12,5 +13,6 @@ export class Order {
         @Field("status", true) public status?: string,
         @Field("totalPrice", true) public totalPrice?: number,
         @Field("linkToPayment", true) public linkToPayment?: string,
+        @Field("post_status", true) public postStatus?: PostStatus,
     ) {}
 }
