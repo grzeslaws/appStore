@@ -1,8 +1,10 @@
-import styled, {css} from "..";
+import styled, { css } from "..";
 
 interface Button {
     small?: boolean;
     htmlFor?: string;
+    disabled?: boolean;
+    success?: boolean;
 }
 
 const Button = styled<Button, "button">("button")`
@@ -12,10 +14,24 @@ const Button = styled<Button, "button">("button")`
     padding: ${props => props.theme.spacing.defaultSpacing(0.3) + " " + props.theme.spacing.defaultSpacing(2)};
     min-height: ${props => (props.small ? props.theme.spacing.defaultSpacing(3) : props.theme.spacing.defaultSpacing(4))};
     border-radius: ${props => props.theme.radius.defaultRadius};
-    background-color: ${props => props.theme.colors.colorPrimary()};
+    background-color: ${props => {
+        if (props.success) {
+            if (!props.disabled) {
+                return props.theme.colors.colorSuccess();
+            } else {
+                return props.theme.colors.colorSuccess(0.5);
+            }
+        } else {
+            if (!props.disabled) {
+                return props.theme.colors.colorPrimary();
+            } else {
+                return props.theme.colors.colorPrimary(0.5);
+            }
+        }
+    }};
+    cursor: ${props => (!props.disabled ? "pointer" : "not-allowed")};
     font-size: ${props => props.theme.fonts.h4};
     outline: 0;
-    cursor: pointer;
     transition: ${props => props.theme.transitions.transitionDefault};
     border: none;
     display: flex;
@@ -25,7 +41,7 @@ const Button = styled<Button, "button">("button")`
     height: fit-content;
 
     &:hover {
-        opacity: 0.8;
+        opacity: ${props => (!props.disabled ? 0.8 : 1)};
     }
 `;
 
@@ -43,10 +59,8 @@ const ButtonAlert = styled(Button)`
     background-color: ${props => props.theme.colors.colorAlert};
 `;
 
-const ButtonSuccess = styled(Button)`
-    background-color: ${props => props.theme.colors.colorSuccess};
+const ButtonFile = styled(Button.withComponent("label"))`
+    ${InvertedCss}
 `;
 
-const ButtonFile = styled(Button.withComponent("label"))`${InvertedCss}`;
-
-export { Button, ButtonInverted, ButtonFile, ButtonAlert, ButtonSuccess };
+export { Button, ButtonInverted, ButtonFile, ButtonAlert };

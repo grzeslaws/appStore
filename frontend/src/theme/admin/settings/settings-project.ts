@@ -4,7 +4,7 @@ const colors: Colors = {
     colorAlert: "#E85D75",
     colorLight: "#c3e7f0",
     colorSecondary: "#f1ee78",
-    colorSuccess: "#00B771",
+    colorSuccess: (opacity = 1) => `rgba(0, 183, 113, ${opacity})`,
     colorPrimary: (opacity = 1) => `rgba(157, 105, 163, ${opacity})`,
     colorWhite: "#fff",
     colorGray: (opacity = 1) => `rgba(159, 172, 189, ${opacity})`,
@@ -15,7 +15,7 @@ const colors: Colors = {
 const colorsPostStatus: ColorsPostStatus = {
     red: colors.colorAlert,
     blue: "#1a73e8",
-    green: colors.colorSuccess,
+    green: colors.colorSuccess(),
     gray: colors.colorGray(),
 };
 
