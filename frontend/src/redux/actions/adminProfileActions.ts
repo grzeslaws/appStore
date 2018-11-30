@@ -1,3 +1,4 @@
+import { bindActionCreators, Dispatch } from "redux";
 import endpoints from "../../endpoints";
 import http from "../../http";
 import { I18N } from "../../i18n/i18n";
@@ -50,7 +51,8 @@ export function login(name: string, password: string): any {
             localStorage.setItem("x-access-token", (token as Token).token);
             dispatch(getAdminProfile());
         } catch (e) {
-            showMessage({ message: "Not allowed extension", type: MessageType.error })(store.dispatch);
+            const err = await e;
+            showMessage({ message: err.message, type: MessageType.error })(store.dispatch);
         }
     };
 }
