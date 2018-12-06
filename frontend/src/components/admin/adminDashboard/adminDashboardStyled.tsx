@@ -1,7 +1,7 @@
 import styled, { keyframes } from "../../../theme/admin";
 
 interface Spinner {
-    show?: boolean;
+    show?: number;
 }
 
 const spinner = keyframes`

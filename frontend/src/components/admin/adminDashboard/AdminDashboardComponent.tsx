@@ -14,7 +14,7 @@ import { Spinner, WrapperDashboard } from "./adminDashboardStyled";
 
 export interface Props {
     i18n: I18N;
-    spinner: boolean;
+    spinner: number;
 }
 
 export class AdminDashboardComponent extends React.Component<Props, {}> {
