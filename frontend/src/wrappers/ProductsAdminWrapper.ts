@@ -30,7 +30,6 @@ export function mapStateToProps(
         getCollections,
         collections: collections.collection,
         showMessage,
-        // messages,
     };
 }
 
