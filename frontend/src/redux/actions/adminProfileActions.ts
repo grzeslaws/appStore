@@ -7,6 +7,7 @@ import { MessageType } from "../../model/Message";
 import store from "../store/store";
 import { Action } from "./action";
 import { showMessage } from "./messagesActions";
+import { updateSpinnerAction } from "./spinnerActions";
 
 function getAdminProfileAction(adminProfile): Action<"GET_ADMIN_PROFILE", AdminProfile | null> {
     return {
@@ -30,7 +31,7 @@ export function getAdminProfile() {
                 dispatch(gettingProfileInProgress(false));
                 dispatch(getAdminProfileAction(adminProfile));
             })
-            .catch(err => {
+            .catch(() => {
                 dispatch(gettingProfileInProgress(false));
                 dispatch(getAdminProfileAction(null));
             });
