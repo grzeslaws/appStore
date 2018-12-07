@@ -25,7 +25,7 @@ export class AdminDashboardComponent extends React.Component<Props, {}> {
                     <Spinner show={this.props.spinner} />
                     <MessagesWrapper />
                     <AdminNavigationWrapper />
-                    <Route exact={true} path={adminRoutes.admin} render={() => <Redirect to={adminRoutes.products} />} />
+                    <Route exact={true} path={adminRoutes.admin} render={() => <Redirect to={adminRoutes.productsTemplate({})} />} />
                     <Route path={adminRoutes.products} component={ProductsAdminWrapper} />
                     <Route path={adminRoutes.orders} component={OrdersWrapper} />
                     <Route path={adminRoutes.order} component={OrderWrapper} />

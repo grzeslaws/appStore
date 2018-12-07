@@ -1,4 +1,4 @@
-import { requestCompleted, requestIssued } from "../redux/actions/fetchActions";
+import { requestCompleted, requestFailed, requestIssued } from "../redux/actions/fetchActions";
 import store from "../redux/store/store";
 
 const CONTENT_TYPE_HEADER = "Content-Type";
@@ -21,7 +21,6 @@ const http = (endpoint, method = "get", options?) => {
         defaultOptions = { ...DEFAULT_OPTIONS };
         switch (method) {
             case "get":
-
                 const esc = encodeURIComponent;
                 params += Object.keys(options)
                     .map(k => esc(k) + "=" + esc(typeof options[k] !== "undefined" ? options[k] : ""))
@@ -63,6 +62,9 @@ const http = (endpoint, method = "get", options?) => {
                         }
                     }
                 } else {
+                    store.dispatch(requestFailed("Error", "Error"));
+                    console.log("err");
+
                     const contentType = response.headers.get(CONTENT_TYPE_HEADER);
                     if (contentType && contentType.includes(APPLICATION_JSON)) {
                         reject(response.json());
@@ -74,6 +76,7 @@ const http = (endpoint, method = "get", options?) => {
             error => {
                 // network errors
                 reject(new Error("Network error"));
+                store.dispatch(requestFailed("Network error", "Network error"));
             },
         );
     });

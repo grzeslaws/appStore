@@ -38,5 +38,6 @@ export function requestCompleted(): any {
 export function requestFailed(message: string, err: any): any {
     return dispatch => {
         dispatch(requestFailedAction(message, err));
+        dispatch(updateSpinnerAction(false));
     };
 }

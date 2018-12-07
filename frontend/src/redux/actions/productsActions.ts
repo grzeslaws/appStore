@@ -26,7 +26,7 @@ export function fetchAdminProducts(i18n: I18N, pageNumber?: number, perPage?: nu
                 dispatch(updateProducts(parse(Products, json)));
             })
             .catch(err => {
-                console.error(err);
+                console.log(err);
                 dispatch(requestFailed(i18n.errors.fetchProductsFailed, err));
             });
     };
@@ -39,7 +39,7 @@ export function fetchPublicProducts({ i18n, categoryId, pageNumber }: { i18n: I1
                 dispatch(updateProducts(parse(Products, json)));
             })
             .catch(err => {
-                console.error(err);
+                console.log(err);
                 dispatch(requestFailed(i18n.errors.fetchProductsFailed, err));
             });
     };
