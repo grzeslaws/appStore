@@ -4,6 +4,7 @@ import { DebounceInput } from "react-debounce-input";
 import { Link } from "react-router-dom";
 import styled from "../../../theme/admin";
 import { H2 } from "../../../theme/admin/elements/Headings";
+import { ButtonAlert } from "../../../theme/admin/objects/Buttons";
 import { WrapperSelect } from "../../../theme/admin/objects/Forms";
 import { label } from "../../../theme/admin/tools/labels";
 

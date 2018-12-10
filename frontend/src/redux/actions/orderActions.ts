@@ -7,10 +7,12 @@ import { Customer } from "../../model/Customer";
 import { Order } from "../../model/Order";
 import { OrderBy, Orders } from "../../model/Orders";
 import { PostStatus } from "../../model/PostStatus";
+import { MessageType } from "./../../model/Message";
 import { Action } from "./action";
 
 import * as _ from "lodash";
 import { I18N } from "../../i18n/i18n";
+import { showMessage } from "./messagesActions";
 
 let stausInterval = null;
 const intervalStep = 3000;
@@ -115,5 +117,18 @@ export function searchOrdersAction(query: string, pageNumber: string) {
         return http(endpoints.searchOrders(query, Number(pageNumber)), "get", {}).then(json => {
             dispatch(updateOrders(parse(Orders, json)));
         });
+    };
+}
+
+export function cancelOrder(orerUuid: string, i18n: I18N) {
+    return async dispatch => {
+        try {
+            await http(endpoints.cancelOrder(orerUuid), "get", {});
+            showMessage({ message: "Order has been removed!", type: MessageType.succces, timeToHide: 3 })(dispatch);
+            return dispatch(getSelectedOrderAction(orerUuid, i18n));
+        } catch (e) {
+            const err = await e;
+            showMessage({ message: err.message, type: MessageType.error })(dispatch);
+        }
     };
 }

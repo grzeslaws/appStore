@@ -2,7 +2,7 @@ import { connect } from "react-redux";
 
 import { match } from "react-router-dom";
 import { OrderComponent as Component, Props } from "../components/admin/orders/OrderComponent";
-import { getSelectedOrderAction, updatePostStatusOrderAction } from "../redux/actions/orderActions";
+import { cancelOrder, getSelectedOrderAction, updatePostStatusOrderAction } from "../redux/actions/orderActions";
 import { getPostStatuses } from "../redux/actions/postStatusActions";
 import { ApplicationStore } from "../redux/store/store";
 
@@ -17,6 +17,7 @@ export function mapStateToProps(
         postStatuses: postStatus.postStatuses,
         getPostStatuses,
         updatePostStatusOrderAction,
+        cancelOrder,
     };
 }
 

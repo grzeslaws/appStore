@@ -4,11 +4,14 @@ import { ColorPostStatus, PostStatus } from "../../../model/PostStatus";
 import { Headline, Label, PostStatusLabel, Row, Status, Value, ValueDescription, WrapperPostStatus, WrapperProduct } from "./ordersStyled";
 
 import { Immutable } from "immutable-typescript";
+import { Redirect } from "react-router";
 import { I18N } from "../../../i18n/i18n";
 import { Customer } from "../../../model/Customer";
 import { Order } from "../../../model/Order";
 import { OrderItemSpark } from "../../../model/OrderItemSpark";
 import store from "../../../redux/store/store";
+import { adminRoutes } from "../../../routes/adminRoutes";
+import { ButtonAlert } from "../../../theme/admin/objects/Buttons";
 import { renderStatus } from "../../../utils/utilsMethods";
 
 export interface Props {
@@ -19,9 +22,23 @@ export interface Props {
     postStatuses: ReadonlyArray<Immutable<PostStatus>>;
     getPostStatuses: () => any;
     updatePostStatusOrderAction: (orderUuid: string, postStatusId: number, i18n: I18N) => any;
+    cancelOrder: (orderUuid: string, i18n: I18N) => any;
 }
 
-export class OrderComponent extends React.Component<Props, {}> {
+interface State {
+    redirectToOrders: boolean;
+}
+
+export class OrderComponent extends React.Component<Props, State> {
+    private static readonly READIRECT_AFTER_DELETE = 1000;
+
+    constructor(props: Props) {
+        super(props);
+
+        this.state = {
+            redirectToOrders: false,
+        };
+    }
     public componentWillMount() {
         this.props.getSelectedOrderAction(this.props.orderUuid, this.props.i18n)(store.dispatch);
         this.props.getPostStatuses()(store.dispatch);
@@ -30,10 +47,14 @@ export class OrderComponent extends React.Component<Props, {}> {
     public render() {
         return (
             <>
-                <Headline>Order details</Headline>
-                {this.renderOrderDetaild(this.props.order)}
-                <Headline>Products of order</Headline>
-                {this.props.order && this.renderProducts(this.props.order.orderItems)}
+                <>
+                    <Headline>Order details</Headline>
+                    {this.renderOrderDetaild(this.props.order)}
+                    <Headline>Products of order</Headline>
+                    {this.props.order && this.renderProducts(this.props.order.orderItems)}
+                    <ButtonAlert onClick={this.cancelOrder}>Cancel order</ButtonAlert>
+                </>
+                {this.state.redirectToOrders && this.props.order && <Redirect to={adminRoutes.ordersTemplate({})} />}
             </>
         );
     }
@@ -138,5 +159,12 @@ export class OrderComponent extends React.Component<Props, {}> {
             : null;
 
         return <WrapperPostStatus>{postStatuses}</WrapperPostStatus>;
+    };
+
+    private cancelOrder = () => {
+        this.props.cancelOrder(this.props.orderUuid, this.props.i18n)(store.dispatch);
+        setTimeout(() => {
+            this.setState({ redirectToOrders: true });
+        }, OrderComponent.READIRECT_AFTER_DELETE);
     };
 }
