@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link, LinkProps } from "react-router-dom";
-import styled from "../../theme/admin";
+import styled from "../../theme/public";
 
 export const LinkItem = styled<{ current?: boolean } & LinkProps>(({ current, ...rest }) => <Link {...rest} />)`
     background-color: ${props => {

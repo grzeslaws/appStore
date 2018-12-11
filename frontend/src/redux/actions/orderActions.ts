@@ -124,7 +124,6 @@ export function cancelOrder(orerUuid: string, i18n: I18N) {
     return async dispatch => {
         try {
             await http(endpoints.cancelOrder(orerUuid), "get", {});
-            showMessage({ message: "Order has been removed!", type: MessageType.succces, timeToHide: 3 })(dispatch);
             return dispatch(getSelectedOrderAction(orerUuid, i18n));
         } catch (e) {
             const err = await e;

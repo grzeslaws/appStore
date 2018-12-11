@@ -19,16 +19,16 @@ export class AdminNavigationComponent extends React.Component<{}, {}> {
             <WrapperNavigation>
                 <WrapperMenu>
                     <MenuItem>
-                        <LinkStyled to={publicRoutes.public}>Home</LinkStyled>
+                        <LinkStyled activeClassName={"active"} to={publicRoutes.public}>Shop</LinkStyled>
+                    </MenuItem>
+                    {/* <MenuItem>
+                        <LinkStyled activeClassName={"active"} exact={true} to={adminRoutes.admin}>Dashboard</LinkStyled>
+                    </MenuItem> */}
+                    <MenuItem>
+                        <LinkStyled activeClassName={"active"} to={adminRoutes.productsTemplate({})}>Products</LinkStyled>
                     </MenuItem>
                     <MenuItem>
-                        <LinkStyled to={adminRoutes.admin}>Dashboard</LinkStyled>
-                    </MenuItem>
-                    <MenuItem>
-                        <LinkStyled to={adminRoutes.productsTemplate({})}>Products</LinkStyled>
-                    </MenuItem>
-                    <MenuItem>
-                        <LinkStyled to={adminRoutes.ordersTemplate({})}>Orders</LinkStyled>
+                        <LinkStyled activeClassName={"active"} to={adminRoutes.ordersTemplate({})}>Orders</LinkStyled>
                     </MenuItem>
                 </WrapperMenu>
                 <Route

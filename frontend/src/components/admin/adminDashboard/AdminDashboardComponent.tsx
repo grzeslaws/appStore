@@ -6,6 +6,7 @@ import ProductsAdminWrapper from "../../../wrappers/ProductsAdminWrapper";
 
 import { I18N } from "../../../i18n/i18n";
 import { themeAdmin, ThemeProvider } from "../../../theme/admin";
+import AdminModalWrapper from "../../../wrappers/AdminModalWrapper";
 import AdminNavigationWrapper from "../../../wrappers/AdminNavigationWrapper";
 import MessagesWrapper from "../../../wrappers/MessagesWrapper";
 import OrdersWrapper from "../../../wrappers/OrdersWrapper";
@@ -23,6 +24,7 @@ export class AdminDashboardComponent extends React.Component<Props, {}> {
             <ThemeProvider theme={themeAdmin}>
                 <WrapperDashboard>
                     <Spinner show={this.props.spinner} />
+                    <AdminModalWrapper />
                     <MessagesWrapper />
                     <AdminNavigationWrapper />
                     <Route exact={true} path={adminRoutes.admin} render={() => <Redirect to={adminRoutes.productsTemplate({})} />} />

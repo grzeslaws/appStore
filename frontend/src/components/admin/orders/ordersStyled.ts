@@ -149,13 +149,13 @@ export const PostStatusLabel = styled<PostStatus, "span">("span")`
         if (props.isSelected) {
             return postsStatusColor(props);
         } else {
-            return props.theme.colors.colorWhite;
+            return props.theme.colors.colorWhite();
         }
     }};
     border: 1px solid ${props => postsStatusColor(props)};
     color: ${props => {
         if (props.isSelected) {
-            return props.theme.colors.colorWhite;
+            return props.theme.colors.colorWhite();
         } else {
             return postsStatusColor(props);
         }

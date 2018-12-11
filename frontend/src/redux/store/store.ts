@@ -9,6 +9,7 @@ import categoriesReducer from "../reducers/categoriesReducer";
 import collectionsReducer from "../reducers/collectionsReducer";
 import i18nReducer from "../reducers/i18nReducer";
 import messageReducer from "../reducers/messageReducer";
+import modalReducer from "../reducers/modalReducer";
 import orderReducer from "../reducers/orderReducer";
 import postPaymentReducer from "../reducers/postPaymentReducer";
 import postStatusReducer from "../reducers/postStatusReducer";
@@ -23,6 +24,7 @@ import CategoriesStore from "./categoriesStore";
 import CollectionsStore from "./collectionsStore";
 import I18NStore from "./i18nStore";
 import MessageStore from "./messageStore";
+import ModalStore from "./modalStore";
 import OrderStore from "./orderStore";
 import PostPaymentStore from "./postPaymentStore";
 import PostStatusStore from "./postStatusStore";
@@ -43,6 +45,7 @@ const reducers = combineReducers({
     postPayment: postPaymentReducer,
     postStatus: postStatusReducer,
     spinner: spinnerReducer,
+    modal: modalReducer,
 });
 
 export interface ApplicationStore {
@@ -58,6 +61,7 @@ export interface ApplicationStore {
     postPayment: PostPaymentStore;
     postStatus: PostStatusStore;
     spinner: SpinnerStore;
+    modal: ModalStore;
 }
 
 export default createStore(reducers, middleware) as Store<Immutable<ApplicationStore>>;
