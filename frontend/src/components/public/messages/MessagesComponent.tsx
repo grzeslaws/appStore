@@ -5,10 +5,6 @@ import { Message } from "../../../model/Message";
 import store from "../../../redux/store/store";
 import { IconToClose, Wrapper, WrapperMessage } from "./MessagesStyled";
 
-/* tslint:disable:no-implicit-dependencies */
-// import IconClose from "-!svg-react-loader?name=Icon!../../../assets/images/icon-close.svg";
-/* tslint:enable:no-implicit-dependencies */
-
 export interface Props {
     i18n: Immutable<I18N>;
     messages: ReadonlyArray<Message>;

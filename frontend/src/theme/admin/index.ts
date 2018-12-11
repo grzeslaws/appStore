@@ -1,8 +1,7 @@
 import * as styledComponents from "styled-components";
-import AdminTheme from "./settings/models";
 import * as settings from "./settings/settings-project";
 
-const { default: styled, css, injectGlobal, keyframes, ThemeProvider } = styledComponents as styledComponents.ThemedStyledComponentsModule<AdminTheme>;
+const { default: styled, css, injectGlobal, keyframes, ThemeProvider } = styledComponents as styledComponents.ThemedStyledComponentsModule<settings.ThemeAdmin>;
 
 export default styled;
 export { css, injectGlobal, keyframes, ThemeProvider };

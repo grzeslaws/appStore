@@ -37,7 +37,7 @@ export const WrapperMessage = styled<Type, "div">("div")`
         }
     }};
     min-height: ${props => props.theme.spacing.defaultSpacing(6)};
-    color: ${props => props.theme.colors.colorWhite};
+    color: ${props => props.theme.colors.colorWhite()};
     display: flex;
     align-items: center;
     justify-content: center;
@@ -51,7 +51,7 @@ export const WrapperMessage = styled<Type, "div">("div")`
 export const IconToClose = styled(IconClose)`
     ${hoverOpacity}
 
-    fill: ${props => props.theme.colors.colorWhite};
+    fill: ${props => props.theme.colors.colorWhite()};
     position: absolute;
     right: ${props => props.theme.spacing.defaultSpacing(2.5)};
     cursor: pointer;

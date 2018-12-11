@@ -24,7 +24,10 @@ export type ActionType =
     | "UPDATE_POST_PAYMENT_TYPES"
     | "UPDATE_ORDERS"
     | "UPDATE_POST_STATUS"
-    | "UPDATE_SPINNER";
+    | "UPDATE_SPINNER"
+    | "UPDATE_MODAL"
+    | "REMOVE_MODAL"
+    | "UPDATE_SUBMIT";
 
 export interface Action<Type extends ActionType, Payload> {
     type: Type;

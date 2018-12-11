@@ -8,7 +8,7 @@ interface Button {
 }
 
 const Button = styled<Button, "button">("button")`
-    color: ${props => props.theme.colors.colorWhite};
+    color: ${props => props.theme.colors.colorWhite()};
     font-family: ${props => props.theme.fonts.fontFamilyDefault};
     font-weight: normal;
     padding: ${props => props.theme.spacing.defaultSpacing(0.3) + " " + props.theme.spacing.defaultSpacing(2)};
@@ -46,7 +46,7 @@ const Button = styled<Button, "button">("button")`
 `;
 
 const InvertedCss = css`
-    background-color: ${props => props.theme.colors.colorWhite};
+    background-color: ${props => props.theme.colors.colorWhite()};
     border: 1px solid ${props => props.theme.colors.colorPrimary()};
     color: ${props => props.theme.colors.colorPrimary()};
 `;

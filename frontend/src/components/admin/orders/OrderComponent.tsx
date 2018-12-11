@@ -7,6 +7,7 @@ import { Immutable } from "immutable-typescript";
 import { Redirect } from "react-router";
 import { I18N } from "../../../i18n/i18n";
 import { Customer } from "../../../model/Customer";
+import { ModalContent } from "../../../model/ModalContent";
 import { Order } from "../../../model/Order";
 import { OrderItemSpark } from "../../../model/OrderItemSpark";
 import store from "../../../redux/store/store";
@@ -23,6 +24,9 @@ export interface Props {
     getPostStatuses: () => any;
     updatePostStatusOrderAction: (orderUuid: string, postStatusId: number, i18n: I18N) => any;
     cancelOrder: (orderUuid: string, i18n: I18N) => any;
+    showModal: (modal: ModalContent) => any;
+    updateSubmit: (flag: boolean) => any;
+    modalSubmit: boolean;
 }
 
 interface State {
@@ -30,7 +34,7 @@ interface State {
 }
 
 export class OrderComponent extends React.Component<Props, State> {
-    private static readonly READIRECT_AFTER_DELETE = 1000;
+    private static readonly TIME_TO_REDIRECT = 0;
 
     constructor(props: Props) {
         super(props);
@@ -39,22 +43,37 @@ export class OrderComponent extends React.Component<Props, State> {
             redirectToOrders: false,
         };
     }
+
     public componentWillMount() {
         this.props.getSelectedOrderAction(this.props.orderUuid, this.props.i18n)(store.dispatch);
         this.props.getPostStatuses()(store.dispatch);
     }
 
+    public componentWillReceiveProps(nextProps) {
+        if (nextProps.modalSubmit) {
+            this.props.cancelOrder(this.props.orderUuid, this.props.i18n)(store.dispatch);
+            this.props.updateSubmit(false)(store.dispatch);
+            setTimeout(() => {
+                this.setState({ redirectToOrders: true });
+            }, OrderComponent.TIME_TO_REDIRECT);
+        }
+    }
+
     public render() {
         return (
             <>
-                <>
-                    <Headline>Order details</Headline>
-                    {this.renderOrderDetaild(this.props.order)}
-                    <Headline>Products of order</Headline>
-                    {this.props.order && this.renderProducts(this.props.order.orderItems)}
-                    <ButtonAlert onClick={this.cancelOrder}>Cancel order</ButtonAlert>
-                </>
-                {this.state.redirectToOrders && this.props.order && <Redirect to={adminRoutes.ordersTemplate({})} />}
+                {this.props.order && (
+                    <>
+                        <Headline>Order details</Headline>
+                        {this.renderOrderDetaild(this.props.order)}
+                        <Headline>Products of order</Headline>
+                        {this.props.order && this.renderProducts(this.props.order.orderItems)}
+                        <ButtonAlert onClick={() => this.props.showModal(new ModalContent("Are you sure to remove this order?"))(store.dispatch)}>
+                            Cancel order
+                        </ButtonAlert>
+                    </>
+                )}
+                {this.state.redirectToOrders && <Redirect to={adminRoutes.ordersTemplate({})} />}
             </>
         );
     }
@@ -159,12 +178,5 @@ export class OrderComponent extends React.Component<Props, State> {
             : null;
 
         return <WrapperPostStatus>{postStatuses}</WrapperPostStatus>;
-    };
-
-    private cancelOrder = () => {
-        this.props.cancelOrder(this.props.orderUuid, this.props.i18n)(store.dispatch);
-        setTimeout(() => {
-            this.setState({ redirectToOrders: true });
-        }, OrderComponent.READIRECT_AFTER_DELETE);
     };
 }

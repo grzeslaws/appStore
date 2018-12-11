@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import styled from "../../../theme/admin";
 import { ButtonInverted } from "../../../theme/admin/objects/Buttons";
 
@@ -10,7 +10,7 @@ export const MenuItem = styled.li`
     margin-right: ${props => props.theme.spacing.defaultSpacing(2)};
 `;
 
-export const LinkStyled = styled(Link)`
+export const LinkStyled = styled(NavLink)`
     font-family: ${props => props.theme.fonts.fontFamilyDefault};
     color: ${props => props.theme.colors.colorGray()};
     text-decoration: none;
@@ -18,6 +18,10 @@ export const LinkStyled = styled(Link)`
     transition: ${props => props.theme.transitions.transitionDefault};
 
     &:hover {
+        color: ${props => props.theme.colors.colorPrimary()};
+    }
+
+    &.active {
         color: ${props => props.theme.colors.colorPrimary()};
     }
 `;

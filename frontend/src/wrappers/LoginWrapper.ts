@@ -1,7 +1,7 @@
-import { ApplicationStore } from "../redux/store/store";
 import { connect } from "react-redux";
-import { LoginComponent, LoginProps } from "../components/admin/login/LoginComponent";
 import { RouteProps } from "react-router-dom";
+import { LoginComponent, LoginProps } from "../components/admin/login/LoginComponent";
+import { ApplicationStore } from "../redux/store/store";
 
 export function mapStateToProps({ i18n, adminProfile }: ApplicationStore, ownProps: RouteProps): LoginProps {
     return {
@@ -12,9 +12,4 @@ export function mapStateToProps({ i18n, adminProfile }: ApplicationStore, ownPro
     };
 }
 
-export default connect(
-    mapStateToProps,
-    null,
-    null,
-    { pure: false },
-)(LoginComponent);
+export default connect(mapStateToProps)(LoginComponent);
