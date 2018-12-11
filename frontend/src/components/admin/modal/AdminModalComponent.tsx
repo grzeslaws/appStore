@@ -1,48 +1,58 @@
-import { Immutable } from "immutable-typescript";
 import * as React from "react";
+import * as ReactDOM from "react-dom";
 import { I18N } from "../../../i18n/i18n";
 import { ModalContent } from "../../../model/ModalContent";
-import store from "../../../redux/store/store";
-import { Button } from "../../../theme/admin/objects/Buttons";
 import { Cancel, Modal, ModalWrapper, Title, WrapperButtons } from "./modalStyled";
 
 export interface Props {
-    i18n: Immutable<I18N>;
-    modal: Immutable<ModalContent>;
-    removeModal: () => any;
-    updateSubmit: (flag: boolean) => any;
+    i18n: I18N;
+    modal: ModalContent;
+    closeModal: () => any;
 }
 
 export class AdminModalComponent extends React.Component<Props, {}> {
-    public render() {
-        const { modal, children } = this.props;
-        console.log(modal);
+    constructor(props: Props, private wrapperModal: HTMLElement, private elementModal: HTMLElement | null) {
+        super(props);
 
-        return (
+        this.elementModal = document.querySelector("#modal");
+        this.wrapperModal = document.createElement("div");
+    }
+    public render() {
+        const { children, modal } = this.props;
+        return ReactDOM.createPortal(
             <>
-                {modal && (
-                    <Modal onClick={this.closeModal}>
+                {this.props.modal && (
+                    <Modal onClick={this.props.closeModal}>
                         <ModalWrapper
                             onClick={(event: React.MouseEvent<HTMLDivElement>) => {
                                 event.stopPropagation();
                             }}>
                             <Title>{modal.title}</Title>
                             {modal.message}
-                            {children}
+
                             <WrapperButtons>
-                                <Button onClick={this.submit}>Submit</Button>
-                                <Cancel onClick={this.closeModal}>Cancel</Cancel>
+                                {children}
+                                <Cancel onClick={this.props.closeModal}>Cancel</Cancel>
                             </WrapperButtons>
                         </ModalWrapper>
                     </Modal>
                 )}
-            </>
+            </>,
+            this.wrapperModal,
         );
     }
 
-    private closeModal = () => this.props.removeModal()(store.dispatch);
-    private submit = () => {
-        this.props.updateSubmit(true)(store.dispatch);
-        this.props.removeModal()(store.dispatch);
-    };
+    public componentDidMount() {
+        if (!this.elementModal) {
+            return;
+        }
+        this.elementModal.appendChild(this.wrapperModal);
+    }
+
+    public componentWillUnmount() {
+        if (!this.elementModal) {
+            return;
+        }
+        this.elementModal.removeChild(this.wrapperModal);
+    }
 }
