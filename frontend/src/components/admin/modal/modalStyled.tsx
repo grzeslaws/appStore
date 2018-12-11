@@ -13,6 +13,9 @@ export const Modal = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    font-family: ${props => props.theme.fonts.fontFamilyDefault};
+    font-size: ${props => props.theme.fonts.h3};
+    color: ${props => props.theme.colors.colorGray()};
 `;
 
 export const ModalWrapper = styled.div`
