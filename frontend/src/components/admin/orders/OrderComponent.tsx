@@ -33,7 +33,6 @@ interface State {
 }
 
 export class OrderComponent extends React.Component<Props, State> {
-
     constructor(props: Props) {
         super(props);
 
@@ -52,6 +51,7 @@ export class OrderComponent extends React.Component<Props, State> {
         return (
             <>
                 <>
+                    {this.state.redirectToOrders && <Redirect to={adminRoutes.ordersTemplate({})} />}
                     {this.state.modalContent && (
                         <AdminModalComponent i18n={this.props.i18n} modal={this.state.modalContent} closeModal={() => this.setState({ modalContent: null })}>
                             <Button onClick={() => this.cancelOrder()}>Cancel order</Button>
@@ -65,8 +65,6 @@ export class OrderComponent extends React.Component<Props, State> {
                         Cancel order
                     </ButtonAlert>
                 </>
-
-                {this.state.redirectToOrders && <Redirect to={adminRoutes.ordersTemplate({})} />}
             </>
         );
     }

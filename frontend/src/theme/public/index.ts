@@ -1,8 +1,9 @@
 import * as styledComponents from "styled-components";
-import PublicTheme from "./settings/models";
 import * as settings from "./settings/settings-project";
 
-const { default: styled, css, injectGlobal, keyframes, ThemeProvider } = styledComponents as styledComponents.ThemedStyledComponentsModule<PublicTheme>;
+const { default: styled, css, injectGlobal, keyframes, ThemeProvider } = styledComponents as styledComponents.ThemedStyledComponentsModule<
+    settings.ThemePublic
+>;
 
 export default styled;
 export { css, injectGlobal, keyframes, ThemeProvider };

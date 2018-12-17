@@ -1,13 +1,11 @@
 import { Immutable } from "immutable-typescript";
-import * as ReactDOM from "react-dom";
-import { Link } from "react-router-dom";
 import { I18N } from "../../../i18n/i18n";
 
 import * as React from "react";
 import { OrderItem } from "../../../model/OrderItem";
-import { Product } from "../../../model/Product";
 import { adminRoutes } from "../../../routes/adminRoutes";
 import { publicRoutes } from "../../../routes/publicRoutes";
+import { Counter, Icon, MenuItem, MenuLink, WrapperCart, WrapperMenu, WrapperNav } from "./navigationStyled";
 
 export interface PublicNavigationProps {
     i18n: Immutable<I18N>;
@@ -20,31 +18,29 @@ export class PublicNavigationComponent extends React.Component<PublicNavigationP
 
         const totalQuantityofProducts = orderItems.length ? orderItems.map(o => o.quantity).reduce((total, num) => total + num) : null;
         return (
-            <>
-                <div>Cart: {totalQuantityofProducts}</div>
-                <ul>
-                    <li>
-                        <Link to={publicRoutes.homeTemplate({pageNumber: 1})}>
-                            <button>Home</button>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to={publicRoutes.categoryTemplate({categoryId: 1})}>
-                            <button>Category</button>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to={publicRoutes.cart}>
-                            <button>Cart</button>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to={adminRoutes.admin}>
-                            <button>Admin</button>
-                        </Link>
-                    </li>
-                </ul>
-            </>
+            <WrapperNav>
+                <WrapperMenu>
+                    <MenuItem>
+                        <MenuLink activeClassName={"active"} to={publicRoutes.homeTemplate({ pageNumber: 1 })}>
+                            Home
+                        </MenuLink>
+                    </MenuItem>
+                    <MenuItem>
+                        <MenuLink activeClassName={"active"} to={publicRoutes.categoryTemplate({ categoryId: 1 })}>
+                            Category
+                        </MenuLink>
+                    </MenuItem>
+                    <MenuItem>
+                        <MenuLink activeClassName={"active"} to={adminRoutes.admin}>
+                            Admin
+                        </MenuLink>
+                    </MenuItem>
+                </WrapperMenu>
+                <WrapperCart to={publicRoutes.cart}>
+                    <Icon />
+                    {totalQuantityofProducts && <Counter>{totalQuantityofProducts}</Counter>}
+                </WrapperCart>
+            </WrapperNav>
         );
     }
 }

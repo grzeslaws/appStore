@@ -4,6 +4,8 @@ import { OrderItemSpark } from "./OrderItemSpark";
 import { PostStatus } from "./PostStatus";
 import { TimestampToDateString } from "./TimestampToDateString";
 
+console.log("Order")
+
 export class Order {
     constructor(
         @ArrayField("orderItems", OrderItemSpark) public orderItems: OrderItemSpark[],

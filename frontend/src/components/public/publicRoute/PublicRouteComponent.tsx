@@ -10,6 +10,7 @@ import HomePublicWrapper from "../../../wrappers/HomePublicWrapper";
 import ProductPublicWrapper from "../../../wrappers/ProductPublicWrapper";
 import PublicNavigationWrapper from "../../../wrappers/PublicNavigationWrapper";
 import ThankYouPageWrapper from "../../../wrappers/ThankYouPageWrapper";
+import { Wrapper } from "./PublicRouteStyled";
 
 export interface Props {
     i18n: Immutable<I18N>;
@@ -19,7 +20,7 @@ export class PublicRouteComponent extends React.Component<Props, {}> {
     public render() {
         return (
             <ThemeProvider theme={themePublic}>
-                <>
+                <Wrapper>
                     <PublicNavigationWrapper />
                     <Route exact={true} path={publicRoutes.public} component={HomePublicWrapper} />
                     <Route exact={true} path={publicRoutes.home} component={HomePublicWrapper} />
@@ -27,7 +28,7 @@ export class PublicRouteComponent extends React.Component<Props, {}> {
                     <Route exact={true} path={publicRoutes.product} component={ProductPublicWrapper} />
                     <Route exact={true} path={publicRoutes.cart} component={CartWrapper} />
                     <Route exact={true} path={publicRoutes.thankYouPage} component={ThankYouPageWrapper} />
-                </>
+                </Wrapper>
             </ThemeProvider>
         );
     }

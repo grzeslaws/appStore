@@ -6,7 +6,6 @@ import http from "../../http";
 import { Customer } from "../../model/Customer";
 import { Order } from "../../model/Order";
 import { OrderBy, Orders } from "../../model/Orders";
-import { PostStatus } from "../../model/PostStatus";
 import { MessageType } from "./../../model/Message";
 import { Action } from "./action";
 
@@ -54,7 +53,6 @@ export function createOrderAction(orderItems: ReadonlyArray<Immutable<OrderItem>
 }
 
 export function updateOrdersAction(pageNumber = "1", orderBy: OrderBy) {
-    console.log(pageNumber, orderBy);
     return dispatch => {
         return http(endpoints.getOrders(Number(pageNumber), orderBy), "get", {}).then((json: Orders) => {
             dispatch(updateOrders(parse(Orders, json)));

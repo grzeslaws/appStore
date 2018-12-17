@@ -10,7 +10,7 @@ export enum OrderBy {
 
 export class Orders {
     constructor(
-        @ArrayField("orders", Order) public orders: Order[],
+        @ArrayField("orders", Order, true) public orders?: Order[],
         @Field("has_next", true) public hasNext?: boolean,
         @Field("has_prev", true) public hasPrev?: boolean,
         @Field("next_num", true) public nextNum?: number,

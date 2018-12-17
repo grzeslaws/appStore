@@ -10,7 +10,7 @@ export const LinkItem = styled<{ current?: boolean } & LinkProps>(({ current, ..
             return props.theme.colors.colorGray();
         }
     }};
-    color: ${props => props.theme.colors.colorWhite};
+    color: ${props => props.theme.colors.colorWhite()};
     border-radius: ${props => props.theme.radius.smallRadius};
     margin-right: ${props => props.theme.spacing.defaultSpacing(0.5)};
     padding-left: ${props => props.theme.spacing.defaultSpacing(0.2)};

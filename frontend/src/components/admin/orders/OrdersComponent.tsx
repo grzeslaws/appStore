@@ -61,6 +61,8 @@ export class OrdersComponent extends React.Component<Props, State> {
     }
 
     public componentWillMount() {
+        console.log("OrdersComponent");
+        console.log("this.props.pageNumber: ", this.props.pageNumber);
         this.props.updateOrdersAction(this.props.pageNumber)(store.dispatch);
         this.props.getPostStatuses()(store.dispatch);
     }
@@ -129,7 +131,9 @@ export class OrdersComponent extends React.Component<Props, State> {
                               {o.postStatus && (
                                   <>
                                       <Label marginLeft={true}>Post status:</Label>
-                                      <PostStatusLabel isSelected={true} color={ColorPostStatus[o.postStatus.color]}>{o.postStatus.name}</PostStatusLabel>
+                                      <PostStatusLabel isSelected={true} color={ColorPostStatus[o.postStatus.color]}>
+                                          {o.postStatus.name}
+                                      </PostStatusLabel>
                                   </>
                               )}
                           </StatusWrapper>

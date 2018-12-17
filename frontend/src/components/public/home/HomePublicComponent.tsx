@@ -12,8 +12,7 @@ import endpoints from "../../../endpoints";
 import { Collections } from "../../../model/Collections";
 import { Product } from "../../../model/Product";
 import { PaginationComponent } from "../../pagination/PaginationComponent";
-
-import styled from "../../../theme/admin";
+import { WraperProducts } from "./homeStyled";
 
 export type FetchPublicProductsByCollectionMethod = (
     { i18n, collectionId, pageNumber, perPage }: { i18n: I18N; collectionId?: number; pageNumber?: number; perPage?: number },
@@ -79,6 +78,7 @@ export class HomePublicComponent extends React.Component<HomePublicProps, HomeSt
                   pages: products.pages,
               }
             : null;
+
         const productList: ReadonlyArray<JSX.Element> = products ? products.products.map(this.renderOneProduct) : null;
 
         return (
@@ -89,7 +89,7 @@ export class HomePublicComponent extends React.Component<HomePublicProps, HomeSt
                 {carouselProducts && this.renderCarouselProducts(carouselProducts)}
                 <br />
                 Collection name: {collections && this.getCollectionName(collections)}
-                {productList}
+                <WraperProducts>{productList}</WraperProducts>
                 <div>
                     {products && (
                         <PaginationComponent
